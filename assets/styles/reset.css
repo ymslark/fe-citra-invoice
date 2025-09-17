@@ -1,0 +1,21 @@
+@media screen {
+  body {
+    font-family: 'Times New Roman', sans-serif;
+    font-size: 11pt !important;
+    background-color: #ffffff;
+    color: #000000;
+    margin: 20px;
+  }
+
+  /* .page {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  } */
+
+  .no-preview {
+    display: none;
+  }
+}

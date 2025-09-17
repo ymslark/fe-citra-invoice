@@ -1,0 +1,382 @@
+<script setup>
+definePageMeta({
+  layout: 'print',
+  backgroundColor: '#FFFFFF'
+})
+import { useAlertStore } from '@/stores/alert'
+import { useCiStore } from '@/stores/ciis'
+import { formatRupiah, formatTanggalIndonesia, pembilang } from '@/utils/format'
+import { hitungInvoiceInterior } from '@/utils/invoice/hitungInvoiceInterior'
+import { getDate } from '@/utils/global'
+const route = useRoute()
+const router = useRouter()
+const cii = useCiStore()
+const id = route.query.id || null
+const alert = useAlertStore()
+
+if (!id) {
+  alert.showAlert({
+    type: 'error',
+    message: 'Tidak ada Id',
+    timeout: 3000
+  })
+  console.error('ID tidak ditemukan')
+  navigateTo({ name: 'admin-CII' })
+}
+let surat = null
+try {
+  const response = await cii.getCIIById(id)
+  surat = response.doc
+  console.log(surat)
+  // console.log(surat.doc)
+} catch (error) {
+  alert.showAlert({
+    type: 'error',
+    message: 'Gagal mengambil data surat',
+  })
+}
+
+onMounted(() => {
+  if(process.client){
+    document.title = 'Invoice ' + surat.tujuan + ' - Citra Interior'
+    setTimeout(() => {
+      document.title = 'Surat Penawaran ' + surat.tujuan + ' - Citra Interior'
+      window.print()
+    }, 1000)
+
+    window.addEventListener('afterprint', () => {
+        window.location.replace('/admin/CII/detail/' + id)
+    })
+  }
+})
+let interiors = hitungInvoiceInterior(surat.interior, surat.ppn)
+console.log(interiors)
+</script>
+
+<template>
+  <div class="header">
+    <img class="kop-img" src="/images/citragroup/CII/CII_Kop.png" alt="" srcset="">
+  </div>
+
+  <!-- box -->
+  <div class="box">
+
+    <div class="meta">
+      <div>Hal : {{surat.hal}}</div>
+      <div>No.Seri : {{surat.no_seri}}</div>
+    </div>
+    <div class="meta">
+      <div>Kepada YTh. <b>{{ surat.tujuan }}</b></div>
+      <div>{{formatTanggalIndonesia(surat.tanggal, 'hari')}}</div>
+    </div>
+    <table class="table-items">
+      <thead>
+        <!-- <tr>
+          <th style="width:5%">No</th>
+          <th style="width:50%">Nama Interior</th>
+          <th style="width:20%">Keterangan</th>
+          <th style="width:13%">Ukuran</th>
+          <th style="width:16%">Harga</th>
+          <th style="width:16%">Total</th>
+        </tr> -->
+        <tr>
+          <th>No</th>
+          <th>Nama Interior</th>
+          <th>Harga per Meter</th>
+          <th>Ukuran</th>
+          <th>subtotal</th>
+          <th>Diskon</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(item, index) in interiors.interiors" :key="index">
+          <td class="text-center">{{ index + 1 }}</td>
+          <td class="text-uppercase">{{ item.nama_interior }}</td>
+          <td class="angka-kanan">
+            <span class="rp">Rp.</span>
+            <span class="nilai">{{ formatRupiah(item.dpp_tanpa_diskon) }}</span>
+          </td>
+          <td class="text-center">{{ item.v1 }}x{{ item.v2 }}m</td>
+          <td class="angka-kanan">
+            <span class="rp">Rp</span>
+            <span class="nilai">{{ formatRupiah(item.total_dpp_tanpa_diskon) }}</span>
+          </td>
+          <td class="angka-kanan">
+            <span class="rp">Rp</span>
+            <span class="nilai">{{ formatRupiah(item.total_diskon) }}</span>
+          </td>
+          <td class="angka-kanan">
+            <span class="rp">Rp</span>
+            <span class="nilai">{{ formatRupiah(item.total_dpp) }}</span>
+          </td>
+        </tr>
+        <tr style="font-weight: bold;">
+          <td colspan="3" class="br-0"></td>
+          <td class="bl-0">Total</td>
+          <td class="angka-kanan">
+            <span class="rp">Rp</span>
+            <span class="nilai">{{formatRupiah( interiors.dpp_tanpa_diskon )}}</span>
+          </td>
+          <td class="angka-kanan">
+            <span class="rp">Rp</span>
+            <span class="nilai">{{formatRupiah( surat.total_diskon )}}</span>
+          </td>
+          <td class="angka-kanan">
+            <span class="rp">Rp</span>
+            <span class="nilai">{{formatRupiah( interiors.dpp )}}</span>
+          </td>
+        </tr>
+        <tr v-if="surat.ppn > 0">
+          <td colspan="5" class="br-0"></td>
+          <td class="bl-0">PPN 11%</td>
+          <td class="angka-kanan">
+            <span class="rp">Rp</span>
+            <span class="nilai">{{ formatRupiah(interiors.ppn) }}</span>
+            </td>
+        </tr>
+        <tr>
+          <td colspan="5" class="br-0"></td>
+          <td class="bl-0"><b>SUBTOTAL</b></td>
+          <td class="angka-kanan">
+            <span class="rp">Rp.</span>
+            <span class="nilai">{{ formatRupiah(surat.harga_akhir) }}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="notes">
+      <span>Note:</span>
+      <ol id="note-list">
+        <li v-if="surat.ppn > 0" >Harga Termasuk PPN</li>
+        <li v-else>Harga Tidak Termasuk PPN</li>
+        <li v-if="surat.ongkos_kirim && surat.instalasi">Harga Sudah Termasuk Ongkos Kirim & Sudah Termasuk Biaya
+          Instalasi</li>
+        <li v-else-if="surat.instalasi">Harga Sudah Termasuk Biaya Instalasi</li>
+        <li v-else-if="surat.ongkos_kirim">Harga Sudah Termasuk Biaya Ongkos Kirim</li>
+        <li v-for="(note, index) in surat.catatan" :key="index">{{note}}</li>
+        <li>Pembayaran Via Transfer ke rekening :</li>
+      </ol>
+    <table class="rekening">
+      <tr>
+        <td>Atas Nama</td>
+        <td>:</td>
+        <td>{{ surat.rekening.atas_nama }}</td>
+      </tr>
+      <tr>
+        <td>No. Rekening</td>
+        <td>:</td>
+        <td>{{ surat.rekening.no_rekening }}</td>
+      </tr>
+      <tr>
+        <td>Bank</td>
+        <td>:</td>
+        <td>{{ surat.rekening.nama_bank }}</td>
+      </tr>
+    </table>
+    </div>
+    <div class="footer-surat">
+      <div class="tanggal">Bekasi, {{ formatTanggalIndonesia(surat.tanggal) }}</div>
+      <div class="mt-n3">Hormat Kami</div>
+      <img src="/images/citragroup/CII/CII_Logo.png" alt="Logo Perusahaan" />
+      <div class="nama-perusahaan">Citra Interior Indonesia</div>
+    </div>
+  </div>
+
+  <!-- box -->
+
+</template>
+<style scoped>
+@media screen {
+  * {
+    font-family: 'Times New Roman', sans-serif !important;
+    color: #000 !important;
+    margin: 0px;
+    padding: 0px;
+    /* border: 1px red solid; */
+    
+  }
+
+  @page {
+    size: A4;
+    margin: 2cm;
+  }
+}
+
+@media print {
+  * {
+    font-family: 'Times New Roman', sans-serif !important;
+    color: #000 !important;
+    margin: 0px;
+    padding: 0px;
+    font-size: 11pt !important;
+  }
+
+  .footer-surat img{
+    max-width: 50%;
+    height: auto;
+  }
+  .table-items{
+    font-size: 10pt !important;
+  }
+
+  .table-items th, .table-items td {
+    border: 1px solid #000000 !important;
+  }
+
+  body{
+    size: A4;
+  }
+  @page {
+    size: A4;
+    margin: 0.5cm;
+  }
+}
+
+
+.box {
+  width: 95%;
+  padding: 20px;
+  margin:auto;
+  box-sizing: border-box;
+  font-size: 24px;
+  
+}
+.box::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.header {
+  text-align: center;
+  /* margin-bottom: 20px; */
+}
+.kop-img {
+  width: 100%;
+  height: auto;
+}
+.meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.table-items {
+  /* width: 90%; */
+  border-collapse: collapse;
+  margin: auto;
+}
+
+.table-items th {
+  background-color: rgb(0, 210, 0);
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.table-items th,
+.table-items td {
+  border: 1px solid #000;
+  padding: 2px 4px;
+  
+  /* text-align: left; */
+}
+#info-akhir {
+  width: 100%;
+  margin: auto;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+#info-akhir td {
+  padding: 8px;
+  width: 50%;
+  vertical-align: top;
+  /* border: 1px solid #000; */
+}
+
+#logo {
+  width: 25%;
+  height: auto;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.notes{
+  margin-top: 20px;
+}
+div .footer {
+  float:right;
+  align-items: center;
+}
+.footer {
+  display: flex;
+  flex-direction: column;
+  /* font-weight: bold; */
+}
+
+.footer-surat {
+  width: 40%; /* atur sesuai kebutuhan */
+  float: right;
+  text-align: center;
+  margin-right: -20px;
+}
+
+.footer-surat img {
+  max-width: 50%;
+  display: block;
+  margin: 0 auto;
+}
+
+.footer-surat .tanggal {
+  margin-bottom: 10px;
+}
+
+.footer-surat .nama-perusahaan {
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.bl-0 {
+  border-left: 0 !important;
+}
+
+.br-0{
+  border-right: 0 !important;
+}
+
+.angka-kanan {
+  text-align: right;
+}
+
+.angka-kanan .rp {
+  display: inline-block;
+  width: 3ch;  /* cukup untuk 'Rp ' */
+  text-align: left;
+}
+
+.angka-kanan .nilai {
+  display: inline-block;
+  min-width: 8ch; /* biarkan panjang angka fleksibel */
+  text-align: right;
+  /* margin-right: 10px; jarak antara angka dan Rp */
+}
+
+
+/* .notes {
+  margin: 10px 0 0px 20px;
+} */
+
+ 
+.notes ol {
+  padding-left: 20px;
+  margin-top: 0;
+}
+
+.rekening{
+  margin-left: 20px;;
+}
+</style>
