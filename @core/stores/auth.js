@@ -15,7 +15,7 @@ export const useAuthStore = defineStore('auth', {
         const { $api } = useNuxtApp()
         const response = await $api.post('/login', credentials)
         if(!response) throw { message: 'Login Gagal' }
-        console.log(response)
+        // console.log(response)
 
         this.accessToken = response.accessToken
         this.refreshToken = response.refreshToken
@@ -32,7 +32,7 @@ export const useAuthStore = defineStore('auth', {
         
         return true
       } catch (error) {
-        console.log(error)
+        // console.log(error)
         
         return false
         
@@ -53,15 +53,15 @@ export const useAuthStore = defineStore('auth', {
         this.refreshToken = response.refreshToken
         this.user = response.user
         thhis.isLoggedIn = true
-        console.log('refresh token function')
-        console.log(response)
+        // console.log('refresh token function')
+        // console.log(response)
         useCookie('accessToken').value = response.accessToken
         useCookie('refreshToken').value = response.refreshToken
         useCookie('user').value = response.user
         return true
       } catch (error) {
         console.log('refreshToken error')
-        console.log(error)
+        // console.log(error)
         return false
       }
     },
