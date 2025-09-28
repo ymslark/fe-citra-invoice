@@ -1,4 +1,3 @@
-import { nav } from '@/views/demos/components/list/demoCodeList'
 import { defineStore } from 'pinia'
 
 export const useAuthStore = defineStore('auth', {
@@ -12,99 +11,151 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async login(credentials) {
       try {
-        const { $api } = useNuxtApp()
-        const response = await $api.post('/login', credentials)
-        if(!response) throw { message: 'Login Gagal' }
-        // console.log(response)
+        // Gunakan $fetch langsung dengan base URL dari runtimeConfig
+        const config = useRuntimeConfig()
+        console.log('RuntimeConfig:', config) // Debug
+        
+        const response = await $fetch('/login', {
+          baseURL: config.public.apiBase,
+          method: 'POST',
+          body: credentials
+        })
 
+        if (!response) throw new Error('Login Gagal')
+        console.log('Login Response:', response)
+
+        // Set state
         this.accessToken = response.accessToken
         this.refreshToken = response.refreshToken
         this.user = response.user
         this.isLoggedIn = true
 
-        const accessToken= useCookie('accessToken', { path: '/' })
-        const refreshToken= useCookie('refreshToken', { path: '/' })
-        const user= useCookie('user', { path: '/' }) // 7 hari
+        // Set cookies dengan config yang benar
+        const accessTokenCookie = useCookie('accessToken', { 
+          maxAge: 60 * 60 * 24 * 7, // 7 hari
+          path: '/',
+          secure: false, // Sementara false untuk development
+          sameSite: 'lax'
+        })
         
-        accessToken.value = response.accessToken
-        refreshToken.value = response.refreshToken
-        user.value = response.user
+        const refreshTokenCookie = useCookie('refreshToken', { 
+          maxAge: 60 * 60 * 24 * 30, // 30 hari
+          path: '/',
+          secure: false,
+          sameSite: 'lax'
+        })
+        
+        const userCookie = useCookie('user', { 
+          maxAge: 60 * 60 * 24 * 7, // 7 hari
+          path: '/',
+          secure: false,
+          sameSite: 'lax'
+        })
+
+        // Assign values
+        accessTokenCookie.value = response.accessToken
+        refreshTokenCookie.value = response.refreshToken
+        userCookie.value = response.user
+        
+        console.log('Cookies set successfully:', {
+          accessToken: !!accessTokenCookie.value,
+          user: !!userCookie.value
+        })
         
         return true
+        
       } catch (error) {
-        // console.log(error)
-        
+        console.error('Login error:', error)
         return false
-        
-        // return error.message || 'Login Gagal'
-        
       }
     },
     
     async refreshAccessToken() {
-      const { $api } = useNuxtApp()
       try {
-        const response = await $api.post('/refresh-token', {
-          refreshToken: this.refreshToken,
+        const config = useRuntimeConfig()
+        
+        const response = await $fetch('/refresh-token', {
+          baseURL: config.public.apiBase,
+          method: 'POST',
+          body: {
+            refreshToken: this.refreshToken,
+          }
         })
-        if (!response) throw { message: 'Refresh Token Gagal' }
+        
+        if (!response) throw new Error('Refresh Token Gagal')
 
+        // Update state
         this.accessToken = response.accessToken
         this.refreshToken = response.refreshToken
         this.user = response.user
-        thhis.isLoggedIn = true
-        // console.log('refresh token function')
-        // console.log(response)
-        useCookie('accessToken').value = response.accessToken
-        useCookie('refreshToken').value = response.refreshToken
-        useCookie('user').value = response.user
+        this.isLoggedIn = true
+        
+        console.log('Refresh token success:', response)
+
+        // Update cookies
+        const accessTokenCookie = useCookie('accessToken')
+        const refreshTokenCookie = useCookie('refreshToken') 
+        const userCookie = useCookie('user')
+
+        accessTokenCookie.value = response.accessToken
+        refreshTokenCookie.value = response.refreshToken
+        userCookie.value = response.user
+        
         return true
       } catch (error) {
-        console.log('refreshToken error')
-        // console.log(error)
+        console.error('Refresh token error:', error)
+        this.logout()
         return false
       }
     },
     
     logout() {
+      // Clear state
       this.accessToken = null
       this.refreshToken = null
       this.user = null
       this.isLoggedIn = false
       
-      // Hapus cookies
-      const accessToken = useCookie('accessToken', {maxAge: 0*0, path: '/'})
-      const refreshToken = useCookie('refreshToken', {maxAge: 0*0, path: '/'})
-      const user = useCookie('user', {maxAge: 0*0, path: '/'})
+      // Clear cookies
+      const accessTokenCookie = useCookie('accessToken', { maxAge: 0 })
+      const refreshTokenCookie = useCookie('refreshToken', { maxAge: 0 })
+      const userCookie = useCookie('user', { maxAge: 0 })
 
-      accessToken.value = null
-      refreshToken.value = null
-      user.value = null
-
-      // navigateTo('/admin/login')
+      accessTokenCookie.value = null
+      refreshTokenCookie.value = null
+      userCookie.value = null
+      
+      console.log('Logout successful')
+      
+      // Redirect to login
+      navigateTo('/login')
     },
     
     initAuth() {
-      // if(process.client){
-        const accessToken = useCookie('accessToken', {path: '/'})
-        const refreshToken = useCookie('refreshToken', {path: '/'})
-        const user = useCookie('user', {path: '/'})
-        // if ((accessToken != null || accessToken != undefined) && (refreshToken != null || refreshToken != undefined)) 
-    if(accessToken.value && refreshToken.value && user.value)  
-        {
-          this.accessToken = accessToken.value
-          this.refreshToken = refreshToken.value
-          this.user = user.value
-          this.isLoggedIn = true 
-        }
-        else {
-          this.accessToken = null
-          this.refreshToken = null
-          this.user = null
-          this.isLoggedIn = false
-          // navigateTo('/login')
+      // Ambil dari cookies
+      const accessTokenCookie = useCookie('accessToken')
+      const refreshTokenCookie = useCookie('refreshToken')
+      const userCookie = useCookie('user')
+      
+      console.log('Init Auth - Cookies:', {
+        accessToken: accessTokenCookie.value ? 'exists' : 'empty',
+        refreshToken: refreshTokenCookie.value ? 'exists' : 'empty',
+        user: userCookie.value ? 'exists' : 'empty'
+      })
+
+      if (accessTokenCookie.value && refreshTokenCookie.value && userCookie.value) {
+        this.accessToken = accessTokenCookie.value
+        this.refreshToken = refreshTokenCookie.value
+        this.user = userCookie.value
+        this.isLoggedIn = true
+        console.log('Auth initialized from cookies')
+      } else {
+        this.accessToken = null
+        this.refreshToken = null
+        this.user = null
+        this.isLoggedIn = false
+        console.log('No auth data found in cookies')
       }
     },
-
   },
 })
