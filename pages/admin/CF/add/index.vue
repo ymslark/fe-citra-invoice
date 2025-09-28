@@ -9,7 +9,7 @@ definePageMeta({
 import { useAlertStore } from '@/stores/alert'
 import { useCFStore } from '@/stores/cf'
 import { VForm } from 'vuetify/components/VForm'
-
+import {ref, nextTick} from 'vue'
 const cf = useCFStore()
 const route = useRoute()
 const id = route.params.id
@@ -34,7 +34,7 @@ const store = async () => {
       type: 'success',
     })
     window.scrollTo(0, 0)
-    await cf.setStatusRequest(id)
+    // await cf.setStatusRequest(id)
     setTimeout(() => {
       navigateTo({ name: 'admin-CF' })
     }, 4000)
@@ -51,9 +51,27 @@ const store = async () => {
     // }, 4000)
   }
 }
+async function scrollTo(id) {
+  await nextTick()
+  const el = document.getElementById(id)
+  if (el){ 
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    const input = el?.querySelector('[name="input-nama-barang"]')
+    
+    input?.focus()
+    input.dispatchEvent(new Event('input', { bubbles: true }))
 
+  }
+}
 const tambahBarang = () => {
   cf.addBarang()
+
+  console.log(cf.addedBarang.length)
+  const idItem = `item-${cf.addedBarang.length}`
+  // scrollTo(idItem)
+  setTimeout(() => {
+    scrollTo(idItem)
+  }, 200);
 }
 
 await cf.getConfig()
@@ -173,7 +191,7 @@ const barangs = res.Barangs
           <!-- <VCol cols="12" offset-md="8" md="4">
           <CFAddBarang v-for="(barang, index) in cf.addedBarang" :key="index" :barang="barang" :index="index" :items="barangs" />
           </VCol> -->
-          <VCol cols="12" v-for="(barang, index) in cf.addedBarang" :key="barang._tempId" >
+          <VCol cols="12" v-for="(barang, index) in cf.addedBarang" :key="barang._tempId" :id="`item-${index+1}`" >
             <CFAddBarang :barang="barang" :index="index" :items="barangs" />
           </VCol>
         </VCardItem>

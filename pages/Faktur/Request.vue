@@ -9,7 +9,9 @@ import {useAlertStore} from '@/stores/alert';
 alert = useAlertStore()
 
 
-const baseUrl = 'http://localhost:3900'; // Ganti dengan URL API yang sesuai
+const config = useRuntimeConfig()
+const baseUrl = config.public.apiUrl // Ganti dengan URL API yang sesuai
+ // Ganti dengan URL API yang sesuai
 const url = ref('')
 
 const tempFile = ref(null)

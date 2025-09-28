@@ -8,7 +8,6 @@ import { useCFStore } from '@/stores/cf'
 import { formatRupiah, formatTanggalIndonesia, pembilang } from '@/utils/format'
 import {  hitungInvoiceBarang } from '@/utils/invoice/hitungInvoiceBarang'
 import { getDate } from '@/utils/global'
-import jsPDF from 'jspdf'
 const route = useRoute()
 const router = useRouter()
 const cf = useCFStore()

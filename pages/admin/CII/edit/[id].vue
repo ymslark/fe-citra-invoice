@@ -33,7 +33,17 @@ if (id) {
 
   }
 }
+function scrollTo(id) {
+  const el = document.getElementById(id)
+  if (el){ 
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    const input = el?.querySelector('[name="input-nama-interior"]')
+    
+    input?.focus()
+    input.dispatchEvent(new Event('input', { bubbles: true }))
 
+  }
+}
 const store = async () => {
   try {
     // refForm?.value?.validate()
@@ -266,9 +276,10 @@ const toDetailPage = () => {
           </VCol> -->
         </VRow>
         <VCardItem>
-          <VCol cols="12" offset-md="8" md="4" />
-          <CIIAddInteriorEdit v-for="(interior, index) in cii.editSurat.interior" :key="index" :interior="interior"
+          <VCol cols="12" offset-md="8" md="4" v-for="(interior, index) in cii.editSurat.interior" :key="index" :id="`item-${index+1}`">
+          <CIIAddInteriorEdit :interior="interior"
             :index="index" />
+          </VCol>
         </VCardItem>
       </VCard>
       <VCard class="mt-4">

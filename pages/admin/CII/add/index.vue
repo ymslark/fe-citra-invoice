@@ -5,7 +5,7 @@ import { VForm } from 'vuetify/components/VForm'
 
 const cii = useCiStore()
 const route = useRoute()
-const addedBarang = cii.addedBarang
+const addedInterior = cii.addedInterior
 let alert = useAlertStore()
 
 const { $api } = useNuxtApp()
@@ -15,7 +15,7 @@ const store = async () => {
     // refForm?.value?.validate()
     const valid = await refForm?.value?.validate()
     if (!valid.valid) { window.scrollTo(0, 0); return }
-    if (cii.addedBarang.length == 0) throw { message: 'Barang tidak boleh kosong' }
+    if (cii.addedInterior.length == 0) throw { message: 'Barang tidak boleh kosong' }
 
     const response = await cii.storeCII()
     console.log(response)
@@ -41,9 +41,26 @@ const store = async () => {
     // }, 4000)
   }
 }
+function scrollTo(id) {
+  const el = document.getElementById(id)
+  if (el){ 
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    const input = el?.querySelector('[name="input-nama-interior"]')
+    
+    input?.focus()
+    input.dispatchEvent(new Event('input', { bubbles: true }))
 
+  }
+}
 const tambahBarang = () => {
+  
   cii.addInterior()
+  console.log(cii.addedInterior.length)
+  const idItem = `item-${cii.addedInterior.length}`
+  // scrollTo(idItem)
+  setTimeout(() => {
+    scrollTo(idItem)
+  }, 200);
 }
 
 await cii.getConfig()
@@ -161,6 +178,9 @@ const copySelected = () => {
             <VCol cols="12" md="6">
               <AppTextField v-model="surat.hal" label="Hal" placeholder="Hal" :rules="[requiredValidator]" />
             </VCol>
+            <VCol cols="12" md="6">
+              <AppTextField v-model="surat.no_hp" label="No Hp" placeholder="No. Hp" :rules="[requiredValidator]" />
+            </VCol>
 
 
 
@@ -214,7 +234,7 @@ const copySelected = () => {
         </VRow>
         <VCardItem>
           <VCol cols="12" offset-md="8" md="4" />
-          <CIIAddInterior v-for="(interior, index) in cii.addedInterior" :key="index" :interior="interior" :index="index" />
+          <CIIAddInterior v-for="(interior, index) in cii.addedInterior" :key="index" :interior="interior" :index="index" :id="`item-${index+1}`"/>
         </VCardItem>
       </VCard>
       <VCard class="mt-4">

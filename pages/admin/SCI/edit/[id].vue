@@ -34,7 +34,17 @@ if (id) {
 
   }
 }
+function scrollTo(id) {
+  const el = document.getElementById(id)
+  if (el){ 
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    const input = el?.querySelector('[name="input-nama-barang"]')
+    
+    input?.focus()
+    input.dispatchEvent(new Event('input', { bubbles: true }))
 
+  }
+}
 const store = async () => {
   try {
     // refForm?.value?.validate()
@@ -209,7 +219,7 @@ const barangs = res.Barangs
           </VCol>
         </VRow>
         <VCardItem>
-          <VCol cols="12" v-for="(barang, index) in sci.editSurat.barang" :key="barang._tempId" >
+          <VCol cols="12" v-for="(barang, index) in sci.editSurat.barang" :key="barang._tempId" :id="`item-${index+1}`">
             <SCIAddBarangEdit :barang="barang" :index="index" :items="barangs" />
           </VCol>
           </VCardItem>

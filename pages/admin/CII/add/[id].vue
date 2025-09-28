@@ -45,8 +45,26 @@ const store = async () => {
   }
 }
 
+function scrollTo(id) {
+  const el = document.getElementById(id)
+  if (el){ 
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    const input = el?.querySelector('[name="input-nama-interior"]')
+    
+    input?.focus()
+    input.dispatchEvent(new Event('input', { bubbles: true }))
+
+  }
+}
 const tambahInterior = () => {
   cii.addInterior()
+
+  console.log(cii.addedInterior.length)
+  const idItem = `item-${cii.addedInterior.length}`
+  // scrollTo(idItem)
+  setTimeout(() => {
+    scrollTo(idItem)
+  }, 200);
 }
 
 await cii.getConfig()
@@ -222,7 +240,7 @@ const copySelected = () => {
         </VRow>
         <VCardItem>
           <VCol cols="12" offset-md="8" md="4" />
-          <CIIAddInterior v-for="(interior, index) in cii.addedInterior" :key="index" :interior="interior" :index="index" />
+          <CIIAddInterior v-for="(interior, index) in cii.addedInterior" :key="index" :interior="interior" :index="index" :id="`item-${index+1}`"/>
         </VCardItem>
       </VCard>
       <VCard class="mt-4">

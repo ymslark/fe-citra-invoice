@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-
+import { v4 as uuidv4 } from 'uuid'
+// import {crypto} from 'crypto'
 function useCurrency() {
   const { $formatRupiah, $parseRupiah } = useNuxtApp()
   return { $formatRupiah, $parseRupiah }
@@ -160,17 +161,19 @@ export const useCiStore = defineStore('ciis', {
     },
 
     async storeCII() {
-      const { $api } = useNuxtApp()
+      const { $api, $parseRupiah } = useNuxtApp()
       this.newSurat['interior'] = this.addedInterior.map(item => {
         return {
           "nama_interior": item.nama_interior,
-          v1: item.v1,
-          v2: item.v2,
+          "v1": parseFloat(item.v1.replace(',', '.')),
+          "v2": parseFloat(item.v2.replace(',', '.')),
           "diskon_persen": item.diskon_persen,
-          "diskon_nominal": item.diskon_nominal,
-          "harga": item.harga,
+          "diskon_nominal": $parseRupiah(item.diskon_nominal),
+          "harga": $parseRupiah(item.harga),
         }
       })
+      console.log(this.newSurat['interior'])
+
       const response = await $api.post('/CII', this.newSurat)
       return response
 
@@ -280,7 +283,25 @@ export const useCiStore = defineStore('ciis', {
 
 
     async updateCII(id){
-      const {$api} = useNuxtApp()
+      const {$api, $parseRupiah} = useNuxtApp()
+      this.editSurat['interior'] = this.editSurat.interior.map((item)=> {
+        let v1,v2
+        console.log(typeof(item.v1))
+        if(typeof(item.v1) == 'string') {
+          v1 = parseFloat(item.v1.replace(',', '.'))
+        }else v1 = item.v1
+        if(typeof(item.v2) == 'string') {
+          v2 = parseFloat(item.v2.replace(',', '.'))
+        }else v2 = item.v2
+        return {
+          "nama_interior": item.nama_interior,
+          "v1": v1,
+          "v2": v2,
+          "diskon_persen": item.diskon_persen,
+          "diskon_nominal": $parseRupiah(item.diskon_nominal),
+          "harga": $parseRupiah(item.harga),
+        }
+      })
       const response = await $api.put(`/CII/update/${id}`, this.editSurat)
       
       console.log(response)
@@ -306,9 +327,13 @@ export const useCiStore = defineStore('ciis', {
         "harga": 0,
       })
     },
-    deleteInterior(_tempId) {
-      const interior = [...this.newRequest.interior]
-      this.newRequest.interior = interior.filter(item => item._tempId !== _tempId);
+    // deleteInterior(_tempId) {
+    //   const interior = [...this.newRequest.interior]
+    //   this.newRequest.interior = interior.filter((item, index)=> index == _tempId);
+    // },
+    deleteInterior(i) {
+      console.log(i)
+      this.addedInterior.splice(i, 1)
     },
     deleteInteriorEdit(i) {
       console.log(i)
@@ -416,7 +441,7 @@ export const useCiStore = defineStore('ciis', {
   // Request 
   addInteriorRequest(){
     this.newRequest.interior.push({
-      _tempId: crypto.randomUUID(),
+      _tempId: uuidv4(),
       nama_interior: "",
       v1: "1",
       v2: "1",

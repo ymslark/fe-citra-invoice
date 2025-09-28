@@ -3,6 +3,8 @@ import { VForm } from 'vuetify/components/VForm';
 import { useAlertStore } from '../../../../stores/alert';
 import { useMemoStore } from '../../../../stores/memo';
 import { useSupirStore } from '../../../../stores/supir';
+// import {crypto} from 'crypto'
+import { v4 as uuidv4 } from 'uuid'
 
 const memo = useMemoStore()
 const supir = useSupirStore()
@@ -28,7 +30,7 @@ try {
   delete memo.editMemo.updatedAt
   memo.editMemo.barang = memo.editMemo.barang.map(barang => ({
     ...barang,
-    _tempId: crypto.randomUUID(), // atau Date.now() atau counter manual
+    _tempId: uuidv4(), // atau Date.now() atau counter manual
   }))
   memo.editMemo.id_supir = response.doc.supir._id
 } catch (error) {

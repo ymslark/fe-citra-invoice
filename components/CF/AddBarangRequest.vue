@@ -18,7 +18,7 @@ const label = barang.nama_barang_request ? `Nama Barang (${barang.nama_barang_re
   <VRow>
     <VCol cols="12" md="8">
       <AppTextarea rows="1" auto-grow v-model="barang.nama_barang" placeholder="Masukkan Nama Barang"
-        variant="underlined" :label="label" :rules="[requiredValidator]" />
+        variant="underlined" :label="label" :rules="[requiredValidator]" name="input-nama-barang"/>
     </VCol>
     <VCol cols="8" md="2">
       <AppTextField v-model="barang.qty" label="Qty" placeholder="Masukkan jumlah barang"

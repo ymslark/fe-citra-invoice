@@ -1,6 +1,6 @@
 <script setup>
 import { useBarangStore } from '@/stores/barang'
-import { useCFStore } from '@/stores/cf'
+import { useSCIStore } from '@/stores/sci'
 // import { format } from 'node:path'
 import { ref } from 'vue'
 
@@ -14,13 +14,13 @@ const props = defineProps({
 const barang = props.barang
 
 const barangStore = useBarangStore()
-const cf = useCFStore()
-const addedTemp = cf.addedBarangTemp
+const sci = useSCIStore()
+const addedTemp = sci.addedBarangTemp
 const loading = ref(false)
 const items = [...props.items]
 
-// const deleteBarang = index => cf.deleteBarangEdit(index)
-const deleteBarang = _tempId => cf.deleteBarangEditByTempId(_tempId)
+// const deleteBarang = index => sci.deleteBarangEdit(index)
+const deleteBarang = _tempId => sci.deleteBarangEditByTempId(_tempId)
 const label = barang.nama_barang_request ? `Nama Barang (${barang.nama_barang_request})` : 'Nama Barang'
 
 function formatInput(e) {
@@ -52,6 +52,7 @@ onMounted(() => {
       v-model="barang.nama_barang"
       placeholder="Pilih Barang"
       :rules="[requiredValidator]"
+       name="input-nama-barang"
     />
     </VCol>
     <VCol cols=" 12" md="3">

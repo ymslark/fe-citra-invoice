@@ -52,6 +52,7 @@ onMounted(() => {
       v-model="barang.nama_barang"
       placeholder="Pilih Barang"
       :rules="[requiredValidator]"
+      name="input-nama-barang"
     />
     </VCol>
     <VCol cols=" 12" md="3">

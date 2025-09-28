@@ -51,6 +51,7 @@ initCore()
 initConfigStore()
 
 const configStore = useConfigStore()
+const config = useRuntimeConfig()
 const { isMobile } = useDevice()
 if (isMobile)
   configStore.appContentLayoutNav = 'vertical'
@@ -59,6 +60,7 @@ if (isMobile)
 const route = useRoute()
 const pageBackground = computed(() => route.meta.backgroundColor || global.current.value.colors.background)
 const isPrintLayout = computed(() => route.meta.layout === 'print')
+console.log(config)
 </script>
 
 <template>

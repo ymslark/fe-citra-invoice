@@ -5,7 +5,7 @@ definePageMeta({
 })
 import { useAlertStore } from '@/stores/alert'
 import { useCiStore } from '@/stores/ciis'
-import { formatRupiah, formatTanggalIndonesia, pembilang } from '@/utils/format'
+import { formatRupiah, formatTanggalIndonesia } from '@/utils/format'
 import { getDate } from '@/utils/global'
 import { hitungInvoiceInterior } from '@/utils/invoice/hitungInvoiceInterior'
 const route = useRoute()
@@ -36,16 +36,56 @@ try {
   })
 }
 
+function pembilang(nilai){
+  //ubah dari nominal jadi terbilang
+  nilai = Math.floor(Math.abs(nilai));
+                    
+  let simpanNilaiBagi = 0;
+  let huruf = [ '', 'Satu','Dua','Tiga','Empat','Lima','Enam','Tujuh','Delapan','Sembilan','Sepuluh','Sebelas']
+  let temp = '';
+  
+  if (nilai < 12) {
+      temp = ' ' + huruf[nilai];
+  } else if (nilai < 20) {
+      temp = this.pembilang(Math.floor(nilai - 10)) + ' Belas';
+  } else if (nilai < 100) {
+      simpanNilaiBagi = Math.floor(nilai / 10);
+      temp = this.pembilang(simpanNilaiBagi) + ' Puluh' + this.pembilang(nilai % 10);
+  } else if (nilai < 200) {
+      temp = ' Seratus' + this.pembilang(nilai - 100);
+  } else if (nilai < 1000) {
+      simpanNilaiBagi = Math.floor(nilai / 100);
+      temp = this.pembilang(simpanNilaiBagi) + ' Ratus' + this.pembilang(nilai % 100);
+  } else if (nilai < 2000) {
+      temp = ' Seribu' + this.pembilang(nilai - 1000);
+  } else if (nilai < 1000000) {
+      simpanNilaiBagi = Math.floor(nilai / 1000);
+      temp = this.pembilang(simpanNilaiBagi) + ' Ribu' + this.pembilang(nilai % 1000);
+  } else if (nilai < 1000000000) {
+      simpanNilaiBagi = Math.floor(nilai / 1000000);
+      temp = this.pembilang(simpanNilaiBagi) + ' Juta' + this.pembilang(nilai % 1000000);
+  } else if (nilai < 1000000000000) {
+      simpanNilaiBagi = Math.floor(nilai / 1000000000);
+      temp =
+      this.pembilang(simpanNilaiBagi) + ' Miliar' + this.pembilang(nilai % 1000000000);
+  } else if (nilai < 1000000000000000) {
+      simpanNilaiBagi = Math.floor(nilai / 1000000000000);
+      temp = this.pembilang(nilai / 1000000000000) + ' Triliun' + this.pembilang(nilai % 1000000000000);
+  }
+  
+  return temp
+}
+
 
 onMounted(() => {
   if(process.client){
-    document.title = 'Invoice ' + surat.tujuan + ' - Citra Interior'
+    document.title = surat.no_seri + ' Invoice ' + surat.tujuan + ' - Citra Interior'
     setTimeout(() => {
       window.print()
     }, 1000)
       window.addEventListener('afterprint', () => {
         window.location.replace('/admin/CII/detail/' + id)
-      //   window.location.href = '/admin/CII/detail/' + id
+        // window.location.href = '/admin/CII/detail/' + id
       //   // this.$router.push(`/admin/CII`)  // Gantilah dengan tujuan kamu
       })
   }
@@ -339,37 +379,38 @@ console.log(interiors)
 
 
   .table-items {
-    font-size: 10pt !important;
+    font-size: 9pt !important;
 
   }
-
-  .table-items thead th {
-    font-size: 11pt !important;
-    padding: 2px;
-  }
-
+/* 5%, 35%, 12%, 8%, 12%, 8%, 20% */
   .table-items thead th:first-child {
-    width: 5% !important;
+    width: 3% !important;
   }
 
   .table-items thead th:nth-child(2) {
-    width: 50% !important;
+    max-width: 24% !important;
   }
 
   .table-items thead th:nth-child(3) {
-    width: 6% !important;
+    max-width: 15% !important;
   }
 
   .table-items thead th:nth-child(4) {
-    width: 19% !important;
+    max-width: 9% !important;
+  }
+  .table-items thead th:nth-child(5) {
+    max-width: 16% !important;
+  }
+  .table-items thead th:nth-child(6) {
+    max-width: 16% !important;
   }
 
   .table-items thead th:last-child {
-    width: 20% !important;
+    max-width: 16% !important;
   }
 
   .table-items tbody td {
-    padding: 2px;
+    padding: 1px;
 
   }
 
@@ -625,9 +666,9 @@ table.rekening {
 
 .angka-kanan .nilai {
   display: inline-block;
-  min-width: 8ch; /* biarkan panjang angka fleksibel */
+  min-width: 7ch; /* biarkan panjang angka fleksibel */
   text-align: right;
-  margin-right: 10px; /* jarak antara angka dan Rp */
+  margin-right: 2pt; /* jarak antara angka dan Rp */
 }
 
 </style>

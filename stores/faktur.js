@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-
+import { v4 as uuidv4 } from 'uuid'
+// import {crypto} from 'crypto'
 function useCurrency() {
   const { $formatRupiah, $parseRupiah } = useNuxtApp()
   return { $formatRupiah, $parseRupiah }
@@ -34,7 +35,7 @@ export const useFakturStore = defineStore('faktur', {
     addBarang(type) {
       // type = 'new' || 'edit'
       let rawItem = {
-        _tempId: crypto.randomUUID(),
+        _tempId: uuidv4(),
         nama_barang: '',
         qty: 0,
         harga: 0,
@@ -49,12 +50,12 @@ export const useFakturStore = defineStore('faktur', {
       if (type == 'new' && this.newFaktur.barang.length > 0) {
         this.newFaktur.barang = this.newFaktur.barang.map(barang => ({
           ...barang,
-          _tempId: crypto.randomUUID(),
+          _tempId: uuidv4(),
         }))
       } else if (type == 'edit' && this.editFaktur.barang.length > 0) {
         this.editFaktur.barang = this.editFaktur.barang.map(barang => ({
           ...barang,
-          _tempId: crypto.randomUUID(),
+          _tempId: uuidv4(),
         }))
       }
     },

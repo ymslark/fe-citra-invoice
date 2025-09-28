@@ -16,6 +16,12 @@ export default defineNuxtConfig({
         href: process.env.NUXT_APP_BASE_URL+'/favicon.ico',
       }],
     },
+    baseURL: '/citra-invoice/'
+  },
+
+  server: {
+    host: '0.0.0.0', // Listen on all interfaces
+    port: 3000
   },
 
   devtools: {
@@ -39,12 +45,15 @@ export default defineNuxtConfig({
     // Private keys are only available on the server
     AUTH_ORIGIN: process.env.AUTH_ORIGIN,
     AUTH_SECRET: process.env.AUTH_SECRET,
-    BASE_URL_API: 'http://localhost:3900',
+    BASE_URL_API: process.env.API_BASE_URL || 'http://localhost:3900',
 
     // Public keys that are exposed to the client.
+// nuxt.config.ts
     public: {
-      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || '/api',
-    },
+      apiUrl: process.env.API_URL,
+      appName: process.env.APP_NAME,
+      debug: process.env.DEBUG === 'true'
+    }
   },
   components: {
     dirs: [{

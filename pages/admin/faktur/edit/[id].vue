@@ -2,12 +2,14 @@
 import {useFakturStore} from '@/stores/faktur.js'
 import {useAlertStore} from '@/stores/alert.js'
 import { formatTanggalIndonesia, formatRupiah } from '@/utils/format'
+const config = useRuntimeConfig()
+const baseUrl = config.public.apiUrl // Ganti dengan URL API yang sesuai
+// Ganti dengan URL API yang sesuai
 const faktur = useFakturStore()
 const route = useRoute()
 const id = route.params.id || null
 const alert = useAlertStore()
 const url = ref('')
-const baseUrl = 'http://localhost:3900'; // Ganti dengan URL API yang sesuai
 // const faktur.editFaktur = faktur.faktur.editFaktur
 
 const tempFile = ref(null)

@@ -22,9 +22,10 @@ function formatInput(e) {
   }
   // let raw = e.target.value.replace(/,/g, '.') // Hanya ambil angka
   // volume = volume.replace(/\D/g, '') // Hanya ambil angka
-
+  
   // semua koma jadi titik
   volume = volume.replace(/,/g, '.')
+  console.log('gaada volume', volume)
 
   // buang semua kecuali angka & titik
   volume = volume.replace(/[^0-9.]/g, '')
@@ -39,20 +40,20 @@ function formatInput(e) {
 
 <template>
   <VRow>
-    <VCol cols="12" md="8">
+    <VCol cols="12" md="6">
       <AppTextField v-model="interior.nama_interior" placeholder="Masukkan Nama Interior" variant="underlined" :label="label"
-        :rules="[requiredValidator]" />
+        :rules="[requiredValidator]" name="input-nama-interior"/>
     </VCol>
-    <VCol cols="12" md="6" class="pt-3">
-      <VRow class="d-flex align-center" no-gutters>
+    <VCol cols="12" md="4" class="pt-3">
+      <VRow class="d-flex align-center " no-gutters>
         <VCol>
-          <AppTextField label="volume1" v-model="interior.v1" :rules="[requiredValidator]" append-inner-icon=" " name="v1" @input="formatInput"/>
+          <AppTextField label="volume1(meter)" v-model="interior.v1" :rules="[requiredValidator]" append-inner-icon=" " name="v1" @input="formatInput"/>
         </VCol>
-        <div class="mx-2">X</div>
-        <VCol><AppTextField label="volume2" v-model="interior.v2" :rules="[requiredValidator]" append-inner-icon=" " name="v2" @input="formatInput"/></VCol>
+        <div class="mx-2 mt-6">X</div>
+        <VCol><AppTextField label="volume2(meter)" v-model="interior.v2" :rules="[requiredValidator]" append-inner-icon=" " name="v2" @input="formatInput"/></VCol>
       </VRow>
     </VCol>
-    <VCol cols="12" md="3">
+    <VCol cols="12" md="2">
       <VBtn color="error" @click="deleteInterior(index)" class="mt-md-5">
         Delete
       </VBtn>

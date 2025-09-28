@@ -40,9 +40,8 @@ try {
 }
 
 onMounted(() => {
-  document.title = 'Surat Penawaran ' + surat.tujuan + ' - Citra Furniture'
   if(process.client){
-    document.title = 'Surat Penawaran ' + surat.tujuan + ' - Citra Furniture'
+    document.title = surat.no_seri + ' Surat Penawaran ' + surat.tujuan + ' - Citra Furniture'
     setTimeout(() => {
       window.print()
     }, 1000)

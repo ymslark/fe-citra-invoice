@@ -71,9 +71,9 @@ import {useFakturStore} from '@/stores/faktur.js'
 const faktur = useFakturStore()
 const seri = ref('')
 const tempat = ref('Offline')
-
+const config = useRuntimeConfig()
 const form = faktur.newFaktur
-const baseUrl = 'http://localhost:3900'; // Ganti dengan URL API yang sesuai
+const baseUrl = config.public.apiUrl // Ganti dengan URL API yang sesuai
 const url = ref('')
 
 const tempFile = ref(null)

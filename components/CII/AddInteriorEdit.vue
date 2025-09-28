@@ -40,7 +40,7 @@ onMounted(() => {
   <VRow>
     <VCol cols="12" md="8">
       <AppTextField v-model="interior.nama_interior" placeholder="Masukkan Nama Interior" variant="underlined" :label="label"
-        :rules="[requiredValidator]" />
+        :rules="[requiredValidator]" name="input-nama-interior"/>
     </VCol>
     <VCol cols=" 12" md="3">
       <AppTextField v-model="interior.harga" label="Harga" placeholder="Masukkan Harga"

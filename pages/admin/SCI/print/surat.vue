@@ -40,9 +40,9 @@ try {
 }
 
 onMounted(() => {
-  document.title = 'Surat Penawaran ' + surat.tujuan + ' - Sentral Citra'
+  document.title = surat.no_seri + ' Surat Penawaran ' + surat.tujuan + ' - Sentral Citra'
   if(process.client){
-    document.title = 'Surat Penawaran ' + surat.tujuan + ' - Sentral Citra'
+    document.title = surat.no_seri + ' Surat Penawaran ' + surat.tujuan + ' - Sentral Citra'
     setTimeout(() => {
       window.print()
     }, 1000)
@@ -202,7 +202,7 @@ onMounted(() => {
       </table>
       </div>
       <div class="footer-surat">
-        <div class="tanggal">Bekasi, {{ formatTanggalIndonesia(getDate()) }}</div>
+        <div class="tanggal">Bekasi, {{ formatTanggalIndonesia(surat.tanggal, 'hari') }}</div>
         <div class="mt-n3">Hormat Kami</div>
         <img src="/images/citragroup/SCI/SCI_Logo.png" alt="Logo Perusahaan" />
         <div class="nama-perusahaan">Sentral Citra Indonesia</div>

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-
+import { v4 as uuidv4 } from 'uuid'
+// import {crypto} from 'crypto'
 function useCurrency() {
   const { $formatRupiah, $parseRupiah } = useNuxtApp()
   return { $formatRupiah, $parseRupiah }
@@ -308,7 +309,7 @@ export const useCFStore = defineStore('cf', {
 
     addBarang() {
       this.addedBarang.push({
-        "_tempId": crypto.randomUUID(),
+        "_tempId": uuidv4(),
         "nama_barang": "",
         "qty": 1,
         "diskon_persen": 0,
@@ -318,7 +319,7 @@ export const useCFStore = defineStore('cf', {
     },
     addBarangEdit() {
       this.editSurat.barang.push({
-        "_tempId": crypto.randomUUID(),
+        "_tempId": uuidv4(),
         "nama_barang": "",
         "qty": 1,
         "diskon_persen": 0,
@@ -347,7 +348,7 @@ export const useCFStore = defineStore('cf', {
       if (this.editSurat.barang.length > 0) {
         this.editSurat.barang = this.editSurat.barang.map(barang => ({
           ...barang,
-          _tempId: crypto.randomUUID(),
+          _tempId: uuidv4(),
         }))
       }
     } 
@@ -477,7 +478,7 @@ export const useCFStore = defineStore('cf', {
     this.newSurat.alamat = response.doc.alamat
     response.doc.barang.forEach(item => {
       this.addedBarang.push({
-        "_tempId": crypto.randomUUID(),
+        "_tempId": uuidv4(),
         "nama_barang": "",
         "nama_barang_request": item.nama_barang,
         "qty": item.qty,

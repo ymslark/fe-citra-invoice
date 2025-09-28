@@ -65,7 +65,17 @@ const selectedRadio = ref()
 
 // // console.log(selectedRadio.value)
 
+function scrollTo(id) {
+  const el = document.getElementById(id)
+  if (el){ 
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    const input = el?.querySelector('[name="input-nama-barang"]')
+    
+    input?.focus()
+    input.dispatchEvent(new Event('input', { bubbles: true }))
 
+  }
+}
 const cetak = () => {
   // // // console.log(selectedRadio.value)
   surat.atas_nama = selectedRadio.value.atas_nama
@@ -167,7 +177,7 @@ const barangs = res.Barangs
           <!-- <VCol cols="12" offset-md="8" md="4">
           <SCIAddBarang v-for="(barang, index) in sci.addedBarang" :key="index" :barang="barang" :index="index" :items="barangs" />
           </VCol> -->
-          <VCol cols="12" v-for="(barang, index) in sci.addedBarang" :key="barang._tempId" >
+          <VCol cols="12" v-for="(barang, index) in sci.addedBarang" :key="barang._tempId" :id="`item-${index+1}`">
             <SCIAddBarang :barang="barang" :index="index" :items="barangs" />
           </VCol>
         </VCardItem>

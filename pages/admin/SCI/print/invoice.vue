@@ -5,7 +5,7 @@ definePageMeta({
 })
 import { useAlertStore } from '@/stores/alert'
 import { useSCIStore } from '@/stores/sci'
-import { formatRupiah, formatTanggalIndonesia, pembilang } from '@/utils/format'
+import { formatRupiah, formatTanggalIndonesia } from '@/utils/format'
 import { hitungInvoiceBarang } from '@/utils/invoice/hitungInvoiceBarang'
 import { getDate } from '@/utils/global'
 const route = useRoute()
@@ -35,10 +35,49 @@ try {
     message: 'Gagal mengambil data surat',
   })
 }
+function pembilang(nilai){
+  //ubah dari nominal jadi terbilang
+  nilai = Math.floor(Math.abs(nilai));
+                    
+  let simpanNilaiBagi = 0;
+  let huruf = [ '', 'Satu','Dua','Tiga','Empat','Lima','Enam','Tujuh','Delapan','Sembilan','Sepuluh','Sebelas']
+  let temp = '';
+  
+  if (nilai < 12) {
+      temp = ' ' + huruf[nilai];
+  } else if (nilai < 20) {
+      temp = this.pembilang(Math.floor(nilai - 10)) + ' Belas';
+  } else if (nilai < 100) {
+      simpanNilaiBagi = Math.floor(nilai / 10);
+      temp = this.pembilang(simpanNilaiBagi) + ' Puluh' + this.pembilang(nilai % 10);
+  } else if (nilai < 200) {
+      temp = ' Seratus' + this.pembilang(nilai - 100);
+  } else if (nilai < 1000) {
+      simpanNilaiBagi = Math.floor(nilai / 100);
+      temp = this.pembilang(simpanNilaiBagi) + ' Ratus' + this.pembilang(nilai % 100);
+  } else if (nilai < 2000) {
+      temp = ' Seribu' + this.pembilang(nilai - 1000);
+  } else if (nilai < 1000000) {
+      simpanNilaiBagi = Math.floor(nilai / 1000);
+      temp = this.pembilang(simpanNilaiBagi) + ' Ribu' + this.pembilang(nilai % 1000);
+  } else if (nilai < 1000000000) {
+      simpanNilaiBagi = Math.floor(nilai / 1000000);
+      temp = this.pembilang(simpanNilaiBagi) + ' Juta' + this.pembilang(nilai % 1000000);
+  } else if (nilai < 1000000000000) {
+      simpanNilaiBagi = Math.floor(nilai / 1000000000);
+      temp =
+      this.pembilang(simpanNilaiBagi) + ' Miliar' + this.pembilang(nilai % 1000000000);
+  } else if (nilai < 1000000000000000) {
+      simpanNilaiBagi = Math.floor(nilai / 1000000000000);
+      temp = this.pembilang(nilai / 1000000000000) + ' Triliun' + this.pembilang(nilai % 1000000000000);
+  }
+  
+  return temp
+}
 
 onMounted(() => {
   if(process.client){
-    document.title = 'Invoice ' + surat.tujuan + ' - Sentral Citra'
+    document.title = surat.no_seri + ' Invoice ' + surat.tujuan + ' - Sentral Citra'
     setTimeout(() => {
       window.print()
     }, 1000)

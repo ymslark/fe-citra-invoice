@@ -1,9 +1,11 @@
 import { useAuthStore } from '@/@core/stores/auth'
 import auth from '@/middleware/auth'
+
 // import dotenv from 'dotenv'
 // env = dotenv.config()
+const config = useRuntimeConfig()
 export default defineNuxtPlugin(nuxtApp => {
-  const BASE_URL = 'http://localhost:3900' // Ganti dengan API base URL-mu
+  const BASE_URL =  config.public.apiUrl // Ganti dengan API base URL-mu
   const authStore = useAuthStore()
   // console.log(authStore.isLoggedIn, authStore.accessToken)
   // Fungsi dasar untuk meng-handle request

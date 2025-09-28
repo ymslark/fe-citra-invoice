@@ -1,4 +1,6 @@
 import { defineStore } from 'pinia'
+import { v4 as uuidv4 } from 'uuid'
+
 const {$api} = useNuxtApp()
 
 export const useMemoStore = defineStore('memo', {
@@ -28,7 +30,7 @@ export const useMemoStore = defineStore('memo', {
     addBarang(type){
       // type = 'new' || 'edit'
       let rawItem = {
-        _tempId: crypto.randomUUID(),
+        _tempId: uuidv4(),
         nama_barang: '',
         qty: 0,
         keterangan: '',
@@ -40,7 +42,7 @@ export const useMemoStore = defineStore('memo', {
     addBarang(type){
       // type = 'new' || 'edit'
       let rawItem = {
-        _tempId: crypto.randomUUID(),
+        _tempId: uuidv4(),
         nama_barang: '',
         qty: 0,
         keterangan: '',
@@ -55,13 +57,13 @@ export const useMemoStore = defineStore('memo', {
       if(type == 'new' && this.newMemo.barang.length > 0){
         this.newMemo.barang = this.newMemo.barang.map(barang => ({
           ...barang,
-          _tempId: crypto.randomUUID(), // atau Date.now() atau counter manual
+          _tempId: uuidv4(), // atau Date.now() atau counter manual
       }))
     }
       else if(type == 'edit' && this.editMemo.barang.length > 0){
         this.editMemo.barang = this.editMemo.barang.map(barang => ({
           ...barang,
-          _tempId: crypto.randomUUID(), // atau Date.now() atau counter manual
+          _tempId: uuidv4(), // atau Date.now() atau counter manual
       }))
       }
     }
