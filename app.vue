@@ -60,7 +60,8 @@ if (isMobile)
 const route = useRoute()
 const pageBackground = computed(() => route.meta.backgroundColor || global.current.value.colors.background)
 const isPrintLayout = computed(() => route.meta.layout === 'print')
-console.log(config)
+// console.log(config)
+// console.log(process.env)
 </script>
 
 <template>
