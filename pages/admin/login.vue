@@ -47,11 +47,11 @@ const refVForm = ref()
 
 const login = async () => {
   try {
-    console.log(username, password)
+    // console.log(username, password)
 
     const isLoggedIn = await authStore.login({ username: username.value, password: password.value })
     if (!isLoggedIn) throw { message: 'Login Gagal! periksa username dan password anda' }
-    console.log(isLoggedIn)
+    // console.log(isLoggedIn)
     if (isLoggedIn) navigateTo({ name: 'admin-supir' })
   } catch (error) {
     errorMessage.value = error.message

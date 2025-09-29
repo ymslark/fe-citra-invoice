@@ -45,13 +45,13 @@ export default defineNuxtPlugin(nuxtApp => {
       // console.log(authStore.refreshToken)
       if (error.response?.status === 401 && authStore.refreshToken) {
         try {
-          console.log('Refreshing access token...')
+          // console.log('Refreshing access token...')
           await authStore.refreshAccessToken()
           headers.Authorization = `Bearer ${authStore.accessToken}`
           
           return await $fetch(BASE_URL + url, options)
         } catch (refreshError) {
-          console.log('Refresh token failed:', refreshError)
+          // console.log('Refresh token failed:', refreshError)
           authStore.logout()
           navigateTo('admin-login')
           throw refreshError
