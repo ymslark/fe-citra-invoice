@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"dc818041534f4202baad7d1bb1d7b807","collectionName":"fakturolds","type":"collection"}

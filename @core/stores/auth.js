@@ -10,12 +10,13 @@ export const useAuthStore = defineStore('auth', {
 
   actions: {
     async login(credentials) {
+      const { $api } = useNuxtApp()
       try {
-        // Gunakan $fetch langsung dengan base URL dari runtimeConfig
+        // Gunakan $api langsung dengan base URL dari runtimeConfig
         const config = useRuntimeConfig()
         console.log('RuntimeConfig:', config) // Debug
-        
-        const response = await $fetch('/login', {
+        const { $api } = useNuxtApp()
+        const response = await $api.post('/login', {
           baseURL: config.public.apiBase,
           method: 'POST',
           body: credentials
@@ -73,8 +74,8 @@ export const useAuthStore = defineStore('auth', {
     async refreshAccessToken() {
       try {
         const config = useRuntimeConfig()
-        
-        const response = await $fetch('/refresh-token', {
+        const { $api } = useNuxtApp()
+        const response = await $api.post('/refresh-token', {
           baseURL: config.public.apiBase,
           method: 'POST',
           body: {
