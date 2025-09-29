@@ -12,10 +12,9 @@ export const useAuthStore = defineStore('auth', {
     async login(credentials) {
       const { $api } = useNuxtApp()
       try {
-        // Gunakan $api langsung dengan base URL dari runtimeConfig
         const config = useRuntimeConfig()
-        console.log('RuntimeConfig:', config) // Debug
-        const { $api } = useNuxtApp()
+        console.log('RuntimeConfig:', config)
+
         const response = await $api.post('/login', {
           baseURL: config.public.apiBase,
           method: 'POST',
@@ -31,46 +30,19 @@ export const useAuthStore = defineStore('auth', {
         this.user = response.user
         this.isLoggedIn = true
 
-        // Set cookies dengan config yang benar
-        const accessTokenCookie = useCookie('accessToken', { 
-          maxAge: 60 * 60 * 24 * 7, // 7 hari
-          path: '/',
-          secure: false, // Sementara false untuk development
-          sameSite: 'lax'
-        })
-        
-        const refreshTokenCookie = useCookie('refreshToken', { 
-          maxAge: 60 * 60 * 24 * 30, // 30 hari
-          path: '/',
-          secure: false,
-          sameSite: 'lax'
-        })
-        
-        const userCookie = useCookie('user', { 
-          maxAge: 60 * 60 * 24 * 7, // 7 hari
-          path: '/',
-          secure: false,
-          sameSite: 'lax'
-        })
+        // Set cookies (client only)
+        useCookie('accessToken', { maxAge: 60 * 60 * 24 * 7, path: '/' }).value = response.accessToken
+        useCookie('refreshToken', { maxAge: 60 * 60 * 24 * 30, path: '/' }).value = response.refreshToken
+        useCookie('user', { maxAge: 60 * 60 * 24 * 7, path: '/' }).value = response.user
 
-        // Assign values
-        accessTokenCookie.value = response.accessToken
-        refreshTokenCookie.value = response.refreshToken
-        userCookie.value = response.user
-        
-        console.log('Cookies set successfully:', {
-          accessToken: !!accessTokenCookie.value,
-          user: !!userCookie.value
-        })
-        
+        console.log('Cookies set successfully')
         return true
-        
       } catch (error) {
         console.error('Login error:', error)
         return false
       }
     },
-    
+
     async refreshAccessToken() {
       try {
         const config = useRuntimeConfig()
@@ -78,30 +50,22 @@ export const useAuthStore = defineStore('auth', {
         const response = await $api.post('/refresh-token', {
           baseURL: config.public.apiBase,
           method: 'POST',
-          body: {
-            refreshToken: this.refreshToken,
-          }
+          body: { refreshToken: this.refreshToken }
         })
-        
+
         if (!response) throw new Error('Refresh Token Gagal')
 
-        // Update state
         this.accessToken = response.accessToken
         this.refreshToken = response.refreshToken
         this.user = response.user
         this.isLoggedIn = true
-        
-        console.log('Refresh token success:', response)
 
         // Update cookies
-        const accessTokenCookie = useCookie('accessToken')
-        const refreshTokenCookie = useCookie('refreshToken') 
-        const userCookie = useCookie('user')
+        useCookie('accessToken').value = response.accessToken
+        useCookie('refreshToken').value = response.refreshToken
+        useCookie('user').value = response.user
 
-        accessTokenCookie.value = response.accessToken
-        refreshTokenCookie.value = response.refreshToken
-        userCookie.value = response.user
-        
+        console.log('Refresh token success')
         return true
       } catch (error) {
         console.error('Refresh token error:', error)
@@ -109,39 +73,31 @@ export const useAuthStore = defineStore('auth', {
         return false
       }
     },
-    
+
     logout() {
-      // Clear state
       this.accessToken = null
       this.refreshToken = null
       this.user = null
       this.isLoggedIn = false
-      
-      // Clear cookies
-      const accessTokenCookie = useCookie('accessToken', { maxAge: 0 })
-      const refreshTokenCookie = useCookie('refreshToken', { maxAge: 0 })
-      const userCookie = useCookie('user', { maxAge: 0 })
 
-      accessTokenCookie.value = null
-      refreshTokenCookie.value = null
-      userCookie.value = null
-      
+      // Clear cookies
+      useCookie('accessToken').value = null
+      useCookie('refreshToken').value = null
+      useCookie('user').value = null
+
       console.log('Logout successful')
-      
-      // Redirect to login
       navigateTo('/login')
     },
-    
+
     initAuth() {
-      // Ambil dari cookies
       const accessTokenCookie = useCookie('accessToken')
       const refreshTokenCookie = useCookie('refreshToken')
       const userCookie = useCookie('user')
-      
+
       console.log('Init Auth - Cookies:', {
-        accessToken: accessTokenCookie.value ? 'exists' : 'empty',
-        refreshToken: refreshTokenCookie.value ? 'exists' : 'empty',
-        user: userCookie.value ? 'exists' : 'empty'
+        accessToken: !!accessTokenCookie.value,
+        refreshToken: !!refreshTokenCookie.value,
+        user: !!userCookie.value
       })
 
       if (accessTokenCookie.value && refreshTokenCookie.value && userCookie.value) {
