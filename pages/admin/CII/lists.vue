@@ -4,26 +4,28 @@
       <VCardTitle>
         <div class="">
           <h2 class="text-lg font-weight-medium d-inline">
-            Data Surat Citra Interior
+            Data Surat Citra Furniture
           </h2>
         </div>
       </VCardTitle>
       <VCardItem>
-        <VRow>
-          <!-- <VCol cols="12" md="4" class="d-flex align-center">
-            <AppTextField v-model="search" label="Cari Tujuan" variant="outlined" class="mb-4" clearable
-              append-inner-icon="tabler-search" @keyup.enter="fetchItems()" />
-          </VCol> -->
-          <!-- <VCol cols="12" md="4" offset-md="6">
+        <VRow class="d-flex justify-end">
+          <VCol cols="12" md="4">
+            <AppTextField v-model="search" label="Cari Tujuan" variant="outlined"
+              append-inner-icon="tabler-search" />
+          </VCol>
+          <VCol cols="12" md="4">
               <AppDateTimePicker
+                class="mt-n1"
                 v-model="dateRange"
                 label="Range"
-                placeholder="Select date"
+                placeholder="Pilih Rentang Tanggal"
+                clearable
                 :config="{ mode: 'range' }"
                 />
-          </VCol> -->
-          <VCol cols="12" md="2" class="d-flex align-end">
-              <VBtn color="primary" @click="getDocumentByRange" class="">Filter Tanggal</VBtn>
+          </VCol>
+          <VCol cols="12" md="2" class="mt-md-5 ">
+              <VBtn color="primary" @click="filterData(page)" class="">Filter Data</VBtn>
           </VCol>
           <VCol cols="12" class="d-flex justify-content-end flex-grow-1" >
             <div >
@@ -133,11 +135,12 @@
 <script setup>
 
 definePageMeta({
-  // middleware: 'auth.client',
+  middleware: 'auth-client',
   requiresAuth: true,
 })
 import { useCiStore } from '@/stores/ciis'
 import {useAlertStore} from '@/stores/alert'
+import { buildQueryFilterParams } from '@/utils/apiFilterQuery'
 
 
 const { $api } = useNuxtApp()
@@ -147,11 +150,43 @@ const currentPage = ref(1)
 const surats = ref([])
 const totalPages = ref(1)
 
+const filterData = async (page = 1) => {
+  try {
+    let start = ''
+    let end = ''
+    if (dateRange.value) {
+      let range = dateRange.value.split(' to ')
+      //console.log(range)
+      if( range.length == 1) {
+        start = range[0]
+        end = range[0]
+      }
+      else if (range.length == 2) {
+        start = range[0]
+        end = range[1]
+      }
+    }
+    const query = buildQueryFilterParams({ startDate: start, endDate: end,page, search: search.value, limit:10 }, false);
+    const response = await $api.get('/CII/filterData', { ...query });
+    //console.log(response)
+    surats.value = response.docs
+    totalPages.value = response.totalPages // backend kirim total halaman
+    currentPage.value = response.page
+    //console.log(surats.value)
+  } catch (error) {
+    //console.log(error.message)
+    alert.showAlertObject({
+      type: 'error',
+      message: error.message || 'Gagal mengambil data',
+    })
+  }
+}
+
 // Ambil data dari backend, backend sudah siapkan pagination
 const fetchItems = async (page = 1) => {
   try {
-    const response = await $api.get(`/CII?page=${page}&limit=20`)
-    console.log(response)
+    const response = await $api.get(`/CII?page=${page}&limit=10`)
+    //console.log(response)
     surats.value = response.docs
     totalPages.value = response.totalPages // backend kirim total halaman
   } catch (error) {
@@ -161,10 +196,11 @@ const fetchItems = async (page = 1) => {
 
 watch(currentPage, (page) => {
   if (search.value.length >= 3) {
-    getDocumentByRange(page)
+    filterData(page)
   }
   else if (search.value.length === 0) {
-    getDocumentByRange(page)
+    //console.log(page)
+    filterData(page)
   }
 
 })
@@ -196,7 +232,7 @@ let status = {
   }
 }
 // let surats = await cii.getCII()
-// console.log(surats)
+// //console.log(surats)
 
 function goToDetailPage(id) {
   navigateTo({ name: `admin-CII-detail-id`, params: { id } })
@@ -210,43 +246,44 @@ const search = ref('')
 
 //fungsi untuk search data
 
-watch(search, (newValue) => {
-  if (newValue.length >= 3) {
-    getDocumentByRange()
-  } else if (newValue.length === 0) {
-    getDocumentByRange()
-  }
-})
+// watch(search, (newValue) => {
+//   if (newValue.length >= 3) {
+//     //console.log(newValue)
+//   } else if (newValue.length === 0) {
+//     //console.log(newValue)
+//   }
+// })
 
 const dateRange = ref()
 
-const getDocumentByRange = async (page) => {
-  try {
-    let start = ''
-    let end = ''
-    if (!dateRange.value) throw { message: 'Pilih rentang tanggal terlebih dahulu' }
-    let range = dateRange.value.split(' to ')
-    console.log(range)
-    if( range.length == 1) {
-      start = range[0]
-      end = range[0]
-    }
-    else if (range.length == 2) {
-      start = range[0]
-      end = range[1]
-    }
-    const response = await cii.getCIIByPeriods(start, end, page, search.value)
-    console.log(response)
-    surats.value = response.docs
-    totalPages.value = response.totalPages // backend kirim total halaman
-    // currentPage.value = page || 1
-    console.log(surats.value)
-  } catch (error) {
-    console.log(error.message)
-    alert.showAlertObject({
-      type: 'error',
-      message: error.message || 'Gagal mengambil data',
-    })
-  }
-}
+// const getDocumentByRange = async (page) => {
+//   try {
+//     let start = ''
+//     let end = ''
+//     if (!dateRange.value) throw { message: 'Pilih rentang tanggal terlebih dahulu' }
+//     let range = dateRange.value.split(' to ')
+//     //console.log(range)
+//     if( range.length == 1) {
+//       start = range[0]
+//       end = range[0]
+//     }
+//     else if (range.length == 2) {
+//       start = range[0]
+//       end = range[1]
+//     }
+//     const response = await cii.getCIIByPeriods(start, end, page, search.value)
+//     //console.log(response)
+//     surats.value = response.docs
+//     totalPages.value = response.totalPages // backend kirim total halaman
+//     // currentPage.value = page || 1
+//     //console.log(surats.value)
+//   } catch (error) {
+//     //console.log(error.message)
+//     alert.showAlertObject({
+//       type: 'error',
+//       message: error.message || 'Gagal mengambil data',
+//     })
+//   }
+// }
+
 </script>

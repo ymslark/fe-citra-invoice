@@ -128,6 +128,7 @@ export default defineNuxtPlugin(nuxtApp => {
           throw refreshError
         }
       }
+      console.log('Request error:', error)
       throw error.response?._data || error
     }
   }

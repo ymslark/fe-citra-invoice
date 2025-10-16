@@ -107,7 +107,7 @@ onMounted(async() => {
 //   doc.addImage(imgBase64, 'PNG', 10, 10, 50, 20)
   doc.html(htmlContent, {
     callback: function (doc) {
-      doc.save(`Permintaan Faktur Pajak ${document.pembeli.nama_pembeli}.pdf`)
+      doc.save(`${Date.now()}_Permintaan Faktur Pajak ${document.pembeli.nama_pembeli}.pdf`)
       router.back() // balik ke halaman sebelumnya
     },
     margin: [20, 20, 20, 20],

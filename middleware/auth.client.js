@@ -3,7 +3,7 @@ import { useAuthStore } from '@/@core/stores/auth'
 export default defineNuxtRouteMiddleware(to => {
   const authStore = useAuthStore()
   authStore.initAuth()
-
+  let isLoggedIn = authStore.isLoggedIn
   if (to.meta.public)
 
   return

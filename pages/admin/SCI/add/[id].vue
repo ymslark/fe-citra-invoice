@@ -47,6 +47,13 @@ const store = async () => {
 
 const tambahBarang = () => {
   sci.addBarang()
+
+  console.log(sci.addedBarang.length)
+  const idItem = `item-${sci.addedBarang.length}`
+  // scrollTo(idItem)
+  setTimeout(() => {
+    scrollTo(idItem)
+  }, 200);
 }
 
 await sci.getConfig()
@@ -67,6 +74,7 @@ const selectedRadio = ref()
 
 function scrollTo(id) {
   const el = document.getElementById(id)
+  console.log(el)
   if (el){ 
     el.scrollIntoView({ behavior: 'smooth', block: 'center' })
     const input = el?.querySelector('[name="input-nama-barang"]')
