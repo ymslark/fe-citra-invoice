@@ -94,7 +94,6 @@ const getSUrat = async () => {
 <template>
   <div>
     <VContainer>
-      <Alert />
       <FakturAddFaktur />
     </VContainer>
   </div>

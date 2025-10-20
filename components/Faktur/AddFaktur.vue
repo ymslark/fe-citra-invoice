@@ -1,6 +1,6 @@
 <template>
   <div>
-    <VCard>
+    <VCard v-if="isNotificationVisible === false">
       <VForm>
         <VCardTitle class="text-h5">Request Faktur Pajak</VCardTitle>
         <div>
@@ -62,12 +62,15 @@
         </VCardItem>
       </VForm>
     </VCard>      
-  </div> 
+    <UtilsNotification v-if="isNotificationVisible" /> 
+  </div>
 </template>
 
 <script setup>
 
 import {useFakturStore} from '@/stores/faktur.js'
+import { useAuthStore } from '@/@core/stores/auth'
+const auth = useAuthStore()
 const faktur = useFakturStore()
 const seri = ref('')
 const tempat = ref('Offline')
@@ -85,7 +88,13 @@ const fileRules = [
   () => file.value.size < 2000000 || 'ukuran file maksimal 2MB',
 ]
 //menangani file untuk diupload
-
+const isNotificationVisible = ref(false)
+const showNotification = () => {
+  isNotificationVisible.value = true
+  setTimeout(() => {
+    isNotificationVisible.value = false
+  }, 5000);
+}
 const handleFileChange = (event) => {
   console.log()
 
@@ -123,6 +132,10 @@ const uploadImage = async () => {
     console.log(formData.get('faktur'))
     let response = null
     response = await $api.post('/faktur', formData)
+    console.log(response)
+    if(!auth.isLoggedIn){
+      showNotification()
+    }
     url.value = baseUrl + '/public/images/' + response.filename
       console.log(response, 'response');
       console.log(url.value);

@@ -80,6 +80,13 @@ const tambahBarang = () => {
     scrollTo(idItem)
   }, 200);
 }
+const isNotificationVisible = ref(false)
+const showNotification = () => {
+  isNotificationVisible.value = true
+  setTimeout(() => {
+    isNotificationVisible.value = false
+  }, 5000);
+}
 const submitForm = async () => {
   try {
     // refForm?.value?.validate()
@@ -112,11 +119,4 @@ const submitForm = async () => {
   }
 }
 
-const isNotificationVisible = ref(false)
-const showNotification = () => {
-  isNotificationVisible.value = true
-  setTimeout(() => {
-    isNotificationVisible.value = false
-  }, 5000);
-}
 </script>
