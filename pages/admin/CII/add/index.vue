@@ -181,6 +181,9 @@ const copySelected = () => {
             <VCol cols="12" md="6">
               <AppTextField v-model="surat.no_hp" label="No Hp" placeholder="No. Hp" :rules="[requiredValidator]" />
             </VCol>
+            <VCol cols="12" md="6">
+              <AppTextField v-model="surat.alamat" label="Alamat" placeholder="Masukkan Alamat" :rules="[requiredValidator]" />
+            </VCol>
 
 
 

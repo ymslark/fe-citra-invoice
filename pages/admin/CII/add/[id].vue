@@ -196,6 +196,10 @@ const copySelected = () => {
               <AppTextField v-model="surat.no_hp" label="Nomor Hp" placeholder="Masukkan Nomor Hp"
                 :rules="[requiredValidator]" />
             </VCol>
+            <VCol cols="12" md="6">
+              <AppTextarea v-model="surat.alamat" label="Alamat" placeholder="Masukkan Alamat" auto-grow rows="1"
+                :rules="[requiredValidator]" />
+            </VCol>
 
             <!-- 👉 Company -->
             <!--

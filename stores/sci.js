@@ -1,10 +1,18 @@
 import { defineStore } from 'pinia'
-
+import { v4 as uuidv4 } from 'uuid'
+// import {crypto} from 'crypto'
 function useCurrency() {
   const { $formatRupiah, $parseRupiah } = useNuxtApp()
   return { $formatRupiah, $parseRupiah }
 }
 
+function getDateNow(){
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const day = String(today.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
 
 export const useSCIStore = defineStore('sci', {
   state: () => ({
@@ -22,19 +30,19 @@ export const useSCIStore = defineStore('sci', {
     errorMessage: null,
     newSurat: 
     {
-      no_hp: "",
       tanggal: "",
       hal: "Surat Penawaran Barang",
       tujuan: "",
       alamat: "",
       tempo: true,
       tanggal_tempo: "",
-      catatan_tempo: "",
+      catatan_tempo: "-",
       status: "WAITING",
       atas_nama: "",
       no_rekening: "",
+      no_hp: "",
       nama_bank: "",
-      catatan: "",
+      catatan: "-",
       ongkos_kirim: false,
       instalasi: true,
       ppn: 0,
@@ -48,13 +56,13 @@ export const useSCIStore = defineStore('sci', {
       alamat: "",
       tempo: "",
       tanggal_tempo: "",
-      catatan_tempo: "",
+      catatan_tempo: "-",
       status: "WAITING",
       atas_nama: "",
       no_rekening: "",
       nama_bank: "",
       barang: [],
-      catatan: "",
+      catatan: "-",
       ongkos_kirim: false,
       instalasi: true,
       ppn: 0,
@@ -74,6 +82,9 @@ export const useSCIStore = defineStore('sci', {
     },
     
   }),
+  getters: {
+
+  },
   actions: {
     parseRupiah(str){
       const { $parseRupiah } = useCurrency()
@@ -83,7 +94,6 @@ export const useSCIStore = defineStore('sci', {
       const { $formatRupiah } = useCurrency()
       return $formatRupiah(number, raw)
     },
-    
     async getSCI() {
       const { $api } = useNuxtApp()
       try {
@@ -99,6 +109,40 @@ export const useSCIStore = defineStore('sci', {
       } catch (error) {
         return error
       }
+    },
+    async getSCILast30Days() {
+      const { $api } = useNuxtApp()
+      try {
+        const query = {
+          limit: 20
+        }
+        const response = await $api.get('/SCI/last30Days', query)
+
+        this.daftarSurat = response.docs
+        console.log(this.daftarSurat)
+        
+        return response
+      } catch (error) {
+        return error
+      }
+    },
+
+    async getSCIByPeriods(start, end, page = 1, search = null) {
+      const { $api } = useNuxtApp()
+        const query = {
+          start_date: start,
+          end_date: end,
+          limit: 20
+        }
+      if (page) {
+        query.page = page
+      }
+      if (search) {
+        query.keyword = search
+      }
+        const response = await $api.get('/SCI/getDocumentsByPeriod', query)
+        return response.docs
+
     },
 
     async getSCIDeleted() {
@@ -127,14 +171,14 @@ export const useSCIStore = defineStore('sci', {
     },
 
     async storeSCI() {
-      const { $api } = useNuxtApp()
+      const { $api, $parseRupiah } = useNuxtApp()
       this.newSurat['barang'] = this.addedBarang.map(item => {
         return {
           "nama_barang": item.nama_barang,
           "qty": item.qty,
           "diskon_persen": item.diskon_persen,
-          "diskon_nominal": item.diskon_nominal,
-          "harga": item.harga,
+          "diskon_nominal": $parseRupiah(item.diskon_nominal),
+          "harga": $parseRupiah(item.harga),
         }
       })
       const response = await $api.post('/SCI', this.newSurat)
@@ -162,7 +206,6 @@ export const useSCIStore = defineStore('sci', {
       }
     },
 
-  
     async getSCIById(id) {
       const { $api } = useNuxtApp()
       try {
@@ -184,7 +227,7 @@ export const useSCIStore = defineStore('sci', {
         return response
         
       } catch (error) {
-        console.log('Fetch cf failed:', error)
+        console.log('Fetch sci failed:', error)
         this.setError(error.message)
         
         return error 
@@ -220,6 +263,7 @@ export const useSCIStore = defineStore('sci', {
         console.log(response)
         this.resetNewSurat()
         this.newSurat.tujuan = response.doc.tujuan
+        this.newSurat.no_hp = response.doc.no_hp
         this.newSurat.alamat = response.doc.alamat  
         this.newSurat.tanggal = response.doc.tanggal  
         response.doc.barang.forEach(item => {
@@ -247,8 +291,17 @@ export const useSCIStore = defineStore('sci', {
 
     async updateSCI(id){
       const {$api} = useNuxtApp()
+      this.editSurat['barang'] = this.editSurat.barang.map(item => {
+        return {
+          "nama_barang": item.nama_barang,
+          "qty": item.qty,
+          "diskon_persen": item.diskon_persen,
+          "diskon_nominal": this.parseRupiah(item.diskon_nominal),
+          "harga": this.parseRupiah(item.harga),
+        }
+      })
+
       const response = await $api.put(`/SCI/update/${id}`, this.editSurat)
-      
       console.log(response)
       return response
     },
@@ -256,6 +309,7 @@ export const useSCIStore = defineStore('sci', {
 
     addBarang() {
       this.addedBarang.push({
+        "_tempId": uuidv4(),
         "nama_barang": "",
         "qty": 1,
         "diskon_persen": 0,
@@ -265,6 +319,7 @@ export const useSCIStore = defineStore('sci', {
     },
     addBarangEdit() {
       this.editSurat.barang.push({
+        "_tempId": uuidv4(),
         "nama_barang": "",
         "qty": 1,
         "diskon_persen": 0,
@@ -280,6 +335,24 @@ export const useSCIStore = defineStore('sci', {
       console.log(i)
       this.editSurat.barang.splice(i, 1)
     },
+    deleteBarangByTempId(_tempId) {
+      const barang = [...this.addedBarang]
+      this.addedBarang = barang.filter(item => item._tempId !== _tempId);
+    },
+    deleteBarangEditByTempId(_tempId) {
+      const barang = [...this.editSurat.barang]
+      this.editSurat.barang = barang.filter(item => item._tempId !== _tempId);
+    },
+    
+    insertTempIdEdit() {
+      if (this.editSurat.barang.length > 0) {
+        this.editSurat.barang = this.editSurat.barang.map(barang => ({
+          ...barang,
+          _tempId: uuidv4(),
+        }))
+      }
+    } 
+    ,
     async searchBarang(keyword) {
       const { $api } = useNuxtApp()
 
@@ -328,7 +401,6 @@ export const useSCIStore = defineStore('sci', {
             current: false,
           }
         })
-
         // return response
       } catch (error) {
         console.error('Fetch config failed:', error)
@@ -354,8 +426,8 @@ export const useSCIStore = defineStore('sci', {
         tujuan: "",
         alamat: "",
         tempo: true,
-        tanggal_tempo: "",
-        catatan_tempo: "",
+        tanggal_tempo: "-",
+        catatan_tempo: "-",
         status: "WAITING",
         atas_nama: "",
         no_rekening: "",
@@ -397,6 +469,29 @@ export const useSCIStore = defineStore('sci', {
     return response
   },
 
+  async getSCIRequestById(id){
+    const { $api } = useNuxtApp()
+    const response = await $api.get(`/Request/detail/SCI/${id}`)
+    console.log(response)
+    this.newSurat.tujuan = response.doc.tujuan
+    this.newSurat.no_hp = response.doc.no_hp
+    this.newSurat.alamat = response.doc.alamat
+    response.doc.barang.forEach(item => {
+      this.addedBarang.push({
+        "_tempId": uuidv4(),
+        "nama_barang": "",
+        "nama_barang_request": item.nama_barang,
+        "qty": item.qty,
+        "diskon_persen": 0,
+        "diskon_nominal": 0,
+        "harga": 0,
+      })
+    })
+    this.newSurat.tanggal = response.doc.tanggal
+  
+    // this.surat = response.doc
+    // return response
+  },
   async setStatusRequest(id){
 
     const {$api} = useNuxtApp()
@@ -404,25 +499,5 @@ export const useSCIStore = defineStore('sci', {
     console.log(response)
   }
 
-},
-  getters: {
-
-    // getRekeningRadio: state => {
-    //   let rekeningList = []
-
-    //   console.log(this.config.rekening)
-    //   state.rekening.forEach((rekening, i) => {
-    //     rekeningList.push({
-    //       title: rekening.atas_nama + ' ( ' + rekening.nama_bank + ' )',
-    //       label: rekening.no_rekening,
-    //       value: rekening,
-    //     })
-    //   })
-      
-    //   return state.config
-    //   console.log(rekeningList)
-      
-    //   return rekeningList
-    // },
   },
 })

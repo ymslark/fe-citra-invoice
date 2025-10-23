@@ -34,11 +34,11 @@ const label = nama_barang => `Nama Barang (${nama_barang})`
         :rules="[requiredValidator]" auto-grow rows="1" />
     </VCol>
     <VCol cols=" 12" md="3">
-      <AppTextarea v-model="barang.keterangan" label="Keterangan" placeholder="Keterangan"
-        :rules="[requiredValidator]" auto-grow rows="1"/>
+      <AppTextField v-model="barang.keterangan" label="Keterangan" placeholder="Keterangan"
+        :rules="[requiredValidator]" />
     </VCol>
     <VCol cols="12" md="3">
-      <AppTextarea v-model="barang.qty" label="Qty" placeholder="Masukkan jumlah barang" auto-grow rows="1"
+      <AppTextField v-model="barang.qty" label="Qty" placeholder="Masukkan jumlah barang"
         :rules="[requiredValidator, integerValidator, minimumNumberValidator(barang.qty, 1)]" />
     </VCol>
     <!-- <VCol cols="12" md="3">
@@ -61,13 +61,13 @@ const label = nama_barang => `Nama Barang (${nama_barang})`
       <VTextarea v-model="barangs.nama_barang" placeholder="Masukkan Nama Barang"
         :label="`nama_barang (${barangs.nama_barang})`" :rules="[requiredValidator]" auto-grow rows="1" />
     </VCol>
-    <VCol cols=" 12" md="5">
-      <VTextarea v-model="barangs.keterangan" label="Keterangan" placeholder="Keterangan"
-        :rules="[requiredValidator]" auto-grow rows="1" />
+    <VCol cols=" 12" md="3">
+      <AppTextField v-model="barangs.keterangan" label="Keterangan" placeholder="Keterangan"
+        :rules="[requiredValidator]" />
     </VCol>
-    <VCol cols="12" md="1">
-      <VTextarea v-model="barangs.qty" label="Qty" placeholder="Masukkan jumlah barang"
-        :rules="[requiredValidator, integerValidator, minimumNumberValidator(barangs.qty, 1)]" auto-grow rows="1"/>
+    <VCol cols="12" md="3">
+      <AppTextField v-model="barangs.qty" label="Qty" placeholder="Masukkan jumlah barang"
+        :rules="[requiredValidator, integerValidator, minimumNumberValidator(barangs.qty, 1)]" />
     </VCol>
     <!-- <VCol cols="12" md="3">
       <AppTextField v-model="barangs.diskon_persen" label="Diskon Persen"
@@ -78,7 +78,7 @@ const label = nama_barang => `Nama Barang (${nama_barang})`
         :rules="[requiredValidator, integerValidator]" />
     </VCol> -->
     <VCol cols="12" md="3">
-      <VBtn color="error" @click="deleteBarang(barangs._tempId)">
+      <VBtn color="error" @click="deleteBarang(barangs._tempId)" class="mt-md-5">
         Delete
       </VBtn>
     </VCol>

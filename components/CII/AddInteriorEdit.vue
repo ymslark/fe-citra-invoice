@@ -71,7 +71,7 @@ onMounted(() => {
       <VBtn color="error" @click="deleteInterior(index)" class="mt-md-5">
         Delete
       </VBtn>
-      {{ $parseRupiah(interior.harga) }}
+      <!-- {{ $parseRupiah(interior.harga) }} -->
     </VCol>
     <VDivider />
   </VRow>

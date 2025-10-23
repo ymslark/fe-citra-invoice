@@ -194,7 +194,7 @@ const barang = hitungInvoiceBarang(surat.barang, surat.ppn)
         <tr>
           <td colspan="5" class="br-0 bl-0"></td>
           <td class="bl-0 detail-total"><b><span style="margin-left:10px;">Total Bayar</span></b></td>
-          <td class="angka-kanan br-0">
+          <td class="angka-kanan br-0 text-bold">
             <span class="rp">Rp.</span>
             <span class="nilai">{{ formatRupiah(surat.harga_akhir) }}</span>
           </td>

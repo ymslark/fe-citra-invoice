@@ -82,7 +82,7 @@ const update = async () => {
     const response = await memo.updateMemo(id)
     console.log(response)
     alert.showAlertObject({
-      message: 'Berhasil Mengubah Memo',
+      message: 'Berhasil Mengubah Surat Jalan',
       type: 'success',
     })
     window.scrollTo(0, 0)
@@ -110,7 +110,7 @@ const update = async () => {
   <VForm ref="refForm" @submit.prevent>
     <VCard>
       <VCardTitle>
-        <span class="text-h6">Tambah Memo</span>
+        <span class="text-h6">Tambah Surat Jalan</span>
       </VCardTitle>
       <VCardText>
         <VRow>
@@ -132,6 +132,9 @@ const update = async () => {
           </VCol>
           <VCol cols="12" md="6">
             <AppTextField v-model="editMemo.tujuan" label="Kepada" :rules="[requiredValidator]" />
+          </VCol>
+          <VCol cols="12" md="6">
+            <AppTextField v-model="editMemo.no_hp" label="Nomor Hp" :rules="[requiredValidator]" />
           </VCol>
           <VCol cols="12" md="6">
             <AppSelect :items="supirList" item-value="_id" item-title="nama_supir" v-model="editMemo.id_supir"

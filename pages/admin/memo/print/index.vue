@@ -35,6 +35,9 @@ try {
   })
 }
 console.log(surat)
+const kopUrl = `/citra-invoice/images/citragroup/${surat.perusahaan}/${surat.perusahaan}_Kop.jpg`
+const logoUrl = `/citra-invoice/images/citragroup/${surat.perusahaan}/${surat.perusahaan}_Logo.png`
+console.log(kopUrl, logoUrl)
 onMounted(() => {
   if(process.client){
     document.title = 'Invoice ' + surat.tujuan + ' - Citra Furniture'
@@ -51,24 +54,25 @@ onMounted(() => {
 
 <template>
   <div class="header">
-    <img class="kop-img" :src="`/images/citragroup/${surat.perusahaan}/${surat.perusahaan}_Kop.png`" alt="" srcset="">
+    <img class="kop-img" :src="kopUrl" alt="" srcset="">
   </div>
 
   <!-- box -->
   <div class="box">
 
     <div class="meta">
-      <div>Hal : Memo {{surat.jenis_memo}}</div>
+      <div>Hal : Surat Jalan {{surat.jenis_memo}}</div>
       <div>Bekasi, {{ formatTanggalIndonesia(getDate(), 'hari') }}</div>
     </div>
     <div class="meta">
       <div style="width: 50%;">
         Kepada YTh. <b>{{ surat.tujuan }}</b> <br>
-        {{surat.alamat}}  
+        {{surat.alamat}} <br>
+        No. Hp: {{ surat.no_hp }}  
       </div>
     </div>
     <div class="meta">
-      <div> Bersama dengan memo ini, kami ingin memberitahukan perihal pengiriman barang pada hari {{ formatTanggalIndonesia(surat.tanggal, 'hari') }}</div>
+      <div> Bersama dengan surat jalan ini, kami ingin memberitahukan perihal pengiriman barang pada hari {{ formatTanggalIndonesia(surat.tanggal, 'hari') }}</div>
     </div>
     <table class="table-items">
       <thead>
@@ -115,7 +119,7 @@ onMounted(() => {
     <div class="footer-surat">
       <div class="tanggal">Bekasi, {{ formatTanggalIndonesia(getDate()) }}</div>
       <div style="margin-top: -15px; margin-bottom: 5px;">Hormat Kami</div>
-      <img :src="`/images/citragroup/${surat.perusahaan}/${surat.perusahaan}_Logo.png`" alt="Logo Perusahaan" />
+      <img :src="logoUrl" alt="Logo Perusahaan" />
       <div class="nama-perusahaan">Citra Furniture Indonesia</div>
     </div>
   </div>

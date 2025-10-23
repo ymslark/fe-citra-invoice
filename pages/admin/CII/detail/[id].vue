@@ -146,13 +146,13 @@ console.log(interiors)
                 </VTooltip>
                 <VIcon>tabler-edit</VIcon>
               </VBtn>
-              <VBtn size=" 38" color="info" @click="navigateTo(`/admin/CII/print/surat?id=${id}`)" class="d-none md-block">
+              <VBtn size=" 38" color="info" @click="navigateTo(`/admin/CII/print/surat?id=${id}`)" class="d-none d-md-block">
                 <VTooltip open-on-focus location="top" activator="parent">
                   Print Surat Penawaran
                 </VTooltip>
                 <VIcon>tabler-printer</VIcon>
               </VBtn>
-              <VBtn size=" 38" color="secondary" @click="navigateTo(`/admin/CII/print/invoice?id=${id}`)" class="d-none md-block">
+              <VBtn size=" 38" color="secondary" @click="navigateTo(`/admin/CII/print/invoice?id=${id}`)" class="d-none d-md-block">
                 <VTooltip open-on-focus location="top" activator="parent">
                   Print Invoice
                 </VTooltip>
@@ -197,6 +197,14 @@ console.log(interiors)
                 <!-- 👉 First Name -->
                 <VCol cols="12">
                   <AppTextField v-model="surat.tujuan" label="Tujuan" placeholder="Tujuan" :rules="[requiredValidator]"
+                    readonly />
+                </VCol>
+                <VCol cols="12">
+                  <AppTextField v-model="surat.no_hp" label="Nomor HP" placeholder="Masukkan Nomor Hp" :rules="[requiredValidator]"
+                    readonly />
+                </VCol>
+                <VCol cols="12">
+                  <AppTextField v-model="surat.alamat" label="Alamat" placeholder=" Masukkan Alamat" :rules="[requiredValidator]"
                     readonly />
                 </VCol>
                 <VCol cols="12">

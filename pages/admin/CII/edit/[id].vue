@@ -208,7 +208,7 @@ const toDetailPage = () => {
     <VForm ref="refForm" @submit.prevent>
       <VCard class="mt-4">
         <VCardTitle>
-          Tambah Surat Citra Interior
+          Edit Surat Citra Interior
         </VCardTitle>
         <Tes />
         <VCardItem>
@@ -226,8 +226,16 @@ const toDetailPage = () => {
 
             <!-- 👉 Country -->
             <VCol cols="12" md="6">
-              <AppDateTimePicker v-model="surat.tanggal" label="Tanggal" placeholder="Pilih Tanggal"
+              <AppTextField v-model="surat.tanggal" label="Tanggal" placeholder="Pilih Tanggal"
                 :rules="[requiredValidator]" />
+            </VCol>
+            <VCol cols="12" md="6">
+              <AppTextField v-model="surat.no_hp" label="Nomor Hp" placeholder="Nomor Hp"
+                :rules="[requiredValidator]" />
+            </VCol>
+            <VCol cols="12" md="6">
+              <AppTextField v-model="surat.alamat" label="Alamat" placeholder="Alamat"
+                :rules="[requiredValidator]"/>
             </VCol>
             <VCol cols="12" md="6">
               <AppSelect v-model="surat.status" :items="allowedStatus" label="Status" placeholder="Pilih Status"
@@ -276,7 +284,7 @@ const toDetailPage = () => {
           </VCol> -->
         </VRow>
         <VCardItem>
-          <VCol cols="12" offset-md="8" md="4" v-for="(interior, index) in cii.editSurat.interior" :key="index" :id="`item-${index+1}`">
+          <VCol cols="12" v-for="(interior, index) in cii.editSurat.interior" :key="index" :id="`item-${index+1}`">
           <CIIAddInteriorEdit :interior="interior"
             :index="index" />
           </VCol>

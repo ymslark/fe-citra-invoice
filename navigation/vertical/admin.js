@@ -45,7 +45,7 @@ export default [
     children: [
       // { title: 'Daftar Memo', to: 'admin-memo-index' },
       { title: 'Daftar Surat', to: 'admin-memo' },
-      { title: 'Arsip Surat', to: 'admin-memo' },
+      { title: 'Arsip Surat', to: 'admin-memo-lists' },
       { title: 'Tambah Surat', to: 'admin-memo-add' },
       { title: 'Surat Terhapus', to: 'admin-memo-deleted' },
     ],

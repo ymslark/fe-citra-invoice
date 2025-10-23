@@ -155,11 +155,11 @@ const barangs = res.Barangs
             </VCol>
 
             <!-- 👉 Company -->
-            <!--
+            
               <VCol cols="12" md="6">
-              <AppTextField v-model="surat.company" label="Company" placeholder="Pixinvent" />
+              <AppTextField v-model="surat.alamat" label="Alamat" placeholder="Masukkan Alamat" readonly/>
               </VCol> 
-            -->
+           
           </VRow>
         </VCardItem>
         <VSpacer />

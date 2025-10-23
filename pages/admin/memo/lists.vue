@@ -4,7 +4,7 @@
       <VCardTitle>
         <div class="">
           <h2 class="text-lg font-weight-medium d-inline">
-            Data Surat Citra Furniture
+            Data Surat Jalan
           </h2>
         </div>
       </VCardTitle>
@@ -92,7 +92,7 @@
                   </VTooltip>
                   <VIcon>tabler-edit</VIcon>
                 </IconBtn>
-                <IconBtn size="38" @click="navigateTo(`/admin/CF/print/invoice?id=${surat._id}`)">
+                <IconBtn size="38" @click="navigateTo(`/admin/SCI/print/invoice?id=${surat._id}`)">
                   <VTooltip open-on-focus location="top" activator="parent">
                     Hapus
                   </VTooltip>
@@ -111,7 +111,7 @@
                   <VTooltip open-on-focus location="top" activator="parent">
                     Edit
                   </VTooltip>
-                  <VIcon @click="navigateTo({ name: `admin-CF-edit-id`, params: { id: surat._id } })">tabler-edit
+                  <VIcon @click="navigateTo({ name: `admin-memo-edit-id`, params: { id: surat._id } })">tabler-edit
                   </VIcon>
                 </VBtn>
                 <!-- <VBtn size="38" class="ml-2" icon color="error" title="Hapus">
@@ -138,13 +138,13 @@ definePageMeta({
   middleware: 'auth-client',
   requiresAuth: true,
 })
-import { useCFStore } from '@/stores/cf'
+import { useMemoStore } from '@/stores/memo'
 import {useAlertStore} from '@/stores/alert'
 import { buildQueryFilterParams } from '@/utils/apiFilterQuery'
 
 
 const { $api } = useNuxtApp()
-const cf = useCFStore()
+const memo = useMemoStore()
 const alert = useAlertStore()
 const currentPage = ref(1)
 const surats = ref([])
@@ -167,7 +167,7 @@ const filterData = async (page = 1) => {
       }
     }
     const query = buildQueryFilterParams({ startDate: start, endDate: end,page, search: search.value, limit:10 }, false);
-    const response = await $api.get('/CF/filterData', { ...query });
+    const response = await $api.get('/Memo/filterData', { ...query });
     //console.log(response)
     surats.value = response.docs
     totalPages.value = response.totalPages // backend kirim total halaman
@@ -183,16 +183,16 @@ const filterData = async (page = 1) => {
 }
 
 // Ambil data dari backend, backend sudah siapkan pagination
-const fetchItems = async (page = 1) => {
-  try {
-    const response = await $api.get(`/CF?page=${page}&limit=10`)
-    //console.log(response)
-    surats.value = response.docs
-    totalPages.value = response.totalPages // backend kirim total halaman
-  } catch (error) {
-    console.error('Gagal mengambil data:', error)
-  }
-}
+// const fetchItems = async (page = 1) => {
+//   try {
+//     const response = await $api.get(`/SCI?page=${page}&limit=10`)
+//     //console.log(response)
+//     surats.value = response.docs
+//     totalPages.value = response.totalPages // backend kirim total halaman
+//   } catch (error) {
+//     console.error('Gagal mengambil data:', error)
+//   }
+// }
 
 watch(currentPage, (page) => {
   if (search.value.length >= 3) {
@@ -231,15 +231,15 @@ let status = {
     color: 'error'
   }
 }
-// let surats = await cf.getCF()
+// let surats = await sci.getSCI()
 // //console.log(surats)
 
 function goToDetailPage(id) {
-  navigateTo({ name: `admin-CF-detail-id`, params: { id } })
+  navigateTo({ name: `admin-memo-detail-id`, params: { id } })
 }
 
 function goToEditPage(id) {
-  navigateTo(`CF/edit/${id}`)
+  navigateTo(`memo/edit/${id}`)
 }
 
 const search = ref('')
@@ -271,7 +271,7 @@ const dateRange = ref()
 //       start = range[0]
 //       end = range[1]
 //     }
-//     const response = await cf.getCFByPeriods(start, end, page, search.value)
+//     const response = await sci.getSCIByPeriods(start, end, page, search.value)
 //     //console.log(response)
 //     surats.value = response.docs
 //     totalPages.value = response.totalPages // backend kirim total halaman

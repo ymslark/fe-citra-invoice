@@ -79,7 +79,8 @@ onMounted(() => {
           <tr>
             <th>No</th>
             <th>Nama Interior</th>
-            <th>Harga Satuan</th>
+            <th>Harga <br> (per m&sup3; )
+            </th>
             <th>Ukuran</th>
             <th>subtotal</th>
             <th>Diskon</th>
@@ -438,6 +439,7 @@ div .footer {
 
 .angka-kanan {
   text-align: right;
+  margin-right: 2ch;
 }
 
 .angka-kanan .rp {

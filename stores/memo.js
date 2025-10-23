@@ -6,6 +6,7 @@ const {$api} = useNuxtApp()
 export const useMemoStore = defineStore('memo', {
   state: () => ({
     newMemo: {
+      no_hp :'',
       tanggal: '',
       tujuan: '',
       barang: [],
@@ -15,6 +16,7 @@ export const useMemoStore = defineStore('memo', {
       jenis_memo: '',
     },
     editMemo: {
+      no_hp :'',
       tanggal: '',
       tujuan: '',
       barang: [],
@@ -117,6 +119,7 @@ export const useMemoStore = defineStore('memo', {
       this.newMemo.tujuan = data.doc.tujuan
       this.newMemo.alamat = data.doc.alamat
       this.newMemo.jenis_memo = data.doc.jenis_memo
+      this.newMemo.no_hp = data.doc.no_hp
       // this.newMemo.tanggal
       this.newMemo.perusahaan = pt[perusahaan]
       if(['CF', 'SCI'].includes(perusahaan)){

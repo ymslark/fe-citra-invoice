@@ -131,7 +131,7 @@ const restoreMemo = async () => {
   <VForm ref="refForm" @submit.prevent>
     <VCard>
       <VCardTitle>
-        Detail Memo
+        Detail Surat Jalan
         <div class="d-flex justify-end gap-2">
           <!-- <VBtn size="small" color="primary" @click="navigateTo({ name: 'admin-memo' })">Kembali</VBtn> -->
           <VBtn size="small" color="primary" @click="navigateTo({ name: `admin-memo-edit-id`, params: { id } })">
@@ -170,15 +170,16 @@ const restoreMemo = async () => {
             <AppTextField v-model="detailMemo.tujuan" label="Kepada" :rules="[requiredValidator]" readonly />
           </VCol>
           <VCol cols="12" md="6">
+            <AppTextField v-model="detailMemo.no_hp" label="Nomor Hp" :rules="[requiredValidator]" readonly />
+          </VCol>
+          <VCol cols="12" md="6">
             <AppTextField v-model="detailMemo.supir.nama_supir" label="Supir" :rules="[requiredValidator]" readonly />
           </VCol>
           <VCol cols="12" md="6">
             <AppTextField v-model="detailMemo.status" label="Status" :rules="[requiredValidator]" readonly />
           </VCol>
-        </VRow>
-        <VRow>
-          <VCol cols="12">
-            <VTextarea v-model="detailMemo.alamat" label="Alamat" :rules="[requiredValidator]" readonly auto-grow
+          <VCol cols="12" md="6">
+            <AppTextarea v-model="detailMemo.alamat" label="Alamat" :rules="[requiredValidator]" readonly auto-grow
               rows="1" />
           </VCol>
         </VRow>
@@ -215,8 +216,8 @@ const restoreMemo = async () => {
       </VCardItem>
     </VCard>
   </VForm>
-  <UtilsConfirmDialog :show="showDialog" message="Apakah Anda Yakin Ingin menghapus memo ini??" @confirm="deleteMemo"
+  <UtilsConfirmDialog :show="showDialog" message="Apakah Anda Yakin Ingin menghapus surat jalan ini??" @confirm="deleteMemo"
     @cancel="showDialog = false" />
-  <UtilsConfirmDialog :show="showDialogRestore" message="Apakah Anda Yakin Ingin me-restore memo ini??" @confirm="restoreMemo"
+  <UtilsConfirmDialog :show="showDialogRestore" message="Apakah Anda Yakin Ingin me-restore surat jalan ini??" @confirm="restoreMemo"
     @cancel="showDialogRestore = false" />
 </template>

@@ -128,7 +128,7 @@
                 {{ supir.no_kendaraan }}
               </td>
               <td>
-                <IconBtn size="38">
+                <IconBtn size="38" @click="navigateTo(`/admin/supir/detail/${supir._id}`)">
                   <VTooltip open-on-focus location="top" activator="parent">
                     Detail
                   </VTooltip>
@@ -198,9 +198,9 @@ const getSupir = async () => {
 getSupir()
 
 
-function goToDetailPage(id) {
-  navigateTo(`supir/detail/${id}`)
-}
+// function goToDetailPage(id) {
+//   navigateTo(`supir-detail-${id}`)
+// }
 
 // function cekButton(i, button) {
 //   if (button == 'edit') {

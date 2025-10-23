@@ -9,7 +9,7 @@ definePageMeta({
 import { useAlertStore } from '@/stores/alert'
 import { useSCIStore } from '@/stores/sci'
 import { VForm } from 'vuetify/components/VForm'
-
+import {ref, nextTick} from 'vue'
 const sci = useSCIStore()
 const route = useRoute()
 const id = route.params.id
@@ -17,18 +17,7 @@ const addedBarang = sci.addedBarang
 let alert = useAlertStore()
 
 const { $api } = useNuxtApp()
-function scrollTo(id) {
-  const el = document.getElementById(id)
-  console.log(el)
-  if (el){ 
-    el.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    const input = el?.querySelector('[name="input-nama-barang"]')
-    
-    input?.focus()
-    input.dispatchEvent(new Event('input', { bubbles: true }))
 
-  }
-}
 const store = async () => {
   try {
     // refForm?.value?.validate()
@@ -45,7 +34,7 @@ const store = async () => {
       type: 'success',
     })
     window.scrollTo(0, 0)
-    await sci.setStatusRequest(id)
+    // await sci.setStatusRequest(id)
     setTimeout(() => {
       navigateTo({ name: 'admin-SCI' })
     }, 4000)
@@ -62,10 +51,21 @@ const store = async () => {
     // }, 4000)
   }
 }
+async function scrollTo(id) {
+  await nextTick()
+  const el = document.getElementById(id)
+  if (el){ 
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    const input = el?.querySelector('[name="input-nama-barang"]')
+    
+    input?.focus()
+    input.dispatchEvent(new Event('input', { bubbles: true }))
 
+  }
+}
 const tambahBarang = () => {
   sci.addBarang()
-  
+
   console.log(sci.addedBarang.length)
   const idItem = `item-${sci.addedBarang.length}`
   // scrollTo(idItem)
@@ -191,7 +191,7 @@ const barangs = res.Barangs
           <!-- <VCol cols="12" offset-md="8" md="4">
           <SCIAddBarang v-for="(barang, index) in sci.addedBarang" :key="index" :barang="barang" :index="index" :items="barangs" />
           </VCol> -->
-          <VCol cols="12" v-for="(barang, index) in sci.addedBarang" :key="barang._tempId" :id="`item-${index+1}`">
+          <VCol cols="12" v-for="(barang, index) in sci.addedBarang" :key="barang._tempId" :id="`item-${index+1}`" >
             <SCIAddBarang :barang="barang" :index="index" :items="barangs" />
           </VCol>
         </VCardItem>

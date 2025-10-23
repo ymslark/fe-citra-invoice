@@ -34,17 +34,7 @@ if (id) {
 
   }
 }
-function scrollTo(id) {
-  const el = document.getElementById(id)
-  if (el){ 
-    el.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    const input = el?.querySelector('[name="input-nama-barang"]')
-    
-    input?.focus()
-    input.dispatchEvent(new Event('input', { bubbles: true }))
 
-  }
-}
 const store = async () => {
   try {
     // refForm?.value?.validate()
@@ -79,10 +69,30 @@ const store = async () => {
   }
 }
 
+
+
+function scrollTo(id) {
+  const el = document.getElementById(id)
+  console.log(el)
+  if (el){ 
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    const input = el?.querySelector('[name="input-nama-barang"]')
+    
+    input?.focus()
+    input.dispatchEvent(new Event('input', { bubbles: true }))
+
+  }
+}
 const tambahBarang = () => {
   sci.addBarangEdit()
-}
 
+  console.log(sci.editSurat.barang.length)
+  const idItem = `item-${sci.editSurat.barang.length}`
+  // scrollTo(idItem)
+  setTimeout(() => {
+    scrollTo(idItem)
+  }, 200);
+}
 await sci.getConfig()
 // await sci.getSCIRequestById(id)
 const config = sci.config

@@ -69,7 +69,7 @@ const store = async () => {
     const response = await memo.storeMemo()
     console.log(response)
     alert.showAlertObject({
-      message: 'Berhasil Menambah Memo',
+      message: 'Berhasil Menambah Surat Jalan',
       type: 'success',
     })
     window.scrollTo(0, 0)
@@ -97,7 +97,7 @@ const store = async () => {
   <VForm ref="refForm" @submit.prevent>
     <VCard>
       <VCardTitle>
-        <span class="text-h6">Tambah Memo</span>
+        <span class="text-h6">Tambah Surat Jalan</span>
       </VCardTitle>
       <VCardText>
         <VRow>
@@ -107,15 +107,16 @@ const store = async () => {
           <VCol cols="12" md="6">
             <AppTextField v-if="perusahaan" :value="perusahaanList[perusahaan]" label="Perusahaan" readonly />
             <AppSelect v-else v-model="newMemo.perusahaan"
-              :items="Object.entries(perusahaanList).map(([value, title]) => ({ value, title }))" label="Perusahaan"
-              :rules="[requiredValidator]" />
+            :items="Object.entries(perusahaanList).map(([value, title]) => ({ value, title }))" label="Perusahaan"
+            :rules="[requiredValidator]" />
           </VCol>
           <VCol cols="12" md="6">
             <AppDateTimePicker v-model="newMemo.tanggal" label="Tanggal" placeholder="Pilih Tanggal"
-              :rules="[requiredValidator]" />
+            :rules="[requiredValidator]" />
           </VCol>
-        </VRow>
-        <VRow>
+          <VCol cols="12" md="6">
+            <AppTextField v-model="newMemo.no_hp" label="No HP Tujuan" :rules="[requiredValidator]" />
+          </VCol>
           <VCol cols="12" md="6">
             <AppSelect v-model="newMemo.jenis_memo" label="Jenis Memo" :items="jenisMemo"
               :rules="[requiredValidator]" />

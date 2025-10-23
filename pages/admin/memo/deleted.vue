@@ -36,10 +36,10 @@
       <VCardTitle>
         <div class="">
           <h2 class="text-lg font-weight-medium d-inline">
-            Data Memo
+            Data Surat Jalan
           </h2>
           <VBtn class="ml-auto d-flex" color="primary" @click="isDialogVisible = true">
-            Tambah Memo
+            Tambah Surat Jalan
           </VBtn>
         </div>
       </VCardTitle>
@@ -51,7 +51,7 @@
             </h4>
           </VCol>
         </VRow>
-        <VTable v-if="memos.length > 0" fixed-header class="text-no-wrap mb-4">
+        <VTable v-if="memos.length > 0" fixed-header class="text-no-wrap mt-4 mb-4">
           <thead>
             <tr>
               <th class="text-uppercase">
@@ -66,9 +66,9 @@
               <th class="text-uppercase">
                 Nama Supir
               </th>
-              <th class="text-uppercase">
+              <!-- <th class="text-uppercase">
                 Alamat
-              </th>
+              </th> -->
               <th class="text-uppercase">
                 Perusahaan
               </th>
@@ -95,9 +95,9 @@
               <td>
                 {{ memo.supir.nama_supir }}
               </td>
-              <td>
+              <!-- <td>
                 {{ memo.alamat }}
-              </td>
+              </td> -->
               <td>
                 {{ memo.perusahaan }}
               </td>
