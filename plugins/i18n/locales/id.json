@@ -176,6 +176,7 @@
   "REQUIRED_NAMA": "Nama harus diisi",
   "DUPLICATE_BARANG": "Tidak Boleh ada barang yang sama",
   "EMPTY_BARANG": "Barang tidak boleh kosong",
+  "BARANG_EMPTY": "Barang tidak boleh kosong",
   "TANGGAL_EMPTY": "Masukkan Tanggal",
   "NAMA_EMPTY": "Nama tidak boleh kosong",
   "ATAS_NAMA_EMPTY": "Pilih Rekening",

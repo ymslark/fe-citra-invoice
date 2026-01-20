@@ -134,64 +134,66 @@ console.log(interiors)
   <div>
     <VForm @submit.prevent="() => { }">
       <VRow>
-        <VCol cols="12" md="6">
-          <VCard>
-            <VCardTitle>
-              Detail Surat Citra Interior
-            </VCardTitle>
-            <VCardText class="d-flex justify-align-start gap-2">
-              <VBtn size=" 38" color="primary" @click="toEditPage()">
+        <VCol cols="12" md="6" order-md="1" order="2" class="">
+          <VCard class="mb-md-6 mb-3 d-md-none" >
+            <VCardItem>
+  
+            <div class="d-flex direction-row gap-3 flex-wrap justify-center">
+              <VBtn color="primary" @click="toEditPage()">
+                Edit
                 <VTooltip open-on-focus location="top" activator="parent">
                   Edit Surat
                 </VTooltip>
-                <VIcon>tabler-edit</VIcon>
+                <VIcon end icon="tabler-edit"/>
               </VBtn>
-              <VBtn size=" 38" color="info" @click="navigateTo(`/admin/CII/print/surat?id=${id}`)" class="d-none d-md-block">
+              <VBtn color="info" @click="navigateTo(`/admin/CII/print/surat?id=${id}`)" class="d-none d-md-inline-block">
+>
+                Print Surat
                 <VTooltip open-on-focus location="top" activator="parent">
                   Print Surat Penawaran
                 </VTooltip>
-                <VIcon>tabler-printer</VIcon>
+                <VIcon end icon="tabler-printer"/>
               </VBtn>
-              <VBtn size=" 38" color="secondary" @click="navigateTo(`/admin/CII/print/invoice?id=${id}`)" class="d-none d-md-block">
+              <VBtn color="secondary" @click="navigateTo(`/admin/CII/print/invoice?id=${id}`)"  class="d-none d-md-inline-block">
+                Print Invoice
                 <VTooltip open-on-focus location="top" activator="parent">
                   Print Invoice
                 </VTooltip>
-                <VIcon>tabler-invoice</VIcon>
+                <VIcon end icon="tabler-invoice"/>
               </VBtn>
-              <VBtn size=" 38" color="warning"
-                @click="navigateTo(`/admin/memo/add?id=${id}&perusahaan=${cii.perusahaan}`)">
+              <VBtn color="warning"
+              @click="navigateTo(`/admin/memo/add?id=${id}&perusahaan=${cii.perusahaan}`)">
+                Buat Surat Jalan
                 <VTooltip open-on-focus location="top" activator="parent">
                   Buat Memo
                 </VTooltip>
-                <VIcon>tabler-truck</VIcon>
+                <VIcon end icon="tabler-truck"/>
               </VBtn>
-              <VBtn v-if="surat.isActive" size=" 38" color="error" @click="showDialog = true">
+              <VBtn v-if="surat.isActive" color="error" @click="showDialog = true">
+                Hapus Surat
                 <VTooltip open-on-focus location="top" activator="parent">
                   Hapus Surat
                 </VTooltip>
-                <VIcon>tabler-trash</VIcon>
+                <VIcon end icon="tabler-trash" />
               </VBtn>
-              <VBtn v-else size=" 38" color="success" @click="showDialogRestore = true">
+              <VBtn v-else color="success" @click="showDialogRestore = true">
                 <VTooltip open-on-focus location="top" activator="parent">
                   Restore Surat
                 </VTooltip>
                 <VIcon>tabler-restore</VIcon>
               </VBtn>
-              <!-- <VBtn size="38" color="error" @click="showDialog = true">
-                <VIcon>tabler-trash</VIcon>Hapus
-              </VBtn> -->
               <UtilsConfirmDialog :show="showDialog" message="Apakah Anda Yakin Ingin menghapus surat ini??"
                 @confirm="deleteCII" @cancel="showDialog = false" />
               <UtilsConfirmDialog :show="showDialogRestore" message="Apakah Anda Yakin Ingin me-restore surat ini??"
-                title="Restore Surat" @confirm="restoreCII" @cancel="showDialogRestore = false" />
-            </VCardText>
-            <VCardText>
-              <template #append>
-                <div class="mt-n4 me-n2">
-                  <MoreBtn :menu-list="moreList" />
-                </div>
-              </template>
-            </VCardText>
+                title="Restore Surat" @confirm="restoreCII" @cancel="showDialogRestore = false" />              
+            </div>      
+  
+            </VCardItem>
+          </VCard>
+          <VCard>
+            <VCardTitle>
+              Detail Surat Citra Interior
+            </VCardTitle>
             <VCardItem>
               <VRow>
                 <!-- 👉 First Name -->
@@ -200,11 +202,15 @@ console.log(interiors)
                     readonly />
                 </VCol>
                 <VCol cols="12">
-                  <AppTextField v-model="surat.no_hp" label="Nomor HP" placeholder="Masukkan Nomor Hp" :rules="[requiredValidator]"
-                    readonly />
+                  <AppTextField v-model="surat.no_hp" label="No. Hp" placeholder="No. Hp"
+                  readonly />
                 </VCol>
                 <VCol cols="12">
-                  <AppTextField v-model="surat.alamat" label="Alamat" placeholder=" Masukkan Alamat" :rules="[requiredValidator]"
+                  <AppTextField v-model="surat.alamat" label="Alamat" placeholder="Alamat"
+                  readonly />
+                </VCol>
+                <VCol cols="12">
+                  <AppTextField v-model="surat.no_seri" label="Nomor Seri" placeholder="No.Seri" :rules="[requiredValidator]"
                     readonly />
                 </VCol>
                 <VCol cols="12">
@@ -235,7 +241,68 @@ console.log(interiors)
             <VSpacer />
           </VCard>
         </VCol>
-        <VCol cols="12" md="6">
+        <VCol cols="12" md="6" order="3" >
+          <VCard class="mb-md-3 mb-3 d-none d-md-block" >
+            <VCardItem>
+  
+            <div class="d-flex direction-row gap-3 flex-wrap justify-center">
+              <VBtn color="primary" @click="toEditPage()">
+                Edit
+                <VTooltip open-on-focus location="top" activator="parent">
+                  Edit Surat
+                </VTooltip>
+                <VIcon end icon="tabler-edit"/>
+              </VBtn>
+              <VBtn color="info" @click="navigateTo(`/admin/CII/print/surat?id=${id}`)">
+                Print Surat
+                <VTooltip open-on-focus location="top" activator="parent">
+                  Print Surat Penawaran
+                </VTooltip>
+                <VIcon end icon="tabler-printer"/>
+              </VBtn>
+              <VBtn color="secondary" @click="navigateTo(`/admin/CII/print/invoice?id=${id}`)">
+                Print Invoice
+                <VTooltip open-on-focus location="top" activator="parent">
+                  Print Invoice
+                </VTooltip>
+                <VIcon end icon="tabler-invoice"/>
+              </VBtn>
+              <VBtn color="warning"
+              @click="navigateTo(`/admin/memo/add?id=${id}&perusahaan=${cii.perusahaan}`)">
+                Buat Surat Jalan
+                <VTooltip open-on-focus location="top" activator="parent">
+                  Buat Surat Jalan
+                </VTooltip>
+                <VIcon end icon="tabler-truck"/>
+              </VBtn>
+              <!-- <VBtn color="warning"
+              @click="navigateTo(`/admin/memo/add?id=${id}&perusahaan=${cii.perusahaan}`)">
+                Buat Surat Permintaan Faktur Pajak
+                <VTooltip open-on-focus location="top" activator="parent">
+                  Buat Surat Permintaan Faktur Pajak
+                </VTooltip>
+                <VIcon end icon="tabler-truck"/>
+              </VBtn> -->
+              <VBtn v-if="surat.isActive" color="error" @click="showDialog = true">
+                Hapus Surat
+                <VTooltip open-on-focus location="top" activator="parent">
+                  Hapus Surat
+                </VTooltip>
+                <VIcon end icon="tabler-trash" />
+              </VBtn>
+              <VBtn v-else color="success" @click="showDialogRestore = true">
+                <VTooltip open-on-focus location="top" activator="parent">
+                  Restore Surat
+                </VTooltip>
+                <VIcon>tabler-restore</VIcon>
+              </VBtn>
+              <UtilsConfirmDialog :show="showDialog" message="Apakah Anda Yakin Ingin menghapus surat ini??"
+                @confirm="deleteCII" @cancel="showDialog = false" />
+              <UtilsConfirmDialog :show="showDialogRestore" message="Apakah Anda Yakin Ingin me-restore surat ini??"
+                title="Restore Surat" @confirm="restoreCII" @cancel="showDialogRestore = false" />              
+            </div>
+            </VCardItem>
+          </VCard>
           <VCard>
             <VCardTitle>
               <h2 class="text-lg font-weight-medium">
@@ -245,7 +312,7 @@ console.log(interiors)
             <VCardItem class="pa-0 ma-0">
               <VList>
                 <VListItem>
-                  1. Harga {{ surat.ppn == 0 ? 'Tidak' : '' }} Termasuk PPN {{ cii.config.ppn }}%
+                  1. Harga {{ surat.ppn == 0 ? 'Tidak' : '' }} Termasuk PPN <span v-if="surat.ppn>0"> {{ surat.ppn }}%</span>
                 </VListItem>
                 <VListItem>
                   2. Harga {{ !surat.ongkir ? 'Tidak' : '' }} Termasuk Ongkir
@@ -275,6 +342,7 @@ console.log(interiors)
               </VList>
             </VCardItem>
           </VCard>
+
         </VCol>
       </VRow>
       <VCard class="mt-4">

@@ -168,7 +168,7 @@ const filterData = async (page = 1) => {
     }
     const query = buildQueryFilterParams({ startDate: start, endDate: end,page, search: search.value, limit:10 }, false);
     const response = await $api.get('/Memo/filterData', { ...query });
-    //console.log(response)
+    console.log(response)
     surats.value = response.docs
     totalPages.value = response.totalPages // backend kirim total halaman
     currentPage.value = response.page

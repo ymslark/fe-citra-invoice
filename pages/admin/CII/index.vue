@@ -117,6 +117,7 @@ definePageMeta({
   requiresAuth: true,
 })
 import { useCiStore } from '@/stores/ciis'
+import {buildQueryFilterParams} from '@/utils/apiFilterQuery'
 
 const { $api } = useNuxtApp()
 const cii = useCiStore()
@@ -124,15 +125,18 @@ const cii = useCiStore()
 const currentPage = ref(1)
 const surats = ref([])
 const totalPages = ref(1)
+const search = ref('')
 
 // Ambil data dari backend, backend sudah siapkan pagination
 const fetchItems = async (page = 1) => {
   try {
-    const response = await $api.get(`/CII?page=${page}&limit=20`)
-    console.log(response)
-    surats.value = response.docs
-    totalPages.value = response.totalPages // backend kirim total halaman
-    console.log(surats.value)
+    const query = buildQueryFilterParams({ limit:10, page, search: search.value}, true); // defaultLast30Days = true
+    const res = await $api.get("/CII/filterData", { ...query });
+
+    surats.value = res.docs;
+    totalPages.value = res.totalPages;
+    currentPage.value = res.page;
+    suratsFiltered.value = surats;
   } catch (error) {
     console.error('Gagal mengambil data:', error)
   }
@@ -186,7 +190,6 @@ function goToEditPage(id) {
   navigateTo(`CII/edit/${id}`)
 }
 
-const search = ref('')
 
 //fungsi untuk search data
 const searchData = async (page) => {

@@ -4,18 +4,16 @@ definePageMeta({
   backgroundColor: '#FFFFFF'
 })
 import { useAlertStore } from '@/stores/alert'
-import { useCFStore } from '@/stores/cf'
-import { formatRupiah, formatTanggalIndonesia, pembilang } from '@/utils/format'
+import { useSCIStore } from '@/stores/sci'
+import { formatRupiah, formatTanggalIndonesia } from '@/utils/format'
 import { hitungInvoiceBarang } from '@/utils/invoice/hitungInvoiceBarang'
 import { getDate } from '@/utils/global'
 const route = useRoute()
 const router = useRouter()
-const cf = useCFStore()
+const sci = useSCIStore()
 const id = route.query.id || null
 const alert = useAlertStore()
-let surat = null
-let barang = null
-let terbilang = ''
+
 if (!id) {
   alert.showAlert({
     type: 'error',
@@ -23,14 +21,15 @@ if (!id) {
     timeout: 3000
   })
   console.error('ID tidak ditemukan')
-  navigateTo({ name: 'admin-CF' })
+  navigateTo({ name: 'admin-SCI' })
 }
+let surat = null
+// let catatan = ''
 try {
-  const response = await cf.getCFById(id)
+  const response = await sci.getSCIById(id)
   surat = response.doc
-  console.log(surat)
-  barang = hitungInvoiceBarang(surat.barang, surat.ppn)
-  terbilang = pembilang(surat.harga_akhir)
+  // catatan = surat.catatan[0]
+  // console.log(surat)
   // // console.log(surat.doc)
 } catch (error) {
   alert.showAlert({
@@ -38,52 +37,85 @@ try {
     message: 'Gagal mengambil data surat',
   })
 }
+function pembilang(nilai){
+  //ubah dari nominal jadi terbilang
+  nilai = Math.floor(Math.abs(nilai));
+                    
+  let simpanNilaiBagi = 0;
+  let huruf = [ '', 'Satu','Dua','Tiga','Empat','Lima','Enam','Tujuh','Delapan','Sembilan','Sepuluh','Sebelas']
+  let temp = '';
+  
+  if (nilai < 12) {
+      temp = ' ' + huruf[nilai];
+  } else if (nilai < 20) {
+      temp = this.pembilang(Math.floor(nilai - 10)) + ' Belas';
+  } else if (nilai < 100) {
+      simpanNilaiBagi = Math.floor(nilai / 10);
+      temp = this.pembilang(simpanNilaiBagi) + ' Puluh' + this.pembilang(nilai % 10);
+  } else if (nilai < 200) {
+      temp = ' Seratus' + this.pembilang(nilai - 100);
+  } else if (nilai < 1000) {
+      simpanNilaiBagi = Math.floor(nilai / 100);
+      temp = this.pembilang(simpanNilaiBagi) + ' Ratus' + this.pembilang(nilai % 100);
+  } else if (nilai < 2000) {
+      temp = ' Seribu' + this.pembilang(nilai - 1000);
+  } else if (nilai < 1000000) {
+      simpanNilaiBagi = Math.floor(nilai / 1000);
+      temp = this.pembilang(simpanNilaiBagi) + ' Ribu' + this.pembilang(nilai % 1000);
+  } else if (nilai < 1000000000) {
+      simpanNilaiBagi = Math.floor(nilai / 1000000);
+      temp = this.pembilang(simpanNilaiBagi) + ' Juta' + this.pembilang(nilai % 1000000);
+  } else if (nilai < 1000000000000) {
+      simpanNilaiBagi = Math.floor(nilai / 1000000000);
+      temp =
+      this.pembilang(simpanNilaiBagi) + ' Miliar' + this.pembilang(nilai % 1000000000);
+  } else if (nilai < 1000000000000000) {
+      simpanNilaiBagi = Math.floor(nilai / 1000000000000);
+      temp = this.pembilang(nilai / 1000000000000) + ' Triliun' + this.pembilang(nilai % 1000000000000);
+  }
+  
+  return temp
+}
 
-
-
-onMounted(async () => {
-  // await fetchData()
-  await nextTick()
-  document.title = surat.no_seri + ' Invoice ' + surat.tujuan + ' - Citra Furniture'
-
-  setTimeout(() => {
-    window.print()
-  }, 2000)
-    window.addEventListener('afterprint', () => {
-      window.location.replace('/admin/CF/detail/' + id)
-    })
-})
 // onMounted(() => {
 //   if(process.client){
-//     document.title = surat.no_seri + ' Invoice ' + surat.tujuan + ' - Citra Furniture'
+//     document.title = surat.no_seri + ' Invoice ' + surat.tujuan + ' - Sentral Citra'
 //     setTimeout(() => {
 //       window.print()
 //     }, 1000)
 //       window.addEventListener('afterprint', () => {
-//         window.location.replace('/admin/CF/detail/' + id)
+//         window.location.replace('/admin/SCI/detail/' + id)
 //       })
 //   }
 // })
+const barang = hitungInvoiceBarang(surat.barang, surat.ppn)
 // console.log(barang)
 </script>
 
 <template>
   <div class="header">
-    <img class="kop-img" src="/images/citragroup/CF/CF_Kop.jpeg" alt="" srcset="">
+    <img class="kop-img" src="/images/citragroup/SCI/SCI_Kop.png" alt="" srcset="">
   </div>
 
   <!-- box -->
   <div class="box">
-    <h1 class="title">PROFORMA INVOICE</h1>
-    <div class="tujuan">
-      <div>Kepada Yth.</div>
-      <div id="tujuan-text">{{ surat.tujuan }}</div>
+    <div class="detail-invoice">
+      <div>Hal : {{ surat.hal || '' }}</div>
+      <div>No. Seri: {{ surat.no_seri || '' }}</div>
     </div>
+    <div class="detail-invoice">
+      <div>
+        <div>Kepada Yth.</div>
+        <div id="tujuan-text"><b>{{ surat.tujuan }}</b></div>
+      </div>
+      <div>{{ formatTanggalIndonesia(surat.tanggal, 'hari') }}</div>
+    </div>
+<!-- 
     <div class="detail-invoice">
       <div>Mata Uang : Rupiah</div>
       <div>No. Po: {{ surat.no_seri }}</div>
       <div>Tanggal PO : {{ formatTanggalIndonesia(surat.tanggal, 'hari') }}</div>
-    </div>
+    </div> -->
 
     <table class="table-items">
       <thead>
@@ -95,59 +127,59 @@ onMounted(async () => {
           <th style="width:20%;" class="br-0">Total Harga</th>
         </tr> -->
         <tr>
-          <th class="bl-0">No</th>
+          <th>No</th>
           <th>Keterangan</th>
           <th>Harga Satuan</th>
           <th>Qty</th>
           <th>Subtotal</th>
           <th>Diskon</th>
-          <th class="br-0">Harga Akhir</th>
+          <th>Harga Akhir</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(item, index) in barang.barangs" :key="index">
-          <td class="text-center bl-0">{{ index + 1 }}</td>
-          <td style="padding: 0px 2px;">{{ item.nama_barang }}</td>
-          <td class="angka-kanan br-0">
-            <span class="rp">Rp.</span>
-            <span class="nilai">{{ formatRupiah(item.dpp_per_unit) }}</span>
+          <td class="text-center">{{ index + 1 }}</td>
+          <td style="padding: 0px 2px;">{{ item.nama_barang }} warna merah maroon</td>
+          <td class="angka-kanan">
+            <!-- <span class="rp">Rp</span> -->
+            <span class="nilai">Rp{{ formatRupiah(item.dpp_per_unit) }}</span>
           </td>
           <td class="text-center">{{ item.qty }}</td>
-          <td class="angka-kanan br-0">
-            <span class="rp">Rp.</span>
-            <span class="nilai">{{ formatRupiah(item.total_dpp_tanpa_diskon) }}</span>
+          <td class="angka-kanan">
+            <!-- <span class="rp">Rp</span> -->
+            <span class="nilai">Rp{{ formatRupiah(item.total_dpp_tanpa_diskon) }}</span>
           </td>
-          <td class="angka-kanan br-0">
-            <span class="rp">Rp.</span>
-            <span class="nilai">{{ formatRupiah(item.total_diskon) }}</span>
+          <td class="angka-kanan">
+            <!-- <span class="rp">Rp</span> -->
+            <span class="nilai">Rp{{ formatRupiah(item.total_diskon) }}</span>
           </td>
-          <td class="angka-kanan br-0">
-            <span class="rp">Rp.</span>
-            <span class="nilai">{{ formatRupiah(item.total_dpp) }}</span>
+          <td class="angka-kanan">
+            <!-- <span class="rp">Rp</span> -->
+            <span class="nilai">Rp{{ formatRupiah(item.total_dpp) }}</span>
           </td>
           <!-- <td class="text-right">{{ formatRupiah(item.harga) }}</td> -->
-          <!-- <td class="text-right br-0">{{ formatRupiah(item.total_harga) }}</td> -->
+          <!-- <td class="text-right">{{ formatRupiah(item.total_harga) }}</td> -->
         </tr>
         <tr style="font-weight: bold;">
-          <td colspan="3" class="br-0 bl-0"></td>
+          <td colspan="3" class="br-0"></td>
           <td class="bl-0">Total</td>
-          <td class="angka-kanan br-0">
-            <span class="rp">Rp</span>
-            <span class="nilai">{{formatRupiah( barang.dpp_tanpa_diskon )}}</span>
+          <td class="angka-kanan">
+            <!-- <span class="rp">Rp</span> -->
+            <span class="nilai">Rp{{formatRupiah( barang.dpp_tanpa_diskon )}}</span>
           </td>
-          <td class="angka-kanan br-0">
-            <span class="rp">Rp</span>
-            <span class="nilai">{{formatRupiah( surat.total_diskon )}}</span>
+          <td class="angka-kanan">
+            <!-- <span class="rp">Rp</span> -->
+            <span class="nilai">Rp{{formatRupiah( surat.total_diskon )}}</span>
           </td>
-          <td class="angka-kanan br-0">
-            <span class="rp">Rp</span>
-            <span class="nilai">{{formatRupiah( barang.dpp )}}</span>
+          <td class="angka-kanan">
+            <!-- <span class="rp">Rp</span> -->
+            <span class="nilai">Rp{{formatRupiah( barang.dpp )}}</span>
           </td>
         </tr>
         <!-- <tr v-if="surat.total_diskon > 0" >
           <td colspan="3" class="br-0 bl-0"></td>
           <td class="bl-0">DISKON</td>
-          <td class="angka-kanan br-0">
+          <td class="angka-kanan">
             <span class="rp">Rp</span>
             <span class="nilai">{{ formatRupiah(surat.total_diskon) }}</span>
             </td>
@@ -161,71 +193,47 @@ onMounted(async () => {
             </td>
         </tr> -->
         <tr v-if="surat.ppn > 0">
-          <td colspan="5" class="br-0 bl-0"></td>
-          <td class="bl-0 detail-total"><b><span style="margin-left:10px;">{{`PPN ${surat.ppn}%`}}</span></b></td>
-          <td class="angka-kanan br-0">
-            <span class="rp">Rp</span>
-            <span class="nilai">{{formatRupiah( barang.ppn  )}}</span>
+          <td colspan="5" class="br-0"></td>
+          <td class="detail-total"><b><span style="margin-left:10px;">{{`PPN ${surat.ppn}%`}}</span></b></td>
+          <td class="angka-kanan">
+            <!-- <span class="rp">Rp</span> -->
+            <span class="nilai">Rp{{formatRupiah( barang.ppn  )}}</span>
             </td>
         </tr>
         <tr>
-          <td colspan="5" class="br-0 bl-0"></td>
+          <td colspan="5" class="br-0"></td>
           <td class="bl-0 detail-total"><b><span style="margin-left:10px;">Total Bayar</span></b></td>
-          <td class="angka-kanan br-0 text-bold">
-            <span class="rp">Rp.</span>
-            <span class="nilai">{{ formatRupiah(surat.harga_akhir) }}</span>
-          </td>
-        </tr>
-        <tr>
-          <td class="bl-0 terbilang br-0 font-normal" colspan="7"><span class="m-left">Terbilang: {{ terbilang }} Rupiah</span></td>
-        </tr>
-        <tr>
-          <td class="bl-0 br-0 font-normal" colspan="7">
-            <span class=" m-left">Note:</span>
-            <ol id="note-list">
-              <li v-if="surat.ppn > 0" >Harga Termasuk PPN {{surat.ppn}}%</li>
-              <li v-else>Harga Tidak Termasuk PPN</li>
-              <li v-if="surat.ongkos_kirim && surat.instalasi">Harga Sudah Termasuk Ongkos Kirim & Sudah Termasuk Biaya
-                Instalasi</li>
-              <li v-else-if="surat.instalasi">Harga Sudah Termasuk Biaya Instalasi</li>
-              <li v-else-if="surat.ongkos_kirim">Harga Sudah Termasuk Biaya Ongkos Kirim</li>
-              <li v-for="(note, index) in surat.catatan" :key="index">{{note}}</li>
-              <li>Pembayaran Via Transfer</li>
-            </ol>
+          <td class="angka-kanan text-bold">
+            <!-- <span class="rp">Rp</span> -->
+            <span class="nilai">Rp{{ formatRupiah(surat.harga_akhir) }}</span>
           </td>
         </tr>
       </tbody>
     </table>
-    <table id="info-akhir" class="font-normal">
-      <tr>
-        <td class="bl-0">
-          <strong style="margin-bottom:20px;">KETERANGAN</strong>
-          <div>Pembayaran untuk invoice ini mohon di transfer ke rekening:</div>
-          <table class="rekening">
-            <tr>
-              <td>Atas Nama</td>
-              <td>:</td>
-              <td>{{ surat.rekening.atas_nama }}</td>
-            </tr>
-            <tr>
-              <td>No. Rekening</td>
-              <td>:</td>
-              <td>{{ surat.rekening.no_rekening }}</td>
-            </tr>
-            <tr>
-              <td>Bank</td>
-              <td>:</td>
-              <td>{{ surat.rekening.nama_bank }}</td>
-            </tr>
-          </table>
-        </td>
-        <td class="br-0">
-          <div>Bekasi, {{ formatTanggalIndonesia(surat.tanggal, 'hari') }}</div>
-          <img src="/images/citragroup/CF/CF_Logo.png" id="logo">
-          <div>Citra Furniture Indonesia</div>
-        </td>
-      </tr>
-    </table>
+    <div class="detail-invoice">
+      <div>
+        <span>Note:</span>
+        <ol id="note-list">
+          <li v-if="surat.ppn > 0" >Harga Termasuk PPN {{surat.ppn}}%</li>
+          <li v-else>Harga Tidak Termasuk PPN</li>
+          <li v-if="surat.ongkos_kirim && surat.instalasi">Harga Sudah Termasuk Ongkos Kirim & Sudah Termasuk Biaya
+            Instalasi</li>
+          <li v-else-if="surat.instalasi">Harga Sudah Termasuk Biaya Instalasi</li>
+          <li v-else-if="surat.ongkos_kirim">Harga Sudah Termasuk Biaya Ongkos Kirim</li>
+          <!-- <li v-else>Harga Belum Termasuk Ongkos Kirim & Belum Termasuk Biaya Instalasi</li> -->
+          <!-- <li v-for="(note, index) in surat.catatan" :key="index" >{{note}}</li> -->
+          <li v-if="(surat.catatan[0]).length > 3">{{surat.catatan[0]}}</li>
+          <li>Pembayaran Via Transfer</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="footer-surat">
+      <div class="tanggal">Bekasi, {{ formatTanggalIndonesia(surat.tanggal) }}</div>
+      <div class="mt-n3">Hormat Kami</div>
+      <img src="/images/citragroup/SCI/SCI_Logo.png" alt="Logo Perusahaan" />
+      <div class="nama-perusahaan">Sentral Citra Indonesia</div>
+    </div>
 
   </div>
   <!-- box -->
@@ -280,7 +288,7 @@ onMounted(async () => {
   }
 
   body {
-    font-family: "Times New Roman", serif;
+    font-family: "Times New Roman", serif !important;
     font-size: 11pt !important;
     color: #000000 !important;
     background: white !important;
@@ -317,7 +325,8 @@ onMounted(async () => {
   }
 
   .box {
-    font-size: 10pt !important;
+    font-size: 11pt !important;
+
     break-inside: auto !important;
     page-break-inside: auto !important;
     height: auto !important;
@@ -333,7 +342,11 @@ onMounted(async () => {
 
   .table-items {
     font-size: 9pt !important;
-
+    width: 90%;
+    border-collapse: collapse;
+    margin-top: 5px;
+    table-layout: auto;
+    white-space: collapse !important;
   }
   /* .table-items td.detail-total {
     margin-left: 20px;
@@ -344,31 +357,32 @@ onMounted(async () => {
     padding: 1px;
   }
 /* 5%, 35%, 12%, 8%, 12%, 8%, 20% */
-  .table-items thead th:first-child {
-    width: 3% !important;
-  }
+  /* .table-items thead th:first-child {
+    max-width: 3% !important;
+  } */
 
-  .table-items thead th:nth-child(2) {
-    width: 27% !important;
+  /* .table-items thead th:nth-child(2) {
+    min-width: 20% !important;
+    max-width: 27% !important;
   }
 
   .table-items thead th:nth-child(3) {
-    width: 15% !important;
+    max-width: 15% !important;
   }
 
   .table-items thead th:nth-child(4) {
-    width: 5% !important;
+    max-width: 5% !important;
   }
   .table-items thead th:nth-child(5) {
-    width: 16% !important;
+    max-width: 16% !important;
   }
   .table-items thead th:nth-child(6) {
-    width: 16% !important;
+    max-width: 16% !important;
   }
 
   .table-items thead th:last-child {
-    width: 18% !important;
-  }
+    max-width: 18% !important;
+  } */
 
   .table-items tbody td {
     padding: 0px;
@@ -377,7 +391,8 @@ onMounted(async () => {
 
   .tujuan,
   .detail-invoice {
-    font-size: 10pt !important;
+    font-size: 11pt !important;
+    margin-bottom: 10pt !important;
   }
 
   .detail-invoice div {
@@ -408,6 +423,7 @@ onMounted(async () => {
     margin: 1px;
     padding: 0px;
   }
+
 
 
   @page {
@@ -460,7 +476,7 @@ body {
 }
 
 .box {
-  border: 1px solid #000000;
+  /* border: 1px solid #000000; */
   margin-bottom: 20px;
   width: 95%;
   margin: 0 auto;
@@ -488,14 +504,14 @@ body {
 
 .table-items {
   color: #000000 !important;
-  width: 100%;
+  width: 90%;
   border-collapse: collapse;
-  margin-top: 5px;
-  table-layout: fixed;
+  margin: 5px auto 15px auto;
+  table-layout: auto;
 }
 
 .table-items thead {
-  background-color: #f2f2f2;
+  background-color: rgb(0, 210, 0);
   font-weight: bold;
   text-transform: uppercase;
   text-align: center;
@@ -530,31 +546,31 @@ body {
 }
 
 /* 5%, 35%, 12%, 8%, 12%, 8%, 20% */
-  .table-items thead th:first-child {
-    width: 3% !important;
+  /* .table-items thead th:first-child {
+    max-width: 3% !important;
   }
 
   .table-items thead th:nth-child(2) {
-    width: 27% !important;
+    max-width: 27% !important;
   }
 
   .table-items thead th:nth-child(3) {
-    width: 15% !important;
+    max-width: 15% !important;
   }
 
   .table-items thead th:nth-child(4) {
-    width: 5% !important;
+    max-width: 5% !important;
   }
   .table-items thead th:nth-child(5) {
-    width: 15% !important;
+    max-width: 15% !important;
   }
   .table-items thead th:nth-child(6) {
-    width: 16% !important;
+    max-width: 16% !important;
   }
 
   .table-items thead th:last-child {
-    width: 18% !important;
-  }
+    max-width: 18% !important;
+  } */
 
 table#info-akhir {
   width: 100%;
@@ -663,5 +679,29 @@ table.rekening {
   text-align: right;
   margin-right: 5px; /* jarak antara angka dan Rp */
 }
+
+.footer-surat {
+  margin-top: 20px;
+  width: 40%; /* atur sesuai kebutuhan */
+  float: right;
+  text-align: center;
+  margin-right: -20px;
+}
+
+.footer-surat img {
+  max-width: 50%;
+  display: block;
+  margin: 0 auto;
+}
+
+.footer-surat .tanggal {
+  margin-bottom: 10px;
+}
+
+.footer-surat .nama-perusahaan {
+  font-weight: bold;
+  margin-top: 5px;
+}
+
 
 </style>

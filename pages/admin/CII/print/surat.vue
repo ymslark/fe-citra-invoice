@@ -5,7 +5,7 @@ definePageMeta({
 })
 import { useAlertStore } from '@/stores/alert'
 import { useCiStore } from '@/stores/ciis'
-import { formatRupiah, formatTanggalIndonesia } from '@/utils/format'
+import { formatAngkaIndo, formatRupiah, formatTanggalIndonesia } from '@/utils/format'
 import {  hitungInvoiceInterior } from '@/utils/invoice/hitungInvoiceInterior'
 import { getDate } from '@/utils/global'
 const route = useRoute()
@@ -91,13 +91,14 @@ onMounted(() => {
           <tr v-for="(item, index) in interior.interiors" :key="index">
             <td class="text-center">{{ index + 1 }}</td>
             <td v-if="index % 2 == 1" class="text-uppercase text-wrap" style="padding-left: 1ch !important;">{{ item.nama_interior }}</td>
-            <td v-else class="text-uppercase text-wrap" style="padding-left: 1ch !important;">{{ item.nama_interior }} warna merah kayu mahoni</td>
+            <td v-else class="text-uppercase text-wrap" style="padding-left: 1ch !important;">{{ item.nama_interior }}</td>
   
             <td class="angka-kanan">
               <span class="rp">Rp.</span>
               <span class="nilai">{{ formatRupiah(item.dpp_tanpa_diskon) }}</span>
             </td>
-            <td class="text-center" id="qty" style="padding: 1pt;">{{ (item.v1 * item.v2).toFixed(2)}}m&sup2;</td>
+            <!-- <td class="text-center" id="qty" style="padding: 1pt;">{{ (item.v1 * item.v2).toFixed(2)}}m&sup2;</td> -->
+            <td class="text-center" id="qty" style="padding: 1pt;">{{ formatAngkaIndo(item.v1) + 'x' + formatAngkaIndo(item.v2)}}m&sup2;</td>
             <td class="angka-kanan">
               <span class="rp">Rp.</span>
               <span class="nilai">{{ formatRupiah(item.total_dpp_tanpa_diskon) }}</span>
@@ -307,6 +308,9 @@ onMounted(() => {
     padding: 1px;
   }
 
+  .table-items tbody td {
+  padding-right: 0.5ch !important;
+}
   body{
     size: A4;
   }
@@ -374,6 +378,10 @@ onMounted(() => {
   padding: 2px 4px;
   
   /* text-align: left; */
+}
+
+.table-items tbody td {
+  padding-right: 1px;
 }
 #info-akhir {
   width: 100%;

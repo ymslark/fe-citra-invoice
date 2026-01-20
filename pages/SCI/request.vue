@@ -46,8 +46,7 @@
 import { useAlertStore } from '@/stores/alert'
 import { useSCIStore } from '@/stores/sci'
 import { VForm } from 'vuetify/components/VForm'
-// import { useBreakpoints } from 'vuetify';
-// const breakPoint = useBreakpoints()
+
 
 const { $vuetify } = useNuxtApp()
 definePageMeta({
@@ -57,14 +56,10 @@ const sci = useSCIStore()
 const request = sci.newRequest
 const refForm = ref()
 const alert = useAlertStore()
-// const isNotificationVisible = ref(false)
-// const isMobile = computed(() => breakPoint.smAndDown)
-// console.log($vuetify)
-// let flex = $vuetify.display.smAndDown ? 'd-flex justify-content-between p-0 flex-column' : 'd-flex justify-content-between p-0 flex-row'
-
 function scrollTo(id) {
+  console.log(id)
   const el = document.getElementById(id)
-  console.log(el)
+  // console.log(el)
   if (el){ 
     el.scrollIntoView({ behavior: 'smooth', block: 'center' })
     const input = el?.querySelector('[name="input-nama-barang"]')
@@ -74,7 +69,6 @@ function scrollTo(id) {
 
   }
 }
-
 const tambahBarang = () => {
   sci.addBarangRequest()
 
@@ -94,7 +88,6 @@ const submitForm = async () => {
     if (request.barang.length == 0) throw { message: 'Barang tidak boleh kosong' }
 
     const response = await sci.storeRequestSCI()
-    if(!response) throw {response}
     console.log(response)
     window.scrollTo(0, 0)
     alert.showAlertObject({
@@ -108,6 +101,7 @@ const submitForm = async () => {
   } catch (error) {
     window.scrollTo(0, 0)
     console.log(error)
+    
     alert.showAlertObject({
       message: error.message || 'Gagal Mengajukan Request',
       type: 'error',

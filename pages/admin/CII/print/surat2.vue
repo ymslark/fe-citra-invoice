@@ -4,13 +4,13 @@ definePageMeta({
   backgroundColor: '#FFFFFF'
 })
 import { useAlertStore } from '@/stores/alert'
-import { useCFStore } from '@/stores/cf'
+import { useCiStore } from '@/stores/ciis'
 import { formatRupiah, formatTanggalIndonesia, pembilang } from '@/utils/format'
 import {  hitungInvoiceBarang } from '@/utils/invoice/hitungInvoiceBarang'
 import { getDate } from '@/utils/global'
 const route = useRoute()
 const router = useRouter()
-const cf = useCFStore()
+const cii = useCiStore()
 const id = route.query.id || null
 const alert = useAlertStore()
 const printArea = ref(null)
@@ -21,16 +21,16 @@ if (!id) {
     timeout: 3000
   })
   console.error('ID tidak ditemukan')
-  navigateTo({ name: 'admin-CF' })
+  navigateTo({ name: 'admin-CII' })
 }
 let surat = null
-let barang = null
+let interior = null
 try {
-  await cf.getCFById(id)
-  surat = cf.surat
-  // // console.log(surat.doc)
-  barang = hitungInvoiceBarang(surat.barang, surat.ppn) 
-  // console.log(barang)
+  await cii.getCIIById(id)
+  surat = cii.surat
+  console.log(surat.doc)
+  interior = hitungInvoiceBarang(surat.interior, surat.ppn) 
+  // console.log(interior)
 } catch (error) {
   alert.showAlert({
     type: 'error',
@@ -38,19 +38,19 @@ try {
   })
 }
 
-onMounted(() => {
-  document.title = 'Surat Penawaran ' + surat.tujuan + ' - Citra Furniture'
-  if(process.client){
-    document.title = 'Surat Penawaran ' + surat.tujuan + ' - Citra Furniture'
-    setTimeout(() => {
-      window.print()
-    }, 1000)
+// onMounted(() => {
+//   document.title = 'Surat Penawaran ' + surat.tujuan + ' - Citra Furniture'
+//   if(process.client){
+//     document.title = 'Surat Penawaran ' + surat.tujuan + ' - Citra Furniture'
+//     setTimeout(() => {
+//       window.print()
+//     }, 1000)
 
-    window.addEventListener('afterprint', () => {
-        window.location.replace('/admin/CF/detail/' + id)
-    })
-  }
-})
+//     window.addEventListener('afterprint', () => {
+//         window.location.replace('/admin/CII/detail/' + id)
+//     })
+//   }
+// })
 
 </script>
 
@@ -58,7 +58,7 @@ onMounted(() => {
     <div class="header">
       <img 
         class="kop-img" 
-        src="/images/citragroup/CF/CF_Kop.png" 
+        src="/images/citragroup/CII/CII_Kop.png" 
         alt="" 
         srcset="">
     </div>
@@ -67,11 +67,11 @@ onMounted(() => {
     <div class="box">
   
       <div class="meta">
-        <div>Hal : {{surat.hal}}</div>
+        <!-- <div>Hal : {{surat.hal}}</div> -->
         <div>No.Seri : {{surat.no_seri}}</div>
       </div>
       <div class="meta">
-        <div>Kepada YTh. <b>{{ surat.tujuan }}</b></div>
+        <!-- <div>Kepada YTh. <b>{{ surat.tujuan }}</b></div> -->
         <div>{{formatTanggalIndonesia(surat.tanggal, 'hari')}}</div>
       </div>
       <table class="table-items">
@@ -87,10 +87,10 @@ onMounted(() => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in barang.barangs" :key="index">
+          <tr v-for="(item, index) in interior.interiors" :key="index">
             <td class="text-center">{{ index + 1 }}</td>
-            <td v-if="index % 2 == 1" class="text-uppercase text-wrap" style="padding-left: 1ch !important;">{{ item.nama_barang }}</td>
-            <td v-else class="text-uppercase text-wrap" style="padding-left: 1ch !important;">{{ item.nama_barang }} warna merah kayu mahoni</td>
+            <td v-if="index % 2 == 1" class="text-uppercase text-wrap" style="padding-left: 1ch !important;">{{ item.nama_interior }}</td>
+            <td v-else class="text-uppercase text-wrap" style="padding-left: 1ch !important;">{{ item.nama_interior }}</td>
   
             <td class="angka-kanan">
               <span class="rp">Rp.</span>
@@ -116,7 +116,7 @@ onMounted(() => {
             <td class="bl-0">Total</td>
             <td class="angka-kanan">
               <span class="rp">Rp</span>
-              <span class="nilai">{{formatRupiah( barang.dpp_tanpa_diskon )}}</span>
+              <span class="nilai">{{formatRupiah( interior.dpp_tanpa_diskon )}}</span>
             </td>
             <td class="angka-kanan">
               <span class="rp">Rp</span>
@@ -124,7 +124,7 @@ onMounted(() => {
             </td>
             <td class="angka-kanan">
               <span class="rp">Rp</span>
-              <span class="nilai">{{formatRupiah( barang.dpp )}}</span>
+              <span class="nilai">{{formatRupiah( interior.dpp )}}</span>
             </td>
           </tr>
           <!-- <tr v-if="surat.total_diskon > 0" >
@@ -141,7 +141,7 @@ onMounted(() => {
             <td class="bl-0">Total Harga Akhir</td>
             <td class="angka-kanan">
               <span class="rp">Rp</span>
-              <span class="nilai">{{formatRupiah( barang.dpp )}}</span>
+              <span class="nilai">{{formatRupiah( interior.dpp )}}</span>
               </td>
           </tr> -->
           <!-- <tr>
@@ -157,7 +157,7 @@ onMounted(() => {
             <td class="bl-0">PPN 11%</td>
             <td class="angka-kanan">
               <span class="rp">Rp</span>
-              <span class="nilai">{{formatRupiah( barang.ppn )}}</span>
+              <span class="nilai">{{formatRupiah( interior.ppn )}}</span>
               </td>
           </tr>
           <tr style="font-weight: bold;">
@@ -203,7 +203,7 @@ onMounted(() => {
       <div class="footer-surat">
         <div class="tanggal">Bekasi, {{ formatTanggalIndonesia(getDate()) }}</div>
         <div class="mt-n3">Hormat Kami</div>
-        <img src="/images/citragroup/CF/CF_Logo.png" alt="Logo Perusahaan" />
+        <img src="/images/citragroup/CII/CII_Logo.png" alt="Logo Perusahaan" />
         <div class="nama-perusahaan">Citra Furniture Indonesia</div>
       </div>
     </div>
@@ -374,6 +374,16 @@ onMounted(() => {
   
   /* text-align: left; */
 }
+
+
+
+.table-items tbody td{
+  
+  padding-right: 1ch;
+  
+  }
+
+
 #info-akhir {
   width: 100%;
   margin: auto;

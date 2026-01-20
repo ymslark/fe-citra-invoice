@@ -95,6 +95,18 @@ export const useFakturStore = defineStore('faktur', {
       this.newFaktur.barang = barang.filter(item => item._tempId !== _tempId);
     },
 
+    resetNewFaktur() {
+      this.newFaktur = {
+        pembeli: { 
+          nama_pembeli: '',
+          alamat: '',
+          npwp: '',
+        },
+        barang: [],
+        tanggal: '',
+        tanggal_pembelian: '',
+      }
+    },
     // async updateFaktur(id, formData) {
     //   const { $api } = useNuxtApp()
     //   console.log(id)

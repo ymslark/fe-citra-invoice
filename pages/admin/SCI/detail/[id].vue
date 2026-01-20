@@ -193,6 +193,10 @@ let barangs = hitungInvoiceBarang(surat.barang, surat.ppn)
                   readonly />
                 </VCol>
                 <VCol cols="12">
+                  <AppTextField v-model="surat.alamat" label="Alamat" placeholder="Alamat"
+                  readonly />
+                </VCol>
+                <VCol cols="12">
                   <AppTextField v-model="surat.no_seri" label="Nomor Seri" placeholder="No.Seri" :rules="[requiredValidator]"
                     readonly />
                 </VCol>
@@ -350,7 +354,7 @@ let barangs = hitungInvoiceBarang(surat.barang, surat.ppn)
                     Nama Barang
                   </th>
                   <th class="text-uppercase">
-                    Harga Satuan (DPP + PPN)
+                    Harga Satuan(DPP + PPN)
                   </th>
                   <th class="text-uppercase">
                     Harga Satuan (DPP)

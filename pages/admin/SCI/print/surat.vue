@@ -39,18 +39,18 @@ try {
   })
 }
 
-onMounted(() => {
-  if(process.client){
-    document.title = surat.no_seri + ' Surat Penawaran ' + surat.tujuan + ' - Sentral Citra'
-    setTimeout(() => {
-      window.print()
-    }, 1000)
+// onMounted(() => {
+//   if(process.client){
+//     document.title = surat.no_seri + ' Surat Penawaran ' + surat.tujuan + ' - Sentral Citra'
+//     setTimeout(() => {
+//       window.print()
+//     }, 1000)
 
-    window.addEventListener('afterprint', () => {
-        window.location.replace('/admin/SCI/detail/' + id)
-    })
-  }
-})
+//     window.addEventListener('afterprint', () => {
+//         window.location.replace('/admin/SCI/detail/' + id)
+//     })
+//   }
+// })
 
 </script>
 
@@ -90,22 +90,22 @@ onMounted(() => {
           <tr v-for="(item, index) in barang.barangs" :key="index">
             <td class="text-center">{{ index + 1 }}</td>
             <td v-if="index % 2 == 1" class="text-uppercase text-wrap" style="padding-left: 1ch !important;">{{ item.nama_barang }}</td>
-            <td v-else class="text-uppercase text-wrap" style="padding-left: 1ch !important;">{{ item.nama_barang }} warna merah kayu mahoni</td>
+            <td v-else class="text-uppercase text-wrap" style="padding-left: 1ch !important;">{{ item.nama_barang }} mahoni warna merah tua</td>
   
-            <td class="angka-kanan">
+            <td class="angka-kanan text-nowrap">
               <span class="rp">Rp.</span>
               <span class="nilai">{{ formatRupiah(item.dpp_tanpa_diskon) }}</span>
             </td>
-            <td class="text-center" id="qty" style="padding: 1pt;">{{ item.qty }}</td>
-            <td class="angka-kanan">
+            <td class="text-center text-nowrap" id="qty" style="padding: 1pt;">{{ item.qty }}</td>
+            <td class="angka-kanan text-nowrap">
               <span class="rp">Rp.</span>
               <span class="nilai">{{ formatRupiah(item.total_dpp_tanpa_diskon) }}</span>
             </td>
-            <td class="angka-kanan">
+            <td class="angka-kanan text-nowrap">
               <span class="rp">Rp.</span>
               <span class="nilai">{{ formatRupiah(item.total_diskon) }}</span>
             </td>
-            <td class="angka-kanan">
+            <td class="angka-kanan text-nowrap" >
               <span class="rp">Rp</span>
               <span class="nilai">{{ formatRupiah(item.total_dpp) }}</span>
               </td>
@@ -164,7 +164,7 @@ onMounted(() => {
             <td colspan="5" class="br-0"></td>
             <td class="bl-0">Total</td>
             <td class="angka-kanan">
-              <span class="rp">Rp.</span>
+              <span class="rp">Rp</span>
               <span class="nilai">{{ formatRupiah(surat.harga_akhir) }}</span>
             </td>
           </tr>
@@ -241,8 +241,8 @@ onMounted(() => {
     max-width: 50%;
     height: auto;
   }
-  .table-items tbody td{
-    font-size: 9pt !important;
+  .table-items tbody{
+    font-size: 10pt !important;
   }
 /* 5%, 35%, 12%, 8%, 12%, 8%, 20% */
   .table-items thead th:first-child {
@@ -250,28 +250,42 @@ onMounted(() => {
   }
 
   .table-items thead th:nth-child(2) {
-    width: 27% !important;
+    /* width: 27% !important; */
+    max-width: 20% !important;
     text-wrap: wrap;
     
   }
 
-  .table-items thead th:nth-child(3) {
+  /* .table-items thead th:nth-child(3) {
     width: 15% !important;
-  }
+    max-width: 15% !important;
+  } */
 
-  .table-items thead th:nth-child(4) {
+  /* .table-items thead th:nth-child(4) {
     width: 5% !important;
-  }
+    max-width: 5% !important;
+  } */
+
+ /* 
   .table-items thead th:nth-child(5) {
     width: 16% !important;
+    max-width: 16% !important;
   }
   .table-items thead th:nth-child(6) {
     width: 16% !important;
+    max-width: 16% !important;
   }
 
   .table-items thead th:last-child {
     width: 18% !important;
+    max-width: 18% !important;
   }
+  */
+
+  .text-nowrap {
+    white-space: normal !important;
+  }
+
   .table-items th, .table-items td {
     border: 1px solid #000000 !important;
   }
@@ -370,7 +384,7 @@ onMounted(() => {
 .table-items th,
 .table-items td {
   border: 1px solid #000;
-  padding: 2px 4px;
+  padding: 1px 2px;
   
   /* text-align: left; */
 }
@@ -447,8 +461,8 @@ div .footer {
 }
 
 .angka-kanan .nilai {
-  display: inline-block;
-  min-width: 8ch; /* biarkan panjang angka fleksibel */
+  /* display: inline-block; */
+  /* min-width: 8ch; biarkan panjang angka fleksibel */
   text-align: right;
   margin-right: 5px; /* jarak antara angka dan Rp */
 }

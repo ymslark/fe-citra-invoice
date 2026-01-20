@@ -44,6 +44,14 @@ export function formatRupiah(value,  rp = ''){
   }).format(value)
 }
 
+export function formatAngkaIndo(value,  rp = ''){
+  let style = rp == 'rp' ? 'currency' : 'decimal'
+  return new Intl.NumberFormat('id-ID', {
+    style: 'decimal',
+   // Menghilangkan angka desimal jika tidak diperlukan
+  }).format(value)
+}
+
 /**
  * Convert formatted currency string to a number for backend processing
  * @param {string} formattedValue - The formatted currency string
@@ -145,4 +153,15 @@ export function generateFileName(type, ptPembuat, ptTujuan, date) {
   const formattedDate = date.replace(/-/g, '')
 
   return `${type.toUpperCase()}_${formatName(ptPembuat)}_TO_${formatName(ptTujuan)}_${formattedDate}.pdf`
+}
+
+export function parseIndoFloat(str) {
+  if (!str) return 0
+
+  return parseFloat(
+    str
+      .toString()
+      .replace(/\./g, '')   // hapus pemisah ribuan
+      .replace(',', '.')   // ganti koma ke titik
+  )
 }

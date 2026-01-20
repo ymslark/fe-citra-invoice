@@ -39,17 +39,28 @@ try {
   })
 }
 
-onMounted(() => {
-  if(process.client){
-    document.title = surat.no_seri + ' Surat Penawaran ' + surat.tujuan + ' - Citra Furniture'
-    setTimeout(() => {
-      window.print()
-    }, 1000)
+// onMounted(() => {
+//   if(process.client){
+//     document.title = surat.no_seri + ' Surat Penawaran ' + surat.tujuan + ' - Citra Furniture'
+//     setTimeout(() => {
+//       window.print()
+//     }, 1000)
 
+//     window.addEventListener('afterprint', () => {
+//         window.location.replace('/admin/CF/detail/' + id)
+//     })
+//   }
+// })
+onMounted(async () => {
+
+  await nextTick()
+
+  setTimeout(() => {
+    window.print()
+  }, 1000)
     window.addEventListener('afterprint', () => {
-        window.location.replace('/admin/CF/detail/' + id)
+      window.location.replace('/admin/CF/detail/' + id)
     })
-  }
 })
 
 </script>
@@ -58,7 +69,7 @@ onMounted(() => {
     <div class="header">
       <img 
         class="kop-img" 
-        src="/images/citragroup/CF/CF_Kop.png" 
+        src="/images/citragroup/CF/CF_Kop.jpeg" 
         alt="" 
         srcset="">
     </div>
@@ -84,7 +95,7 @@ onMounted(() => {
             <th>subtotal</th>
             <th>Diskon</th>
             <th>Total</th>
-          </tr>
+          </tr> 
         </thead>
         <tbody>
           <tr v-for="(item, index) in barang.barangs" :key="index">
@@ -335,7 +346,7 @@ onMounted(() => {
   /* margin-bottom: 20px; */
 }
 .kop-img {
-  width: 100%;
+  width: 94%;
   height: auto;
 }
 .meta {

@@ -175,7 +175,7 @@ const totalPages = ref(1)
 // Ambil data dari backend, backend sudah siapkan pagination
 const fetchItems = async (page = 1) => {
   try {
-    const response = await $api.get(`/memo/deleted?page=${page}&limit=2`)
+    const response = await $api.get(`/memo/deleted?page=${page}&limit=100`)
     console.log(response)
     memos.value = response.docs
     totalPages.value = response.totalPages // backend kirim total halaman

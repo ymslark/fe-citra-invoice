@@ -40,7 +40,7 @@ const logoUrl = `/citra-invoice/images/citragroup/${surat.perusahaan}/${surat.pe
 console.log(kopUrl, logoUrl)
 onMounted(() => {
   if(process.client){
-    document.title = 'Invoice ' + surat.tujuan + ' - Citra Furniture'
+    document.title = 'Surat Jalan ' + surat.tujuan + ' - Citra Furniture'
     setTimeout(() => {
       window.print()
     }, 1000)
@@ -161,6 +161,9 @@ onMounted(() => {
     margin: 0;
     padding: 0;
   }
+  .table-items th, .table-items td {
+    font-size: 9pt !important;
+  }
   @page {
     size: A4;
     margin: 2cm;
@@ -204,6 +207,7 @@ onMounted(() => {
   width: 95%;
   border-collapse: collapse;
   margin: auto;
+
 }
 
 .table-items th {

@@ -1,7 +1,8 @@
 <template>
   <div>
+    <Alert />
     <VCard v-if="isNotificationVisible === false">
-      <VForm>
+      <VForm ref="refForm" @submit.prevent>
         <VCardTitle class="text-h5">Request Faktur Pajak</VCardTitle>
         <div>
           <VCardItem>
@@ -25,24 +26,24 @@
         <VCardItem v-if="true">
           <VRow>
             <VCol cols="12" md="6" class="d-flex flex-column ga-4 mt-2">
-              <VTextField v-model="form.pembeli.nama_pembeli" label="Nama Pembeli" required outlined :rules="[requiredValidator]" />
-              <VTextField v-model="form.pembeli.no_hp" label="No Hp" required outlined :rules="[requiredValidator]" />
-              <VTextarea v-model="form.pembeli.alamat" label="Alamat" required outlined :rules="[requiredValidator]" rows="1" auto-grow />
-              <VTextField v-model="form.pembeli.npwp" label="NPWP" required outlined :rules="[requiredValidator]" />
-              
-              <AppDateTimePicker label="Tanggal Pembelian" v-model="form.tanggal_pembelian" required outlined :rules="[requiredValidator]" />
+              <VTextField v-model="faktur.newFaktur.pembeli.nama_pembeli" label="Nama Pembeli" required outlined :rules="[requiredValidator]" />
+              <VTextField v-model="faktur.newFaktur.pembeli.no_hp" label="No Hp" required outlined :rules="[requiredValidator]" />
+              <VTextarea v-model="faktur.newFaktur.pembeli.alamat" label="Alamat" required outlined :rules="[requiredValidator]" rows="1" auto-grow />
+              <VTextField v-model="faktur.newFaktur.pembeli.npwp" label="NPWP" required outlined :rules="[requiredValidator]" />
+
+              <AppDateTimePicker label="Tanggal Pembelian" v-model="faktur.newFaktur.tanggal_pembelian" required outlined :rules="[requiredValidator]" />
               <!-- <VTextField label="Nama Pelanggan" required outlined :rules="[requiredValidator]" />
               <VTextField label="Nama Pelanggan" required outlined :rules="[requiredValidator]" /> -->
             </VCol>
             <VCol cols="12" md="6">
               <!-- <VFileInput label="File input" @change="uploadImage" v-model="file" /> -->
-              <VImg v-if="previewUrl" :src="previewUrl" class="mt-2" max-height="350" contain />
+              <VImg v-if="tempFile != null" :src="previewUrl" class="mt-2" max-height="350" contain />
               <VFileInput accept="image/jpeg, image/png, image/jpg" label="Masukkan Gambar NPWP"
-                @change="handleFileChange" :rules="fileRules" show-size class="mt-5" />
+                @blur="handleFileChange" @change="handleFileChange" :rules="fileRules" show-size class="mt-5"/>
             </VCol>
-            <VCol cols="6">
+            <!-- <VCol cols="6">
               <VImg v-if="url" :src="url" class="mt-2" max-height="350" contain />
-            </VCol>
+            </VCol> -->
           
             <VCol class="d-flex justify-end">
               <VBtn color="primary" @click="addBarang">Tambah Barang</VBtn>
@@ -62,7 +63,7 @@
         </VCardItem>
       </VForm>
     </VCard>      
-    <UtilsNotification v-if="isNotificationVisible" /> 
+    <UtilsNotification v-if="isNotificationVisible" message="Request Faktur pajak sudah kami terima dan akan segera kami proses" /> 
   </div>
 </template>
 
@@ -70,6 +71,7 @@
 
 import {useFakturStore} from '@/stores/faktur.js'
 import { useAuthStore } from '@/@core/stores/auth'
+import { VForm } from 'vuetify/components/VForm'
 const auth = useAuthStore()
 const faktur = useFakturStore()
 const seri = ref('')
@@ -78,7 +80,7 @@ const config = useRuntimeConfig()
 const form = faktur.newFaktur
 const baseUrl = config.public.apiUrl // Ganti dengan URL API yang sesuai
 const url = ref('')
-
+const isVisiblePreviewImage= ref(false)
 const tempFile = ref(null)
 const file = ref(tempFile)
 const previewUrl = ref(null)
@@ -96,11 +98,12 @@ const showNotification = () => {
   }, 5000);
 }
 const handleFileChange = (event) => {
-  console.log()
-
+  console.log(event.target.files)
   const selectedFile = event.target.files[0];
   if (selectedFile) {
     tempFile.value = selectedFile;
+  }else{
+    tempFile.value = null;
   }
   console.log(event.target.files)
 };
@@ -108,14 +111,13 @@ const handleFileChange = (event) => {
 const uploadImage = async () => {  
   try {
     const { $api } = useNuxtApp()
-    if (!file.value) {
-      // console.error('No file selected');
-      alert.showAlertObject({
-        type: 'error',
-        message: 'Tidak ada file yang dipilih',
-      })
-      return;
-    }
+    const valid = await refForm?.value?.validate()
+    console.log(file.value)
+    if (!file.value) throw { message: 'File gambar wajib diisi' }
+    
+    if (!valid.valid) { window.scrollTo(0, 0); return }
+    console.log(form.barang)
+    if (form.barang.length == 0) throw { message: 'Barang tidak boleh kosong' }
     let data = JSON.parse(JSON.stringify(faktur.newFaktur))
     data['barang'] = faktur.newFaktur.barang.map(item => ({
       nama_barang: item.nama_barang,
@@ -128,21 +130,23 @@ const uploadImage = async () => {
     formData.append('gambar', file.value);
     formData.append('faktur', JSON.stringify(data));
     // console.log('Form data prepared for upload:', formData);
-  
+   
     console.log(formData.get('faktur'))
     let response = null
     response = await $api.post('/faktur', formData)
     console.log(response)
-    if(!auth.isLoggedIn){
-      showNotification()
-    }
-    url.value = baseUrl + '/public/images/' + response.filename
-      console.log(response, 'response');
-      console.log(url.value);
-    alert.showAlertObject({
-      type: 'success',
-      message: 'Gambar Berhasil di-upload',
-    })
+    // url.value = baseUrl + '/public/images/' + response.filename
+    // console.log(response, 'response');
+    // console.log(url.value);
+    
+    faktur.resetNewFaktur()
+    seri.value = ''
+    tempFile.value = null
+    showNotification()
+    // alert.showAlertObject({
+    //   type: 'success',
+    //   message: 'Berhasil mengirim request faktur pajak',
+    // })
   } catch (error) {
     console.log(error)
     alert.showAlertObject({
@@ -152,10 +156,16 @@ const uploadImage = async () => {
   }
 };
 watch(file, (newFile) => {
+  console.log(tempFile.value)
+  console.log(previewUrl.value)
   if (newFile) {
     previewUrl.value = URL.createObjectURL(newFile)
+    isVisiblePreviewImage.value = true
     console.log(URL.createObjectURL(newFile))
-
+  }
+  if (!file.value) {
+    isVisiblePreviewImage.value = false
+    previewUrl.value = null
   }
   //  // }
 })
@@ -166,6 +176,7 @@ const logFile = (files) => {
 
 const surat = ref(null)
 const refForm = ref()
+
 // const seri = ref('')
 
 const getSurat = async () => {

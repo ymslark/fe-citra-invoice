@@ -19,13 +19,13 @@ const props = defineProps({
 
 
 const isDialogVisible = ref(true)
-// function showDialog() {
-//     isDialogVisible.value = props.modelValue
-//     setTimeout(() => {
-//         isDialogVisible.value = false
-//         emit('end')
-//     }, 3000)
-// }
+function showDialog() {
+    isDialogVisible.value = props.modelValue
+    setTimeout(() => {
+        isDialogVisible.value = false
+        emit('end')
+    }, 3000)
+}
 
 </script>
 

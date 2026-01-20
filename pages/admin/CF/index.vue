@@ -116,6 +116,7 @@ const fetchIndex = async (page = 1) => {
   try {
     const query = buildQueryFilterParams({ limit:10, page, search: search.value}, true); // defaultLast30Days = true
     const res = await $api.get("/CF/filterData", { ...query });
+    
     surats = res.docs;
     totalPages.value = res.totalPages;
     currentPage.value = res.page;

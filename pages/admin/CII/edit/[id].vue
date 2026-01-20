@@ -1,4 +1,5 @@
 <script setup>
+import AppTextarea from '@/@core/components/app-form-elements/AppTextarea.vue'
 import { useAlertStore } from '@/stores/alert'
 import { useCiStore } from '@/stores/ciis'
 import { navigateTo } from 'nuxt/app'
@@ -234,8 +235,8 @@ const toDetailPage = () => {
                 :rules="[requiredValidator]" />
             </VCol>
             <VCol cols="12" md="6">
-              <AppTextField v-model="surat.alamat" label="Alamat" placeholder="Alamat"
-                :rules="[requiredValidator]"/>
+              <AppTextarea v-model="surat.alamat" label="Alamat" placeholder="Alamat"
+                :rules="[requiredValidator]" rows="1" auto-grow />
             </VCol>
             <VCol cols="12" md="6">
               <AppSelect v-model="surat.status" :items="allowedStatus" label="Status" placeholder="Pilih Status"

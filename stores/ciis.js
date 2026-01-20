@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { v4 as uuidv4 } from 'uuid'
 // import {crypto} from 'crypto'
+import { parseIndoFloat } from '@/utils/format.js' 
 function useCurrency() {
   const { $formatRupiah, $parseRupiah } = useNuxtApp()
   return { $formatRupiah, $parseRupiah }
@@ -165,8 +166,8 @@ export const useCiStore = defineStore('ciis', {
       this.newSurat['interior'] = this.addedInterior.map(item => {
         return {
           "nama_interior": item.nama_interior,
-          "v1": parseFloat(item.v1.replace(',', '.')),
-          "v2": parseFloat(item.v2.replace(',', '.')),
+          "v1": parseIndoFloat(item.v1),
+          "v2": parseIndoFloat(item.v2),
           "diskon_persen": item.diskon_persen,
           "diskon_nominal": $parseRupiah(item.diskon_nominal),
           "harga": $parseRupiah(item.harga),
@@ -230,7 +231,9 @@ export const useCiStore = defineStore('ciis', {
     async restoreCII(id){
       //TANPA TRY CATCH
       const { $api } = useNuxtApp()
-      const response = await $api.patch(`/CII/restore/${id}`)
+
+      const response = await $api.put(`/CII/restore/${id}`)
+      console.log(id)
       console.log(response)
       return response
     },
@@ -258,6 +261,7 @@ export const useCiStore = defineStore('ciis', {
         this.newSurat.tujuan = response.doc.tujuan
         this.newSurat.alamat = response.doc.alamat  
         this.newSurat.tanggal = response.doc.tanggal  
+        this.newSurat.no_hp = response.doc.no_hp  
         response.doc.interior.forEach(item => {
           this.addedInterior.push({
             "nama_interior": item.nama_interior,
