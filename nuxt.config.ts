@@ -17,8 +17,6 @@ export default defineNuxtConfig({
         href: process.env.NUXT_APP_BASE_URL+'/favicon.ico',
       }],
     },
-    baseURL: '/citra-invoice/',
-    buildAssetsDir: '_nuxt'
   },
 
   server: {
