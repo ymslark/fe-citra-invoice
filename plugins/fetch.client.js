@@ -85,7 +85,7 @@ import { useAlertStore } from '@/stores/alert'
 export default defineNuxtPlugin(nuxtApp => {
   const alert= useAlertStore()
   const config = useRuntimeConfig() // pakai runtimeConfig, bukan process.env
-  const BASE_URL = config.public.apiUrl || 'http://localhost:3900'
+  const BASE_URL = config.BASE_URL_API
 
   const authStore = useAuthStore()
 

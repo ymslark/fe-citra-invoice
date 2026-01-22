@@ -45,7 +45,7 @@ export default defineNuxtConfig({
     // Private keys are only available on the server
     // AUTH_ORIGIN: process.env.AUTH_ORIGIN,
     // AUTH_SECRET: process.env.AUTH_SECRET,
-    BASE_URL_API: process.env.API_BASE_URL || 'http://localhost:3900',
+    BASE_URL_API: process.env.API_BASE_URL,
 
     // Public keys that are exposed to the client.
 // nuxt.config.ts
