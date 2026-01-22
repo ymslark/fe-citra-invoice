@@ -11,33 +11,30 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async login(credentials) {
       const { $api } = useNuxtApp()
-      try {
-        const config = useRuntimeConfig()
-        // console.log('RuntimeConfig:', config)
-        // console.log(credentials)
 
-        const response = await $api.post('/login', credentials)
+      const config = useRuntimeConfig()
+      // console.log('RuntimeConfig:', config)
+      // console.log(credentials)
 
-        if (!response) throw new Error('Login Gagal')
-        // console.log('Login Response:', response)
+      const response = await $api.post('/login', credentials)
 
-        // Set state
-        this.accessToken = response.accessToken
-        this.refreshToken = response.refreshToken
-        this.user = response.user
-        this.isLoggedIn = true
+      if (!response) throw new Error('Login Gagal')
+      // console.log('Login Response:', response)
 
-        // Set cookies (client only)
-        useCookie('accessToken', { maxAge: 60 * 60 * 24 * 7, path: '/' }).value = response.accessToken
-        useCookie('refreshToken', { maxAge: 60 * 60 * 24 * 30, path: '/' }).value = response.refreshToken
-        useCookie('user', { maxAge: 60 * 60 * 24 * 7, path: '/' }).value = response.user
+      // Set state
+      this.accessToken = response.accessToken
+      this.refreshToken = response.refreshToken
+      this.user = response.user
+      this.isLoggedIn = true
 
-        // console.log('Cookies set successfully')
-        return true
-      } catch (error) {
-        console.error('Login error:', error)
-        return false
-      }
+      // Set cookies (client only)
+      useCookie('accessToken', { maxAge: 60 * 60 * 24 * 7, path: '/' }).value = response.accessToken
+      useCookie('refreshToken', { maxAge: 60 * 60 * 24 * 30, path: '/' }).value = response.refreshToken
+      useCookie('user', { maxAge: 60 * 60 * 24 * 7, path: '/' }).value = response.user
+
+      // console.log('Cookies set successfully')
+      return response
+
     },
 
     async refreshAccessToken() {

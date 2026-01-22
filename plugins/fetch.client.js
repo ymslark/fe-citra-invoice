@@ -80,8 +80,10 @@
 
 import { useAuthStore } from '@/@core/stores/auth'
 import auth from '@/middleware/auth'
+import { useAlertStore } from '@/stores/alert'
 
 export default defineNuxtPlugin(nuxtApp => {
+  const alert= useAlertStore()
   const config = useRuntimeConfig() // pakai runtimeConfig, bukan process.env
   const BASE_URL = config.public.apiUrl || 'http://localhost:3900'
 
@@ -114,6 +116,13 @@ export default defineNuxtPlugin(nuxtApp => {
       console.log('Response:', res)
       return res
     } catch (error) {
+      console.log(error)
+      if (!error.response) {
+        // console.log('Network or unexpected error:', error)
+        // alert.showAlertObject({ type: 'error', message: 'ERROR_OCCURRED' })
+        throw { code: 500, message: 'SERVER_ERROR' }
+
+      }
       error.response._data['code'] = error.response?.status
       if (error.response?.status === 401 && authStore.refreshToken) {
         try {

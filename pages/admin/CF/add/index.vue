@@ -152,6 +152,9 @@ const barangs = res.Barangs
               <AppTextField v-model="surat.no_hp" label="No Hp (Wajib Diisi)" placeholder="No Hp" :rules="[requiredValidator]" />
             </VCol>
             <VCol cols="12" md="6">
+              <AppTextField v-model="surat.alamat" label="Alamat(Wajib Diisi)" placeholder="Alamat" :rules="[requiredValidator]" />
+            </VCol>
+            <VCol cols="12" md="6">
               <AppTextField v-model="surat.hal" label="Hal (Wajib Diisi)" placeholder="Hal" :rules="[requiredValidator]" />
             </VCol>
 

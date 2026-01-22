@@ -40,7 +40,7 @@ const route = useRoute()
 // })
 
 const refVForm = ref()
-
+const isLoggedIn = computed(() => authStore.isLoggedIn)
 // const credentials = ref({
 //   email: 'admin@demo.com',
 //   password: 'admin',
@@ -50,12 +50,18 @@ const login = async () => {
   try {
     // console.log(username, password)
 
-    const isLoggedIn = await authStore.login({ username: username.value, password: password.value })
-    if (!isLoggedIn) throw { message: 'Login Gagal! periksa username dan password anda' }
+    const response = await authStore.login({ username: username.value, password: password.value })
+    if (!isLoggedIn.value) throw response
+    // throw { message: 'Login Gagal! periksa username dan password anda' }
     // console.log(isLoggedIn)
-    if (isLoggedIn) navigateTo({ name: 'admin-supir' })
+    if (isLoggedIn.value) navigateTo({ name: 'admin-supir' })
   } catch (error) {
-    errorMessage.value = error.message
+    console.log(error)
+    if(error.code >= 399 && error.code <= 499) {
+      errorMessage.value = "Login Gagal! Username atau Password Salah!"
+    } else {
+      errorMessage.value = "SERVER_ERROR"
+    }
     setTimeout(() => {
       errorMessage.value = null
     }, 2000)
@@ -105,7 +111,7 @@ const onSubmit = () => {
               <!-- email -->
               <VCol cols="12">
                 <VAlert v-if="errorMessage" type="error" close-delay="2">
-                  {{ errorMessage }}
+                  {{ $t(errorMessage) }}
                 </VAlert>
               </VCol>
               <VCol cols="12">

@@ -13,13 +13,13 @@ const deleteData = (async () => {
   try {
     const response = await $api.delete(`${url}`)
     if (!response) throw {}
-    isDialogVisible = false
+    isDialogVisible.value = false
     alert.showAlertObject({
       message: 'Berhasil Menghapus Data',
       type: 'success',
     })
   } catch (error) {
-    isDialogVisible = false
+    isDialogVisible.value = false
     alert.showAlertObject({
       message: 'Gagal Menghapus Data',
       type: 'error',
@@ -40,7 +40,7 @@ const deleteData = (async () => {
     </template>
 
     <!-- Dialog close btn -->
-    <DialogCloseBtn @click="isDialogVisible = !isDialogVisible" />
+    <DialogCloseBtn @click="isDialogVisible.value = !isDialogVisible" />
 
     <!-- Dialog Content -->
     <VCard title="Konfirmasi">

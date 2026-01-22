@@ -118,14 +118,16 @@ definePageMeta({
 })
 import { useCiStore } from '@/stores/ciis'
 import {buildQueryFilterParams} from '@/utils/apiFilterQuery'
+import { useAlertStore } from '@/stores/alert'
 
 const { $api } = useNuxtApp()
 const cii = useCiStore()
-
+const alert = useAlertStore()
 const currentPage = ref(1)
 const surats = ref([])
 const totalPages = ref(1)
 const search = ref('')
+const suratsFiltered = ref([])
 
 // Ambil data dari backend, backend sudah siapkan pagination
 const fetchItems = async (page = 1) => {
@@ -139,6 +141,10 @@ const fetchItems = async (page = 1) => {
     suratsFiltered.value = surats;
   } catch (error) {
     console.error('Gagal mengambil data:', error)
+    alert.showAlertObject({
+      type: 'error',
+      message: error.message || 'ERROR_OCCURRED',
+    })    
   }
 }
 

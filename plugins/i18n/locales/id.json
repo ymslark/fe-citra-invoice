@@ -183,7 +183,10 @@
   "NAMA_BANK_EMPTY": "Pilih Rekening",
   "NO_REKENING_EMPTY": "Pilih Rekening",
   "SATUAN_EMPTY": "Satuan tidak boleh kosong",
-
+  "SERVER_ERROR": "Terjadi kesalahan pada server, silahkan coba lagi nanti",
+  "ERROR_OCCURRED": "Terjadi kesalahan",
+  "INVALID_PASSWORD": "Password salah",
+  "INVALID_USERNAME": "Password salah",
   "_notFound": "Dibawah ini untuk not found",
 
   "NOT_FOUND": "Halaman tidak ditemukan",
