@@ -51,10 +51,10 @@ const login = async () => {
     // console.log(username, password)
 
     const response = await authStore.login({ username: username.value, password: password.value })
-    if (!isLoggedIn.value) throw response
+    if (!isLoggedIn) throw response
     // throw { message: 'Login Gagal! periksa username dan password anda' }
     // console.log(isLoggedIn)
-    if (isLoggedIn.value) navigateTo({ name: 'admin-supir' })
+    if (isLoggedIn) navigateTo({ name: 'admin-supir' })
   } catch (error) {
     console.log(error)
     if(error.code >= 399 && error.code <= 499) {

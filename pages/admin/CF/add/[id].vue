@@ -2,6 +2,7 @@
 import { useAlertStore } from '@/stores/alert'
 import { useCFStore } from '@/stores/cf'
 import { VForm } from 'vuetify/components/VForm'
+import { getDate } from '@/utils/global'
 
 const cf = useCFStore()
 const route = useRoute()
@@ -72,6 +73,7 @@ const config = cf.config
 const rekeningList = config.rekening
 
 const surat = cf.newSurat
+cf.newSurat.tanggal = getDate()
 
 let ppnSelection = [
   { title: 'Ya', value: config.ppn },
@@ -212,7 +214,7 @@ const barangs = res.Barangs
             </VCol>
             <VCol cols="12" md="2">
               <AppSelect v-model="surat.ongkos_kirim" label="Termasuk Ongkir" placeholder="Tujuan"
-                :items="ongkirItems" />
+                :items="ongkirItems" autocomplete="off" />
             </VCol>
             <VCol cols="12" md="2">
               <AppSelect v-model="surat.instalasi" label="Termasuk Instalasi" placeholder="Tujuan"

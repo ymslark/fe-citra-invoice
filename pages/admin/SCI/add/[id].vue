@@ -2,6 +2,7 @@
 import { useAlertStore } from '@/stores/alert'
 import { useSCIStore } from '@/stores/sci'
 import { VForm } from 'vuetify/components/VForm'
+import { getDate } from '@/utils/global'
 
 const sci = useSCIStore()
 const route = useRoute()
@@ -72,6 +73,7 @@ const config = sci.config
 const rekeningList = config.rekening
 
 const surat = sci.newSurat
+sci.newSurat.tanggal = getDate()
 
 let ppnSelection = [
   { title: 'Ya', value: config.ppn },
@@ -155,11 +157,11 @@ const barangs = res.Barangs
             </VCol>
 
             <!-- 👉 Company -->
-            <!--
+            
               <VCol cols="12" md="6">
-              <AppTextField v-model="surat.company" label="Company" placeholder="Pixinvent" />
+              <AppTextField v-model="surat.alamat" label="Alamat" placeholder="Masukkan Alamat" readonly/>
               </VCol> 
-            -->
+           
           </VRow>
         </VCardItem>
         <VSpacer />
@@ -212,7 +214,7 @@ const barangs = res.Barangs
             </VCol>
             <VCol cols="12" md="2">
               <AppSelect v-model="surat.ongkos_kirim" label="Termasuk Ongkir" placeholder="Tujuan"
-                :items="ongkirItems" />
+                :items="ongkirItems" autocomplete="off" />
             </VCol>
             <VCol cols="12" md="2">
               <AppSelect v-model="surat.instalasi" label="Termasuk Instalasi" placeholder="Tujuan"

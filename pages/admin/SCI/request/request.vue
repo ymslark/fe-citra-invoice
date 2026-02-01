@@ -61,7 +61,7 @@
                   </VTooltip>
                   <VIcon>tabler-edit</VIcon>
                 </IconBtn>
-                <IconBtn size="38" @click="navigateTo(`/admin/SCI/print/invoice?id=${surat._id}`)">
+                <IconBtn size="38" @click="navigateTo(`/admin/CF/print/invoice?id=${surat._id}`)">
                   <VTooltip open-on-focus location="top" activator="parent">
                     Hapus
                   </VTooltip>
@@ -77,7 +77,7 @@
 </template>
 
 <script setup>
-import { useSCIStore } from '@/stores/sci'
+import { useCFStore } from '@/stores/cf'
 import { onMounted, ref } from 'vue'
 definePageMeta({
   // middleware: 'auth.client',
@@ -85,7 +85,7 @@ definePageMeta({
 })
 
 
-const sci = useSCIStore()
+const cf = useCFStore()
 const isDialogVisible = ref(false)
 const firstName = ref('')
 const middleName = ref('')
@@ -100,11 +100,11 @@ let supir = {
   no_telp: '',
   no_kendaraan: '',
 }
-let surats = await sci.getSCIRequest()
+let surats = await cf.getCFRequest()
 // console.log(surats)
 
 function goToDetailPage(id) {
-  navigateTo(`SCI/detail/${id}`)
+  navigateTo(`CF/detail/${id}`)
 }
 
 // function cekButton(i, button){

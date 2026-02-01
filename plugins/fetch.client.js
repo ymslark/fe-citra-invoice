@@ -81,12 +81,16 @@
 import { useAuthStore } from '@/@core/stores/auth'
 import auth from '@/middleware/auth'
 import { useAlertStore } from '@/stores/alert'
-
+// import dotenv from 'dotenv'
+// import dotenv from 'dotenv'
 export default defineNuxtPlugin(nuxtApp => {
   const alert= useAlertStore()
   const config = useRuntimeConfig() // pakai runtimeConfig, bukan process.env
-  const BASE_URL = config.BASE_URL_API
+  // env = dotenv.config()
+  // console.log('Runtime Config:', config)
 
+  // const BASE_URL = config.BASE_URL_API || config.public.apiUrl // Ganti dengan API base URL-mu
+  const BASE_URL = config.public.apiUrl // Ganti dengan API base URL-mu
   const authStore = useAuthStore()
 
   let request = null

@@ -5,7 +5,7 @@ definePageMeta({
 })
 import { useAlertStore } from '@/stores/alert'
 import { useSCIStore } from '@/stores/sci'
-import { formatRupiah, formatTanggalIndonesia } from '@/utils/format'
+import { formatRupiah, formatTanggalIndonesia, pembilang } from '@/utils/format'
 import { hitungInvoiceBarang } from '@/utils/invoice/hitungInvoiceBarang'
 import { getDate } from '@/utils/global'
 const route = useRoute()
@@ -13,7 +13,9 @@ const router = useRouter()
 const sci = useSCIStore()
 const id = route.query.id || null
 const alert = useAlertStore()
-
+let surat = null
+let barang = null
+let terbilang = ''
 if (!id) {
   alert.showAlert({
     type: 'error',
@@ -23,11 +25,12 @@ if (!id) {
   console.error('ID tidak ditemukan')
   navigateTo({ name: 'admin-SCI' })
 }
-let surat = null
 try {
   const response = await sci.getSCIById(id)
   surat = response.doc
-  // console.log(surat)
+  console.log(surat)
+  barang = hitungInvoiceBarang(surat.barang, surat.ppn)
+  terbilang = pembilang(surat.harga_akhir)
   // // console.log(surat.doc)
 } catch (error) {
   alert.showAlert({
@@ -35,64 +38,38 @@ try {
     message: 'Gagal mengambil data surat',
   })
 }
-function pembilang(nilai){
-  //ubah dari nominal jadi terbilang
-  nilai = Math.floor(Math.abs(nilai));
-                    
-  let simpanNilaiBagi = 0;
-  let huruf = [ '', 'Satu','Dua','Tiga','Empat','Lima','Enam','Tujuh','Delapan','Sembilan','Sepuluh','Sebelas']
-  let temp = '';
-  
-  if (nilai < 12) {
-      temp = ' ' + huruf[nilai];
-  } else if (nilai < 20) {
-      temp = this.pembilang(Math.floor(nilai - 10)) + ' Belas';
-  } else if (nilai < 100) {
-      simpanNilaiBagi = Math.floor(nilai / 10);
-      temp = this.pembilang(simpanNilaiBagi) + ' Puluh' + this.pembilang(nilai % 10);
-  } else if (nilai < 200) {
-      temp = ' Seratus' + this.pembilang(nilai - 100);
-  } else if (nilai < 1000) {
-      simpanNilaiBagi = Math.floor(nilai / 100);
-      temp = this.pembilang(simpanNilaiBagi) + ' Ratus' + this.pembilang(nilai % 100);
-  } else if (nilai < 2000) {
-      temp = ' Seribu' + this.pembilang(nilai - 1000);
-  } else if (nilai < 1000000) {
-      simpanNilaiBagi = Math.floor(nilai / 1000);
-      temp = this.pembilang(simpanNilaiBagi) + ' Ribu' + this.pembilang(nilai % 1000);
-  } else if (nilai < 1000000000) {
-      simpanNilaiBagi = Math.floor(nilai / 1000000);
-      temp = this.pembilang(simpanNilaiBagi) + ' Juta' + this.pembilang(nilai % 1000000);
-  } else if (nilai < 1000000000000) {
-      simpanNilaiBagi = Math.floor(nilai / 1000000000);
-      temp =
-      this.pembilang(simpanNilaiBagi) + ' Miliar' + this.pembilang(nilai % 1000000000);
-  } else if (nilai < 1000000000000000) {
-      simpanNilaiBagi = Math.floor(nilai / 1000000000000);
-      temp = this.pembilang(nilai / 1000000000000) + ' Triliun' + this.pembilang(nilai % 1000000000000);
-  }
-  
-  return temp
-}
 
-onMounted(() => {
-  if(process.client){
-    document.title = surat.no_seri + ' Invoice ' + surat.tujuan + ' - Sentral Citra'
-    setTimeout(() => {
-      window.print()
-    }, 1000)
-      window.addEventListener('afterprint', () => {
-        window.location.replace('/admin/SCI/detail/' + id)
-      })
-  }
+
+
+onMounted(async () => {
+  // await fetchData()
+  await nextTick()
+  document.title = surat.no_seri + ' Invoice ' + surat.tujuan + ' - Sentral Citra'
+
+  setTimeout(() => {
+    window.print()
+  }, 2000)
+    window.addEventListener('afterprint', () => {
+      window.location.replace('/admin/SCI/detail/' + id)
+    })
 })
-const barang = hitungInvoiceBarang(surat.barang, surat.ppn)
+// onMounted(() => {
+//   if(process.client){
+//     document.title = surat.no_seri + ' Invoice ' + surat.tujuan + ' - Sentral Citra'
+//     setTimeout(() => {
+//       window.print()
+//     }, 1000)
+//       window.addEventListener('afterprint', () => {
+//         window.location.replace('/admin/SCI/detail/' + id)
+//       })
+//   }
+// })
 // console.log(barang)
 </script>
 
 <template>
   <div class="header">
-    <img class="kop-img" src="/images/citragroup/SCI/SCI_Kop.png" alt="" srcset="">
+    <img class="kop-img" src="/images/citragroup/SCI/SCI_Kop.jpg" alt="" srcset="">
   </div>
 
   <!-- box -->
@@ -200,7 +177,7 @@ const barang = hitungInvoiceBarang(surat.barang, surat.ppn)
           </td>
         </tr>
         <tr>
-          <td class="bl-0 terbilang br-0 font-normal" colspan="7"><span class="m-left">Terbilang: {{ pembilang(surat.harga_akhir) }} Rupiah</span></td>
+          <td class="bl-0 terbilang br-0 font-normal" colspan="7"><span class="m-left">Terbilang: {{ terbilang }} Rupiah</span></td>
         </tr>
         <tr>
           <td class="bl-0 br-0 font-normal" colspan="7">
@@ -243,7 +220,7 @@ const barang = hitungInvoiceBarang(surat.barang, surat.ppn)
           </table>
         </td>
         <td class="br-0">
-          <div>Bekasi, {{ formatTanggalIndonesia(surat.tanggal, 'hari') }}</div>
+          <div>Bekasi, {{ formatTanggalIndonesia(getDate(), 'hari') }}</div>
           <img src="/images/citragroup/SCI/SCI_Logo.png" id="logo">
           <div>Sentral Citra Indonesia</div>
         </td>

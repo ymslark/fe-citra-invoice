@@ -220,7 +220,7 @@ onMounted(async () => {
           </table>
         </td>
         <td class="br-0">
-          <div>Bekasi, {{ formatTanggalIndonesia(surat.tanggal, 'hari') }}</div>
+          <div>Bekasi, {{ formatTanggalIndonesia(getDate(), 'hari') }}</div>
           <img src="/images/citragroup/CF/CF_Logo.png" id="logo">
           <div>Citra Furniture Indonesia</div>
         </td>

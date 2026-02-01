@@ -353,11 +353,14 @@ let barangs = hitungInvoiceBarang(surat.barang, surat.ppn)
                   <th class="text-uppercase">
                     Nama Barang
                   </th>
-                  <th class="text-uppercase">
-                    Harga Satuan(DPP + PPN)
+                  <th class="text-uppercase flex-column">
+                    
+                    <div>Harga Satuan</div>
+                    <div>(DPP + PPN)</div>
+                    
                   </th>
                   <th class="text-uppercase">
-                    Harga Satuan (DPP)
+                    Harga Satuan <br>(DPP)
                   </th>
                   <th class="text-uppercase">
                     qty
@@ -372,7 +375,7 @@ let barangs = hitungInvoiceBarang(surat.barang, surat.ppn)
                     Diskon
                   </th>
                   <th class="text-uppercase">
-                    Harga Akhir (DPP)
+                    Harga Akhir <br> (DPP)
                   </th>
                   <th class="text-uppercase">
                     Total

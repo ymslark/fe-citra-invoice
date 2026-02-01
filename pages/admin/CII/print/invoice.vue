@@ -5,7 +5,7 @@ definePageMeta({
 })
 import { useAlertStore } from '@/stores/alert'
 import { useCiStore } from '@/stores/ciis'
-import { formatRupiah, formatTanggalIndonesia } from '@/utils/format'
+import { formatRupiah, formatTanggalIndonesia, pembilang } from '@/utils/format'
 import { getDate } from '@/utils/global'
 import { hitungInvoiceInterior } from '@/utils/invoice/hitungInvoiceInterior'
 const route = useRoute()
@@ -24,10 +24,15 @@ if (!id) {
   navigateTo({ name: 'admin-CII' })
 }
 let surat = null
+let interiors = null
+let terbilang = ''
 try {
   const response = await cii.getCIIById(id)
   surat = response.doc
   console.log(surat)
+  interiors = hitungInvoiceInterior(surat.interior, surat.ppn)
+  terbilang = pembilang(interiors.total_dpp)
+  console.log(interiors)
   // console.log(surat.doc)
 } catch (error) {
   alert.showAlert({
@@ -35,47 +40,6 @@ try {
     message: 'Gagal mengambil data surat',
   })
 }
-
-function pembilang(nilai){
-  //ubah dari nominal jadi terbilang
-  nilai = Math.floor(Math.abs(nilai));
-                    
-  let simpanNilaiBagi = 0;
-  let huruf = [ '', 'Satu','Dua','Tiga','Empat','Lima','Enam','Tujuh','Delapan','Sembilan','Sepuluh','Sebelas']
-  let temp = '';
-  
-  if (nilai < 12) {
-      temp = ' ' + huruf[nilai];
-  } else if (nilai < 20) {
-      temp = this.pembilang(Math.floor(nilai - 10)) + ' Belas';
-  } else if (nilai < 100) {
-      simpanNilaiBagi = Math.floor(nilai / 10);
-      temp = this.pembilang(simpanNilaiBagi) + ' Puluh' + this.pembilang(nilai % 10);
-  } else if (nilai < 200) {
-      temp = ' Seratus' + this.pembilang(nilai - 100);
-  } else if (nilai < 1000) {
-      simpanNilaiBagi = Math.floor(nilai / 100);
-      temp = this.pembilang(simpanNilaiBagi) + ' Ratus' + this.pembilang(nilai % 100);
-  } else if (nilai < 2000) {
-      temp = ' Seribu' + this.pembilang(nilai - 1000);
-  } else if (nilai < 1000000) {
-      simpanNilaiBagi = Math.floor(nilai / 1000);
-      temp = this.pembilang(simpanNilaiBagi) + ' Ribu' + this.pembilang(nilai % 1000);
-  } else if (nilai < 1000000000) {
-      simpanNilaiBagi = Math.floor(nilai / 1000000);
-      temp = this.pembilang(simpanNilaiBagi) + ' Juta' + this.pembilang(nilai % 1000000);
-  } else if (nilai < 1000000000000) {
-      simpanNilaiBagi = Math.floor(nilai / 1000000000);
-      temp =
-      this.pembilang(simpanNilaiBagi) + ' Miliar' + this.pembilang(nilai % 1000000000);
-  } else if (nilai < 1000000000000000) {
-      simpanNilaiBagi = Math.floor(nilai / 1000000000000);
-      temp = this.pembilang(nilai / 1000000000000) + ' Triliun' + this.pembilang(nilai % 1000000000000);
-  }
-  
-  return temp
-}
-
 
 onMounted(() => {
   if(process.client){
@@ -90,8 +54,6 @@ onMounted(() => {
       })
   }
 })
-let interiors = hitungInvoiceInterior(surat.interior, surat.ppn)
-console.log(interiors)
 </script>
 
 <template>
@@ -216,7 +178,7 @@ console.log(interiors)
           </td>
         </tr>
         <tr>
-          <td class="bl-0 terbilang br-0 m font-normal" colspan="7">Terbilang: {{ pembilang(surat.harga_akhir) }} Rupiah</td>
+          <td class="bl-0 terbilang br-0 m font-normal" colspan="7">Terbilang: {{ terbilang }} Rupiah</td>
         </tr>
         <tr>
           <td class="bl-0 br-0 m-left font-normal" colspan="7">

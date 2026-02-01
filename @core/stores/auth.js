@@ -19,7 +19,8 @@ export const useAuthStore = defineStore('auth', {
       const response = await $api.post('/login', credentials)
 
       if (!response) throw new Error('Login Gagal')
-      // console.log('Login Response:', response)
+      console.log('Login Response:', response)
+
 
       // Set state
       this.accessToken = response.accessToken

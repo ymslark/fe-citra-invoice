@@ -78,13 +78,20 @@ onMounted(async () => {
     <div class="box">
   
       <div class="meta">
-        <div>Hal : {{surat.hal}}</div>
-        <div>No.Seri : {{surat.no_seri}}</div>
+        <div class="d-flex flex-column">
+          <span>Hal : {{surat.hal}}</span>
+          <span>Kepada YTh. <b>{{ surat.tujuan }}</b></span>
+          <span>{{ surat.no_hp }}</span>
+          <span>{{ surat.alamat }}</span>
+  
+        </div>
+        <div class="d-flex flex-column">
+          <span>{{formatTanggalIndonesia(getDate(), 'hari')}}</span>
+          <span>No.Seri : {{surat.no_seri}}</span>
+        </div>
       </div>
-      <div class="meta">
-        <div>Kepada YTh. <b>{{ surat.tujuan }}</b></div>
-        <div>{{formatTanggalIndonesia(surat.tanggal, 'hari')}}</div>
-      </div>
+      <p style="text-indent:2em; line-height:1.4; margin-bottom: 1em;">Dengan hormat, bersama surat ini kami sampaikan penawaran harga terkait produk/jasa yang kami tawarkan sesuai dengan kebutuhan Bapak/Ibu. Adapun rincian penawaran kami sajikan pada tabel berikut untuk dapat dipelajari dan dipertimbangkan.
+        </p>
       <table class="table-items">
         <thead>
           <tr>
@@ -101,7 +108,7 @@ onMounted(async () => {
           <tr v-for="(item, index) in barang.barangs" :key="index">
             <td class="text-center">{{ index + 1 }}</td>
             <td v-if="index % 2 == 1" class="text-uppercase text-wrap" style="padding-left: 1ch !important;">{{ item.nama_barang }}</td>
-            <td v-else class="text-uppercase text-wrap" style="padding-left: 1ch !important;">{{ item.nama_barang }} warna merah kayu mahoni</td>
+            <td v-else class="text-uppercase text-wrap" style="padding-left: 1ch !important;">{{ item.nama_barang }}</td>
   
             <td class="angka-kanan">
               <span class="rp">Rp.</span>
@@ -212,7 +219,7 @@ onMounted(async () => {
       </table>
       </div>
       <div class="footer-surat">
-        <div class="tanggal">Bekasi, {{ formatTanggalIndonesia(surat.tanggal) }}</div>
+        <div class="tanggal">Bekasi, {{ formatTanggalIndonesia(getDate()) }}</div>
         <div class="mt-n3">Hormat Kami</div>
         <img src="/images/citragroup/CF/CF_Logo.png" alt="Logo Perusahaan" />
         <div class="nama-perusahaan">Citra Furniture Indonesia</div>
@@ -252,6 +259,12 @@ onMounted(async () => {
     max-width: 50%;
     height: auto;
   }
+
+  .table-items tbody{
+    page-break-inside: avoid !important;
+    font-size: 9pt !important;
+  }
+
   .table-items tbody td{
     font-size: 9pt !important;
   }
@@ -363,7 +376,7 @@ onMounted(async () => {
   /* width: 90%; */
   border-collapse: collapse;
   margin: auto;
-  font-size: 24px;
+  font-size: 24px !important;
 }
 
 

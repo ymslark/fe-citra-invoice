@@ -51,6 +51,17 @@ try {
 //     })
 //   }
 // })
+onMounted(async () => {
+
+  await nextTick()
+
+  setTimeout(() => {
+    window.print()
+  }, 1000)
+    window.addEventListener('afterprint', () => {
+      window.location.replace('/admin/SCI/detail/' + id)
+    })
+})
 
 </script>
 
@@ -58,8 +69,8 @@ try {
     <div class="header">
       <img 
         class="kop-img" 
-        src="/images/citragroup/SCI/SCI_Kop.png" 
-        alt="KOP Surat" 
+        src="/images/citragroup/SCI/SCI_Kop.jpg" 
+        alt="" 
         srcset="">
     </div>
   
@@ -67,13 +78,20 @@ try {
     <div class="box">
   
       <div class="meta">
-        <div>Hal : {{surat.hal}}</div>
-        <div>No.Seri : {{surat.no_seri}}</div>
+        <div class="d-flex flex-column">
+          <span>Hal : {{surat.hal}}</span>
+          <span>Kepada YTh. <b>{{ surat.tujuan }}</b></span>
+          <span>{{ surat.no_hp }}</span>
+          <span>{{ surat.alamat }}</span>
+  
+        </div>
+        <div class="d-flex flex-column">
+          <span>{{formatTanggalIndonesia(getDate(), 'hari')}}</span>
+          <span>No.Seri : {{surat.no_seri}}</span>
+        </div>
       </div>
-      <div class="meta">
-        <div>Kepada YTh. <b>{{ surat.tujuan }}</b></div>
-        <div>{{formatTanggalIndonesia(surat.tanggal, 'hari')}}</div>
-      </div>
+      <p style="text-indent:2em; line-height:1.4; margin-bottom: 1em;">Dengan hormat, bersama surat ini kami sampaikan penawaran harga terkait produk/jasa yang kami tawarkan sesuai dengan kebutuhan Bapak/Ibu. Adapun rincian penawaran kami sajikan pada tabel berikut untuk dapat dipelajari dan dipertimbangkan.
+        </p>
       <table class="table-items">
         <thead>
           <tr>
@@ -84,28 +102,28 @@ try {
             <th>subtotal</th>
             <th>Diskon</th>
             <th>Total</th>
-          </tr>
+          </tr> 
         </thead>
         <tbody>
           <tr v-for="(item, index) in barang.barangs" :key="index">
             <td class="text-center">{{ index + 1 }}</td>
             <td v-if="index % 2 == 1" class="text-uppercase text-wrap" style="padding-left: 1ch !important;">{{ item.nama_barang }}</td>
-            <td v-else class="text-uppercase text-wrap" style="padding-left: 1ch !important;">{{ item.nama_barang }} mahoni warna merah tua</td>
+            <td v-else class="text-uppercase text-wrap" style="padding-left: 1ch !important;">{{ item.nama_barang }}</td>
   
-            <td class="angka-kanan text-nowrap">
+            <td class="angka-kanan">
               <span class="rp">Rp.</span>
               <span class="nilai">{{ formatRupiah(item.dpp_tanpa_diskon) }}</span>
             </td>
-            <td class="text-center text-nowrap" id="qty" style="padding: 1pt;">{{ item.qty }}</td>
-            <td class="angka-kanan text-nowrap">
+            <td class="text-center" id="qty" style="padding: 1pt;">{{ item.qty }}</td>
+            <td class="angka-kanan">
               <span class="rp">Rp.</span>
               <span class="nilai">{{ formatRupiah(item.total_dpp_tanpa_diskon) }}</span>
             </td>
-            <td class="angka-kanan text-nowrap">
+            <td class="angka-kanan">
               <span class="rp">Rp.</span>
               <span class="nilai">{{ formatRupiah(item.total_diskon) }}</span>
             </td>
-            <td class="angka-kanan text-nowrap" >
+            <td class="angka-kanan">
               <span class="rp">Rp</span>
               <span class="nilai">{{ formatRupiah(item.total_dpp) }}</span>
               </td>
@@ -164,7 +182,7 @@ try {
             <td colspan="5" class="br-0"></td>
             <td class="bl-0">Total</td>
             <td class="angka-kanan">
-              <span class="rp">Rp</span>
+              <span class="rp">Rp.</span>
               <span class="nilai">{{ formatRupiah(surat.harga_akhir) }}</span>
             </td>
           </tr>
@@ -201,7 +219,7 @@ try {
       </table>
       </div>
       <div class="footer-surat">
-        <div class="tanggal">Bekasi, {{ formatTanggalIndonesia(surat.tanggal) }}</div>
+        <div class="tanggal">Bekasi, {{ formatTanggalIndonesia(getDate()) }}</div>
         <div class="mt-n3">Hormat Kami</div>
         <img src="/images/citragroup/SCI/SCI_Logo.png" alt="Logo Perusahaan" />
         <div class="nama-perusahaan">Sentral Citra Indonesia</div>
@@ -241,8 +259,14 @@ try {
     max-width: 50%;
     height: auto;
   }
+
   .table-items tbody{
-    font-size: 10pt !important;
+    page-break-inside: avoid !important;
+    font-size: 9pt !important;
+  }
+
+  .table-items tbody td{
+    font-size: 9pt !important;
   }
 /* 5%, 35%, 12%, 8%, 12%, 8%, 20% */
   .table-items thead th:first-child {
@@ -250,42 +274,28 @@ try {
   }
 
   .table-items thead th:nth-child(2) {
-    /* width: 27% !important; */
-    max-width: 20% !important;
+    width: 27% !important;
     text-wrap: wrap;
     
   }
 
-  /* .table-items thead th:nth-child(3) {
+  .table-items thead th:nth-child(3) {
     width: 15% !important;
-    max-width: 15% !important;
-  } */
+  }
 
-  /* .table-items thead th:nth-child(4) {
+  .table-items thead th:nth-child(4) {
     width: 5% !important;
-    max-width: 5% !important;
-  } */
-
- /* 
+  }
   .table-items thead th:nth-child(5) {
     width: 16% !important;
-    max-width: 16% !important;
   }
   .table-items thead th:nth-child(6) {
     width: 16% !important;
-    max-width: 16% !important;
   }
 
   .table-items thead th:last-child {
     width: 18% !important;
-    max-width: 18% !important;
   }
-  */
-
-  .text-nowrap {
-    white-space: normal !important;
-  }
-
   .table-items th, .table-items td {
     border: 1px solid #000000 !important;
   }
@@ -349,7 +359,7 @@ try {
   /* margin-bottom: 20px; */
 }
 .kop-img {
-  width: 100%;
+  width: 94%;
   height: auto;
 }
 .meta {
@@ -366,7 +376,7 @@ try {
   /* width: 90%; */
   border-collapse: collapse;
   margin: auto;
-  font-size: 24px;
+  font-size: 24px !important;
 }
 
 
@@ -384,7 +394,7 @@ try {
 .table-items th,
 .table-items td {
   border: 1px solid #000;
-  padding: 1px 2px;
+  padding: 2px 4px;
   
   /* text-align: left; */
 }
@@ -461,8 +471,8 @@ div .footer {
 }
 
 .angka-kanan .nilai {
-  /* display: inline-block; */
-  /* min-width: 8ch; biarkan panjang angka fleksibel */
+  display: inline-block;
+  min-width: 8ch; /* biarkan panjang angka fleksibel */
   text-align: right;
   margin-right: 5px; /* jarak antara angka dan Rp */
 }
