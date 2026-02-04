@@ -16,7 +16,7 @@ async function logout() {
     isLogoutDialogVisible.value = true
     isDialogVisible.value = false
     authStore.logout()
-    // navigateTo({ name: 'admin-login' })
+    navigateTo({ name: 'admin-login' })
     setTimeout(() => {
     isLogoutDialogVisible.value = false
     navigateTo({ name: 'admin-login' })
