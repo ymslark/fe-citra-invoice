@@ -21,7 +21,7 @@ export default defineNuxtConfig({
 
   server: {
     host: '0.0.0.0', // Listen on all interfaces
-    port: 3000
+    port: process.env.APP_PORT || 8000,
   },
 
   devtools: {
