@@ -233,7 +233,7 @@ const barangs = res.Barangs
             </VCol>
             <!-- 👉 Catatan -->
             <VCol cols="12" md="6">
-              <AppTextField v-model="surat.catatan" label="Catatan Invoice (gunakan - jika tidak ada catatan)" placeholder="Catatan Invoice " value="-" :rules="[requiredValidator]"/>
+              <AppTextField v-model="surat.catatan" label="Catatan Invoice (gunakan - jika tidak ada catatan)" placeholder="Catatan Invoice " :rules="[requiredValidator]"/>
             </VCol>
             <VCol cols="12">
               <!--
