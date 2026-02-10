@@ -15,7 +15,8 @@ const id = route.query.id || null
 const alert = useAlertStore()
 let surat = null
 let barang = null
-let terbilang = ''
+// const pembilang = pembilang
+let terbilang = '' 
 if (!id) {
   alert.showAlert({
     type: 'error',
@@ -31,13 +32,15 @@ try {
   console.log(surat)
   barang = hitungInvoiceBarang(surat.barang, surat.ppn)
   terbilang = pembilang(surat.harga_akhir)
-  // // console.log(surat.doc)
 } catch (error) {
   alert.showAlert({
     type: 'error',
     message: 'Gagal mengambil data surat',
   })
 }
+// terbilang = pembilang(surat.harga_akhir)
+// console.log(terbilang)
+
 
 
 
@@ -78,6 +81,8 @@ onMounted(async () => {
     <div class="tujuan">
       <div>Kepada Yth.</div>
       <div id="tujuan-text">{{ surat.tujuan }}</div>
+      <div>{{ surat.no_hp }}</div>
+      <div>{{ surat.alamat }}</div>
     </div>
     <div class="detail-invoice">
       <div>Mata Uang : Rupiah</div>
@@ -189,7 +194,10 @@ onMounted(async () => {
                 Instalasi</li>
               <li v-else-if="surat.instalasi">Harga Sudah Termasuk Biaya Instalasi</li>
               <li v-else-if="surat.ongkos_kirim">Harga Sudah Termasuk Biaya Ongkos Kirim</li>
-              <li v-for="(note, index) in surat.catatan" :key="index">{{note}}</li>
+              <li v-if="surat.tempo">Tempo pembayaran hingga {{ formatTanggalIndonesia(surat.tanggal_tempo) }}</li>
+              <li v-else>{{ surat.catatan_tempo }}</li>
+              <!-- <li v-for="(note, index) in surat.catatan" :key="index" v-if="note.length > 3">{{note}}</li> -->
+               <li v-if="surat.catatan[0] && surat.catatan[0].length > 3">{{ surat.catatan[0] }}</li>
               <li>Pembayaran Via Transfer</li>
             </ol>
           </td>
@@ -220,7 +228,7 @@ onMounted(async () => {
           </table>
         </td>
         <td class="br-0">
-          <div>Bekasi, {{ formatTanggalIndonesia(getDate(), 'hari') }}</div>
+          <div>Bekasi, {{ formatTanggalIndonesia(getDate()) }}</div>
           <img src="/images/citragroup/CF/CF_Logo.png" id="logo">
           <div>Citra Furniture Indonesia</div>
         </td>
@@ -471,7 +479,7 @@ body {
 .tujuan {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 2px;
   margin: 10px 10px 20px 10px;
 }
 

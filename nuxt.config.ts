@@ -52,6 +52,7 @@ export default defineNuxtConfig({
     public: {
       apiUrl: process.env.API_BASE_URL,
       appName: process.env.APP_NAME,
+      appBaseUrl: process.env.BASE_URL_FE,
       debug: process.env.DEBUG === 'true'
     }
   },

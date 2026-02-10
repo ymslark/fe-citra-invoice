@@ -15,6 +15,7 @@ const authStore = useAuthStore()
 let role = authStore.user ? authStore.user.role : 'guest'
 // @layouts plugin
 import { VerticalNavLayout } from '@layouts'
+import RequestLinkList from '@/components/RequestLinkList.vue'
 
 const toConfig = () => {
   // Navigate to the configuration page
@@ -46,6 +47,7 @@ const toConfig = () => {
           v-if="themeConfig.app.i18n.enable && themeConfig.app.i18n.langConfig?.length"
           :languages="themeConfig.app.i18n.langConfig"
         /> -->
+        <RequestLinkList />
         <NavbarThemeSwitcher />
         <!-- <NavbarShortcuts /> -->
         <!-- <NavBarNotifications class="me-1" /> -->

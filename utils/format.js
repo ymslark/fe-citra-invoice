@@ -85,46 +85,51 @@ export function formatTanggalIndonesia(tanggalString, opsi = null) {
   // return formatter.format(date)
 }
 
-export function pembilang(nilai){
-  //ubah dari nominal jadi terbilang
+export function pembilang(nilai) {
   nilai = Math.floor(Math.abs(nilai));
-                    
-  let simpanNilaiBagi = 0;
-  let huruf = [ '', 'Satu','Dua','Tiga','Empat','Lima','Enam','Tujuh','Delapan','Sembilan','Sepuluh','Sebelas']
-  let temp = '';
   
-  if (nilai < 12) {
-      temp = ' ' + huruf[nilai];
-  } else if (nilai < 20) {
-      temp = this.pembilang(Math.floor(nilai - 10)) + ' Belas';
-  } else if (nilai < 100) {
-      simpanNilaiBagi = Math.floor(nilai / 10);
-      temp = this.pembilang(simpanNilaiBagi) + ' Puluh' + this.pembilang(nilai % 10);
-  } else if (nilai < 200) {
-      temp = ' Seratus' + this.pembilang(nilai - 100);
-  } else if (nilai < 1000) {
-      simpanNilaiBagi = Math.floor(nilai / 100);
-      temp = this.pembilang(simpanNilaiBagi) + ' Ratus' + this.pembilang(nilai % 100);
-  } else if (nilai < 2000) {
-      temp = ' Seribu' + this.pembilang(nilai - 1000);
-  } else if (nilai < 1000000) {
-      simpanNilaiBagi = Math.floor(nilai / 1000);
-      temp = this.pembilang(simpanNilaiBagi) + ' Ribu' + this.pembilang(nilai % 1000);
-  } else if (nilai < 1000000000) {
-      simpanNilaiBagi = Math.floor(nilai / 1000000);
-      temp = this.pembilang(simpanNilaiBagi) + ' Juta' + this.pembilang(nilai % 1000000);
-  } else if (nilai < 1000000000000) {
-      simpanNilaiBagi = Math.floor(nilai / 1000000000);
-      temp =
-      this.pembilang(simpanNilaiBagi) + ' Miliar' + this.pembilang(nilai % 1000000000);
-  } else if (nilai < 1000000000000000) {
-      simpanNilaiBagi = Math.floor(nilai / 1000000000000);
-      temp = this.pembilang(nilai / 1000000000000) + ' Triliun' + this.pembilang(nilai % 1000000000000);
+  // Handle 0
+  if (nilai === 0) {
+    return 'Nol';
   }
   
-  return temp
+  const huruf = ['', 'Satu', 'Dua', 'Tiga', 'Empat', 'Lima', 'Enam', 'Tujuh', 'Delapan', 'Sembilan', 'Sepuluh', 'Sebelas'];
+  let temp = '';
+  
+  const pembilangRecursive = (n) => {
+    if (n < 12) {
+      return huruf[n];
+    } else if (n < 20) {
+      return pembilangRecursive(n - 10) + ' Belas';
+    } else if (n < 100) {
+      return pembilangRecursive(Math.floor(n / 10)) + ' Puluh' + 
+             (n % 10 !== 0 ? ' ' + pembilangRecursive(n % 10) : '');
+    } else if (n < 200) {
+      return 'Seratus' + (n - 100 !== 0 ? ' ' + pembilangRecursive(n - 100) : '');
+    } else if (n < 1000) {
+      return pembilangRecursive(Math.floor(n / 100)) + ' Ratus' + 
+             (n % 100 !== 0 ? ' ' + pembilangRecursive(n % 100) : '');
+    } else if (n < 2000) {
+      return 'Seribu' + (n - 1000 !== 0 ? ' ' + pembilangRecursive(n - 1000) : '');
+    } else if (n < 1000000) {
+      return pembilangRecursive(Math.floor(n / 1000)) + ' Ribu' + 
+             (n % 1000 !== 0 ? ' ' + pembilangRecursive(n % 1000) : '');
+    } else if (n < 1000000000) {
+      return pembilangRecursive(Math.floor(n / 1000000)) + ' Juta' + 
+             (n % 1000000 !== 0 ? ' ' + pembilangRecursive(n % 1000000) : '');
+    } else if (n < 1000000000000) {
+      return pembilangRecursive(Math.floor(n / 1000000000)) + ' Miliar' + 
+             (n % 1000000000 !== 0 ? ' ' + pembilangRecursive(n % 1000000000) : '');
+    } else if (n < 1000000000000000) {
+      return pembilangRecursive(Math.floor(n / 1000000000000)) + ' Triliun' + 
+             (n % 1000000000000 !== 0 ? ' ' + pembilangRecursive(n % 1000000000000) : '');
+    }
+    return 'Nilai terlalu besar';
+  };
+  
+  temp = pembilangRecursive(nilai);
+  return temp.replace(/\s+/g, ' ').trim();
 }
-
 
 export function npwpFormat(npwp) {
   // Format NPWP menjadi 99.999.999.9-999.999

@@ -67,13 +67,20 @@ onMounted(() => {
     <div class="box">
   
       <div class="meta">
-        <div>Hal : {{surat.hal}}</div>
-        <div>No.Seri : {{surat.no_seri}}</div>
+        <div class="d-flex flex-column">
+          <span>Hal : {{surat.hal}}</span>
+          <span>Kepada YTh. <b>{{ surat.tujuan }}</b></span>
+          <span>{{ surat.no_hp }}</span>
+          <span>{{ surat.alamat }}</span>
+  
+        </div>
+        <div class="d-flex flex-column">
+          <span>{{formatTanggalIndonesia(getDate(), 'hari')}}</span>
+          <span>No.Seri : {{surat.no_seri}}</span>
+        </div>
       </div>
-      <div class="meta">
-        <div>Kepada YTh. <b>{{ surat.tujuan }}</b></div>
-        <div>{{formatTanggalIndonesia(surat.tanggal, 'hari')}}</div>
-      </div>
+      <p style="text-indent:2em; line-height:1.4; margin-bottom: 1em;">Dengan hormat, bersama surat ini kami sampaikan penawaran harga terkait produk yang kami tawarkan sesuai dengan kebutuhan Bapak/Ibu. Adapun rincian penawaran kami sajikan pada tabel berikut untuk dapat dipelajari dan dipertimbangkan.
+      </p>
       <table class="table-items">
         <thead>
           <tr>
@@ -181,7 +188,7 @@ onMounted(() => {
             Instalasi</li>
           <li v-else-if="surat.instalasi">Harga Sudah Termasuk Biaya Instalasi</li>
           <li v-else-if="surat.ongkos_kirim">Harga Sudah Termasuk Biaya Ongkos Kirim</li>
-          <li v-if="surat.catatan.length > 1 && surat.catatan[0].length > 3">{{surat.catatan[0]}}</li>
+          <!-- <li v-if="surat.catatan.length > 0 && surat.catatan[0].length > 3">{{surat.catatan[0]}}</li> -->
           <li>Pembayaran Via Transfer ke rekening :</li>
         </ol>
       <table class="rekening">
@@ -206,7 +213,7 @@ onMounted(() => {
         <div class="tanggal">Bekasi, {{ formatTanggalIndonesia(getDate()) }}</div>
         <div class="mt-n3">Hormat Kami</div>
         <img src="/images/citragroup/CII/CII_Logo.png" alt="Logo Perusahaan" />
-        <div class="nama-perusahaan">Citra Furniture Indonesia</div>
+        <div class="nama-perusahaan">Citra Interior Indonesia</div>
       </div>
     </div>
   

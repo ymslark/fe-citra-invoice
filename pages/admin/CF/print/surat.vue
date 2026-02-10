@@ -90,7 +90,7 @@ onMounted(async () => {
           <span>No.Seri : {{surat.no_seri}}</span>
         </div>
       </div>
-      <p style="text-indent:2em; line-height:1.4; margin-bottom: 1em;">Dengan hormat, bersama surat ini kami sampaikan penawaran harga terkait produk/jasa yang kami tawarkan sesuai dengan kebutuhan Bapak/Ibu. Adapun rincian penawaran kami sajikan pada tabel berikut untuk dapat dipelajari dan dipertimbangkan.
+      <p style="text-indent:2em; line-height:1.4; margin-bottom: 1em;">Dengan hormat, bersama surat ini kami sampaikan penawaran harga terkait produk yang kami tawarkan sesuai dengan kebutuhan Bapak/Ibu. Adapun rincian penawaran kami sajikan pada tabel berikut untuk dapat dipelajari dan dipertimbangkan.
         </p>
       <table class="table-items">
         <thead>

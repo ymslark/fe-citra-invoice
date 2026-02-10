@@ -227,7 +227,7 @@ const toDetailPage = () => {
 
             <!-- 👉 Country -->
             <VCol cols="12" md="6">
-              <AppTextField v-model="surat.tanggal" label="Tanggal" placeholder="Pilih Tanggal"
+              <AppDateTimePicker v-model="surat.tanggal" label="Tanggal" placeholder="Pilih Tanggal"
                 :rules="[requiredValidator]" />
             </VCol>
             <VCol cols="12" md="6">

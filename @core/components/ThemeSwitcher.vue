@@ -1,5 +1,6 @@
 <script setup>
 import { useConfigStore } from '@core/stores/config'
+import { config } from '@fullcalendar/core/internal'
 
 const props = defineProps({
   themes: {
@@ -9,6 +10,7 @@ const props = defineProps({
 })
 
 const configStore = useConfigStore()
+console.log(configStore.theme)
 const selectedItem = ref([configStore.theme])
 
 // Update icon if theme is changed from other sources

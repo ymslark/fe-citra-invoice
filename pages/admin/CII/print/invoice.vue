@@ -26,13 +26,12 @@ if (!id) {
 let surat = null
 let interiors = null
 let terbilang = ''
-try {
+  try {
   const response = await cii.getCIIById(id)
   surat = response.doc
   console.log(surat)
   interiors = hitungInvoiceInterior(surat.interior, surat.ppn)
-  terbilang = pembilang(interiors.total_dpp)
-  console.log(interiors)
+  terbilang = pembilang(surat.harga_akhir)
   // console.log(surat.doc)
 } catch (error) {
   alert.showAlert({
@@ -41,7 +40,8 @@ try {
   })
 }
 
-onMounted(() => {
+onMounted(async () => {
+  // console.log(getDate())
   if(process.client){
     document.title = surat.no_seri + ' Invoice ' + surat.tujuan + ' - Citra Interior'
     setTimeout(() => {
@@ -67,6 +67,8 @@ onMounted(() => {
     <div class="tujuan">
       <div>Kepada Yth.</div>
       <div id="tujuan-text">{{ surat.tujuan }}</div>
+      <div>{{ surat.no_hp }}</div>
+      <div>{{ surat.alamat }}</div>
     </div>
     <div class="detail-invoice">
       <div>Mata Uang : Rupiah</div>
@@ -181,16 +183,19 @@ onMounted(() => {
           <td class="bl-0 terbilang br-0 m font-normal" colspan="7">Terbilang: {{ terbilang }} Rupiah</td>
         </tr>
         <tr>
-          <td class="bl-0 br-0 m-left font-normal" colspan="7">
-            <span>Note:</span>
+          <td class="bl-0 br-0 font-normal" colspan="7">
+            <span class=" m-left">Note:</span>
             <ol id="note-list">
-              <li v-if="surat.ppn > 0" >Harga Termasuk PPN</li>
+              <li v-if="surat.ppn > 0" >Harga Termasuk PPN {{surat.ppn}}%</li>
               <li v-else>Harga Tidak Termasuk PPN</li>
               <li v-if="surat.ongkos_kirim && surat.instalasi">Harga Sudah Termasuk Ongkos Kirim & Sudah Termasuk Biaya
                 Instalasi</li>
               <li v-else-if="surat.instalasi">Harga Sudah Termasuk Biaya Instalasi</li>
               <li v-else-if="surat.ongkos_kirim">Harga Sudah Termasuk Biaya Ongkos Kirim</li>
-              <li v-for="(note, index) in surat.catatan" :key="index">{{note}}</li>
+              <li v-if="surat.tempo">Tempo pembayaran hingga {{ formatTanggalIndonesia(surat.tanggal_tempo) }}</li>
+              <li v-else>{{ surat.catatan_tempo }}</li>
+              <!-- <li v-for="(note, index) in surat.catatan" :key="index" v-if="note.length > 3">{{note}}</li> -->
+               <li v-if="surat.catatan[0] && surat.catatan[0].length > 3">{{ surat.catatan[0] }}</li>
               <li>Pembayaran Via Transfer</li>
             </ol>
           </td>
@@ -221,7 +226,7 @@ onMounted(() => {
           </table>
         </td>
         <td class="br-0">
-          <div>Bekasi, {{ formatTanggalIndonesia(surat.tanggal, 'hari') }}</div>
+          <div>Bekasi, {{ formatTanggalIndonesia(getDate()) }}</div>
           <img src="/images/citragroup/CII/CII_Logo.png" id="logo">
           <div>Citra Interior Indonesia</div>
         </td>

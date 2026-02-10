@@ -312,7 +312,10 @@ let barangs = hitungInvoiceBarang(surat.barang, surat.ppn)
                   </p>
                 </VListItem>
                 <VListItem>
-                  4. Pembayaran harap di transfer melalui rekening :
+                  4. Catatan Invoice : {{ surat.catatan[0] }}
+                </VListItem>
+                <VListItem>
+                  5. Pembayaran harap di transfer melalui rekening :
                   <VSpacer />
                   <VList>
                     <VListItem>
