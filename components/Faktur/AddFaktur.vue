@@ -138,7 +138,7 @@ const uploadImage = async () => {
     // url.value = baseUrl + '/public/images/' + response.filename
     // console.log(response, 'response');
     // console.log(url.value);
-    
+    // await faktur.setStatusRequest
     faktur.resetNewFaktur()
     seri.value = ''
     tempFile.value = null

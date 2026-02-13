@@ -24,6 +24,7 @@ export const useFakturStore = defineStore('faktur', {
         alamat: '',
         npwp: '',
         no_hp: '',
+        status: '',
       },
       barang: [],
       tanggal: '',
@@ -126,6 +127,12 @@ export const useFakturStore = defineStore('faktur', {
       if (!id) throw new Error('ID_REQUIRED')
       const response = await $api.put('/faktur/restore/' + id)
       return response
+    },
+    async setStatusRequest(id){
+
+      const {$api} = useNuxtApp()
+      const response = await $api.patch(`/Faktur/status/${id}?status=APPROVED`)
+      console.log(response)
     }
   },
   getters: {

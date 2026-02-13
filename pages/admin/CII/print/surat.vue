@@ -122,7 +122,7 @@ onMounted(() => {
   
           <tr style="font-weight: bold;">
             <td colspan="3" class="br-0"></td>
-            <td class="bl-0">Total</td>
+            <td class="bl-0 total-harga">Total</td>
             <td class="angka-kanan">
               <span class="rp">Rp</span>
               <span class="nilai">{{formatRupiah( interior.dpp_tanpa_diskon )}}</span>
@@ -171,7 +171,7 @@ onMounted(() => {
           </tr>
           <tr style="font-weight: bold;">
             <td colspan="5" class="br-0"></td>
-            <td class="bl-0">Total</td>
+            <td class="bl-0 total-harga">Total</td>
             <td class="angka-kanan">
               <span class="rp">Rp.</span>
               <span class="nilai">{{ formatRupiah(surat.harga_akhir) }}</span>
@@ -250,9 +250,7 @@ onMounted(() => {
     max-width: 50%;
     height: auto;
   }
-  .table-items tbody td{
-    font-size: 8pt !important;
-  }
+
 /* 5%, 35%, 12%, 8%, 12%, 8%, 20% */
   .table-items thead th:first-child {
     width: 3% !important;
@@ -265,29 +263,34 @@ onMounted(() => {
   }
 
   .table-items thead th:nth-child(3) {
-    width: 15% !important;
+    /* width: 15% !important; */
+    text-wrap: nowrap;
   }
 
   .table-items thead th:nth-child(4) {
-    width: 5% !important;
+    /* width: 5% !important; */
+    text-wrap: nowrap;
   }
   .table-items thead th:nth-child(5) {
-    width: 16% !important;
+    /* width: 16% !important; */
+    text-wrap: nowrap;
   }
   .table-items thead th:nth-child(6) {
-    width: 16% !important;
+    /* width: 16% !important; */
+    text-wrap: nowrap;
   }
 
   .table-items thead th:last-child {
-    width: 18% !important;
+    /* width: 18% !important; */
+    text-wrap: nowrap;
   }
   .table-items th, .table-items td {
     border: 1px solid #000000 !important;
   }
 
-  table.table-items tbody td {
+  table.table-items tbody tr td {
     padding: 0px;
-    font-size: 9pt !important;
+    font-size: 8pt !important;
   }
 
   #qty{
@@ -317,6 +320,18 @@ onMounted(() => {
 
   .table-items tbody td {
   padding-right: 0.5ch !important;
+  font-family: 'Times New Roman', sans-serif !important;
+
+  .total-harga {
+    font-weight: bold;
+    font-size: 11pt !important;
+    padding: 1px !important;
+  }
+  .angka-kanan{
+    text-align: right;
+    margin-right: 1ch;
+    font-size: 8pt !important;
+  }
 }
   body{
     size: A4;
@@ -454,7 +469,8 @@ div .footer {
 
 .angka-kanan {
   text-align: right;
-  margin-right: 2ch;
+  margin-right: 1ch;
+  font-size: 8pt !important;
 }
 
 .angka-kanan .rp {

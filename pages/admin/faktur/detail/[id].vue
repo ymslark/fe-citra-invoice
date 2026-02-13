@@ -12,6 +12,24 @@ const isActive = ref(true)
 
 const isDialogConfirmVisible = ref(false)
 const isRestoreDialogConfirmVisible = ref(false)
+let status = {
+  'WAITING': {
+    icon: 'tabler-hourglass',
+    color: 'warning'
+  },
+  'PROCCESS': {
+    icon: 'tabler-truck-delivery',
+    color: 'primary'
+  },
+  'DONE': {
+    icon: 'tabler-check',
+    color: 'success'
+  },
+  'CANCEL': {
+    icon: 'tabler-x',
+    color: 'error'
+  }
+}
 // const alert = useAlertStore()
 // watch(isDialogConfirmVisible, (newVal) => {
 //   console.log('Dialog visibility changed:', newVal);
@@ -265,6 +283,22 @@ async function restoreFaktur(){
                 </h6>
                 <div class="text-body-1">
                  {{ formatTanggalIndonesia(document.tanggal_pembelian)  }}
+                </div>
+              </div>
+            </div>
+            <div class="d-flex gap-x-3 align-center">
+              <VAvatar
+                variant="tonal"
+                size="large"
+              >
+                <VIcon :icon="status[document.status]?.icon || 'tabler-question'" />
+              </VAvatar>
+              <div>
+                <h6 class="text-h6">
+                 Status
+                </h6>
+                <div class="text-body-1">
+                 {{ document.status }}
                 </div>
               </div>
             </div>

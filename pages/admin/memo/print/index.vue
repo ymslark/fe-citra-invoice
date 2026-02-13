@@ -12,7 +12,8 @@ const router = useRouter()
 const memo = useMemoStore()
 const id = route.query.id || null
 const alert = useAlertStore()
-
+const config = useRuntimeConfig()
+const baseUrl = config.public.apiUrl // Ganti dengan URL API yang sesuai
 if (!id) {
   alert.showAlert({
     type: 'error',
@@ -35,8 +36,9 @@ try {
   })
 }
 console.log(surat)
-const kopUrl = `/citra-invoice/images/citragroup/${surat.perusahaan}/${surat.perusahaan}_Kop.jpg`
-const logoUrl = `/citra-invoice/images/citragroup/${surat.perusahaan}/${surat.perusahaan}_Logo.png`
+let kopUrl = `/images/citragroup/${surat.perusahaan}/${surat.perusahaan}_Kop.`
+surat.perusahaan == 'CF' ? kopUrl += 'jpeg' : kopUrl += 'jpg'
+const logoUrl = `/images/citragroup/${surat.perusahaan}/${surat.perusahaan}_Logo.png`
 console.log(kopUrl, logoUrl)
 onMounted(() => {
   if(process.client){
@@ -67,8 +69,8 @@ onMounted(() => {
     <div class="meta">
       <div style="width: 50%;">
         Kepada YTh. <b>{{ surat.tujuan }}</b> <br>
-        {{surat.alamat}} <br>
-        No. Hp: {{ surat.no_hp }}  
+        No. Hp: {{ surat.no_hp }}<br>  
+        {{surat.alamat}} 
       </div>
     </div>
     <div class="meta">

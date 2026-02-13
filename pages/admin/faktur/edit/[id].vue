@@ -10,6 +10,7 @@ const route = useRoute()
 const id = route.params.id || null
 const alert = useAlertStore()
 const url = ref('')
+const allowedStatus = ['WAITING', 'PROCCESS', 'DONE', 'CANCEL']
 // const faktur.editFaktur = faktur.faktur.editFaktur
 
 const tempFile = ref(null)
@@ -54,6 +55,7 @@ const updateFaktur = async () => {
   
     console.log(formData.get('faktur'))
     let response = null
+    // console.log(formData.getAll())
     response = await $api.put(`/faktur/${id}`, formData)
      if(response){
       window.scrollTo(0, 0)
@@ -207,6 +209,10 @@ if (id) {
                     outlined
                     clearable
                   />
+                </VCol>
+                <VCol cols="12" md="6">
+                  <AppSelect v-model="faktur.editFaktur.status" :items="allowedStatus" label="Status" placeholder="Pilih Status"
+                    :rules="[requiredValidator]" />
                 </VCol>
               </VRow>
             </VCardItem>

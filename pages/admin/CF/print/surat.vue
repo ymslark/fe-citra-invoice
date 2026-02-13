@@ -197,7 +197,7 @@ onMounted(async () => {
             Instalasi</li>
           <li v-else-if="surat.instalasi">Harga Sudah Termasuk Biaya Instalasi</li>
           <li v-else-if="surat.ongkos_kirim">Harga Sudah Termasuk Biaya Ongkos Kirim</li>
-          <li v-if="surat.catatan[0].length > 3">{{surat.catatan[0]}}</li>
+          <!-- <li v-if="surat.catatan[0].length > 3">{{surat.catatan[0]}}</li> -->
           <li>Pembayaran Via Transfer ke rekening :</li>
         </ol>
       <table class="rekening">
@@ -266,6 +266,7 @@ onMounted(async () => {
   }
 
   .table-items tbody td{
+    font-family: 'Times New Roman', sans-serif !important;
     font-size: 9pt !important;
   }
 /* 5%, 35%, 12%, 8%, 12%, 8%, 20% */
@@ -280,21 +281,26 @@ onMounted(async () => {
   }
 
   .table-items thead th:nth-child(3) {
-    width: 15% !important;
+    /* width: 15% !important; */
+    text-wrap: nowrap;
   }
 
   .table-items thead th:nth-child(4) {
-    width: 5% !important;
+    /* width: 5% !important; */
+    text-wrap: nowrap; 
   }
   .table-items thead th:nth-child(5) {
-    width: 16% !important;
+    /* width: 16% !important; */
+    text-wrap: nowrap;
   }
   .table-items thead th:nth-child(6) {
-    width: 16% !important;
+    /* width: 16% !important; */
+    text-wrap: nowrap;
   }
 
   .table-items thead th:last-child {
-    width: 18% !important;
+    /* width: 18% !important; */
+    text-wrap: nowrap;
   }
   .table-items th, .table-items td {
     border: 1px solid #000000 !important;
