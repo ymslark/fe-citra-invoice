@@ -197,25 +197,6 @@ function goToEditPage(id) {
 }
 
 
-//fungsi untuk search data
-const searchData = async (page) => {
-  try {
-    const response = await $api.get(`/CII/search?keyword=${search.value}&&page=${page}&limit=10`)
-    console.log(response)
-    surats.value = response.docs
-    totalPages.value = response.totalPages // backend kirim total halaman
-  } catch (error) {
-    console.error('Gagal mengambil data:', error)
-  }
-}
-
-watch(search, (newValue) => {
-  if (newValue.length >= 3) {
-    searchData()
-  } else if (newValue.length === 0) {
-    fetchItems(1)
-  }
-})
 
 
 // function cekButton(i, button){

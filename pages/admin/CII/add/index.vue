@@ -173,16 +173,16 @@ const copySelected = () => {
           <VRow>
             <!-- 👉 First Name -->
             <VCol cols="12" md="6">
-              <AppTextField v-model="surat.tujuan" label="Tujuan" placeholder="Tujuan" :rules="[requiredValidator]" />
+              <AppTextField v-model="surat.tujuan" label="Tujuan (wajib diisi)" placeholder="Tujuan" :rules="[requiredValidator]" />
             </VCol>
             <VCol cols="12" md="6">
-              <AppTextField v-model="surat.hal" label="Hal" placeholder="Hal" :rules="[requiredValidator]" />
+              <AppTextField v-model="surat.hal" label="Hal (wajib diisi)" placeholder="Hal" :rules="[requiredValidator]" />
             </VCol>
             <VCol cols="12" md="6">
-              <AppTextField v-model="surat.no_hp" label="No Hp" placeholder="No. Hp" :rules="[requiredValidator]" />
+              <AppTextField v-model="surat.no_hp" label="No Hp (wajib diisi)" placeholder="No. Hp" :rules="[requiredValidator]" />
             </VCol>
             <VCol cols="12" md="6">
-              <AppTextField v-model="surat.alamat" label="Alamat" placeholder="Masukkan Alamat" :rules="[requiredValidator]" />
+              <AppTextField v-model="surat.alamat" label="Alamat (wajib diisi)" placeholder="Masukkan Alamat" :rules="[requiredValidator]" />
             </VCol>
 
 
@@ -190,7 +190,7 @@ const copySelected = () => {
 
             <!-- 👉 Country -->
             <VCol cols="12" md="6">
-              <AppDateTimePicker v-model="surat.tanggal" label="Tanggal" placeholder="Pilih Tanggal"
+              <AppDateTimePicker v-model="surat.tanggal" label="Tanggal (wajib diisi)" placeholder="Pilih Tanggal"
                 :rules="[requiredValidator]" />
             </VCol>
 
@@ -249,32 +249,32 @@ const copySelected = () => {
               </h2>
             </VCol>
             <!-- 👉 Last Name -->
-            <VCol cols="12" md="2">
+            <VCol cols="12" md="3">
               <AppSelect v-model="surat.tempo" :items="tempoItems" item-title="title" item-value="value" label="Tempo"
                 placeholder="Pilih" @change="checkTempo" />
             </VCol>
 
             <!-- 👉 Email -->
-            <VCol cols="12" md="6">
-              <AppDateTimePicker v-if="surat.tempo" v-model="surat.tanggal_tempo" label="Tanggal Jatuh Tempo"
+            <VCol cols="12" md="5">
+              <AppDateTimePicker v-if="surat.tempo" v-model="surat.tanggal_tempo" label="Tanggal Jatuh Tempo (wajib diisi)"
                 :rules="[requiredValidator]" placeholder="Pilih Tanggal" />
-              <AppTextField v-else v-model="surat.catatan_tempo" label="Catatan Tempo" :rules="[requiredValidator]" />
+              <AppTextarea v-else v-model="surat.catatan_tempo" label="Catatan Tempo (wajib diisi)" :rules="[requiredValidator]" rows="1" auto-grow />
             </VCol>
             <VCol cols="12" md="2">
               <AppSelect v-if="ppnSelection.length > 0" v-model="surat.ppn" label="Termasuk PPN" placeholder="Tujuan"
                 :items="ppnSelection" />
             </VCol>
             <VCol cols="12" md="2">
-              <AppSelect v-model="surat.ongkos_kirim" label="Termasuk Ongkir" placeholder="Tujuan"
+              <AppSelect v-model="surat.ongkos_kirim" label="Termasuk Ongkir"
                 :items="ongkirItems" />
             </VCol>
             <VCol cols="12" md="2">
-              <AppSelect v-model="surat.instalasi" label="Termasuk Instalasi" placeholder="Tujuan"
+              <AppSelect v-model="surat.instalasi" label="Termasuk Instalasi"
                 :items="ongkirItems" />
             </VCol>
             <!-- 👉 Catatan -->
             <VCol cols="12" md="6">
-              <AppTextField v-model="surat.catatan" label="Catatan Invoice" placeholder="Catatan Invoice" />
+              <AppTextField v-model="surat.catatan" label="Catatan Invoice (gunakan '-' untuk mengosongkan)" placeholder="Catatan Invoice" :rules="[requiredValidator]" />
             </VCol>
             <VCol cols="12">
               <!--
@@ -282,8 +282,13 @@ const copySelected = () => {
                 Rekening
                 </VCardText> 
               -->
-              <CustomRadiosWithIcon v-model:selected-radio="selectedRadio" :radio-content="rekeningList"
-                :grid-column="{ md: '4', cols: '12' }" @change="cetak" />
+              <FormElementsCustomRadiosWithIcon 
+              v-model:selected-radio="selectedRadio" 
+              :radio-content="rekeningList"
+              :grid-column="{ md: '4', cols: '12' }" 
+              title="Pilih Rekening" 
+              @change="cetak" 
+              :rules="[requiredValidator]" />
             </VCol>
             <VCol cols="12" class="d-flex gap-4 ">
               <VBtn type="submit" @click="store">

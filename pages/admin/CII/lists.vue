@@ -4,7 +4,7 @@
       <VCardTitle>
         <div class="">
           <h2 class="text-lg font-weight-medium d-inline">
-            Data Surat Citra Furniture
+            Data Surat Citra Interior
           </h2>
         </div>
       </VCardTitle>

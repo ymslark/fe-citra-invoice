@@ -40,9 +40,14 @@ let kopUrl = `/images/citragroup/${surat.perusahaan}/${surat.perusahaan}_Kop.`
 surat.perusahaan == 'CF' ? kopUrl += 'jpeg' : kopUrl += 'jpg'
 const logoUrl = `/images/citragroup/${surat.perusahaan}/${surat.perusahaan}_Logo.png`
 console.log(kopUrl, logoUrl)
+const namaPerusahaan = {
+  CF: 'Citra Furniture',
+  CII: 'Citra Interior Indonesia',
+  SCI: 'Sentral Citra Interior',
+}
 onMounted(() => {
   if(process.client){
-    document.title = 'Surat Jalan ' + surat.tujuan + ' - Citra Furniture'
+    document.title = 'Surat Jalan ' + surat.tujuan + ' - ' + namaPerusahaan[surat.perusahaan]
     setTimeout(() => {
       window.print()
     }, 1000)
@@ -122,7 +127,7 @@ onMounted(() => {
       <div class="tanggal">Bekasi, {{ formatTanggalIndonesia(getDate()) }}</div>
       <div style="margin-top: -15px; margin-bottom: 5px;">Hormat Kami</div>
       <img :src="logoUrl" alt="Logo Perusahaan" />
-      <div class="nama-perusahaan">Citra Furniture Indonesia</div>
+      <div class="nama-perusahaan">{{ namaPerusahaan[surat.perusahaan] }}</div>
     </div>
   </div>
 

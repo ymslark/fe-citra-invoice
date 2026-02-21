@@ -178,10 +178,10 @@ const copySelected = () => {
           <VRow>
             <!-- 👉 First Name -->
             <VCol cols="12" md="6">
-              <AppTextField v-model="surat.tujuan" label="Tujuan" placeholder="Tujuan" :rules="[requiredValidator]" />
+              <AppTextField v-model="surat.tujuan" label="Tujuan (wajib diisi)" placeholder="Tujuan" :rules="[requiredValidator]" />
             </VCol>
             <VCol cols="12" md="6">
-              <AppTextField v-model="surat.hal" label="Hal" placeholder="Hal" :rules="[requiredValidator]" />
+              <AppTextField v-model="surat.hal" label="Hal (wajib diisi)" placeholder="Hal" :rules="[requiredValidator]" />
             </VCol>
 
 
@@ -189,15 +189,15 @@ const copySelected = () => {
 
             <!-- 👉 Country -->
             <VCol cols="12" md="6">
-              <AppDateTimePicker v-model="surat.tanggal" label="Tanggal" placeholder="Pilih Tanggal"
+              <AppDateTimePicker v-model="surat.tanggal" label="Tanggal (wajib diisi)" placeholder="Pilih Tanggal"
                 :rules="[requiredValidator]" />
             </VCol>
             <VCol cols="12" md="6">
-              <AppTextField v-model="surat.no_hp" label="Nomor Hp" placeholder="Masukkan Nomor Hp"
+              <AppTextField v-model="surat.no_hp" label="Nomor Hp (wajib diisi)" placeholder="Masukkan Nomor Hp"
                 :rules="[requiredValidator]" />
             </VCol>
             <VCol cols="12" md="6">
-              <AppTextarea v-model="surat.alamat" label="Alamat" placeholder="Masukkan Alamat" auto-grow rows="1"
+              <AppTextarea v-model="surat.alamat" label="Alamat (wajib diisi)" placeholder="Masukkan Alamat" auto-grow rows="1"
                 :rules="[requiredValidator]" />
             </VCol>
 
@@ -283,14 +283,19 @@ const copySelected = () => {
             <VCol cols="12" md="6">
               <AppTextField v-model="surat.catatan" label="Catatan Invoice" placeholder="Catatan Invoice" />
             </VCol>
-            <VCol cols="12">
-              <!--
-                <VCardText>
+            <VCol cols="12">              
+              <!-- <VCardText>
                 Rekening
-                </VCardText> 
-              -->
-              <CustomRadiosWithIcon v-model:selected-radio="selectedRadio" :radio-content="rekeningList"
+                <CustomRadiosWithIcon v-model:selected-radio="selectedRadio" :radio-content="rekeningList"
                 :grid-column="{ md: '4', cols: '12' }" @change="cetak" :rules="[requiredValidator]" />
+              </VCardText>  -->
+              <FormElementsCustomRadiosWithIcon 
+              v-model:selected-radio="selectedRadio" 
+              :radio-content="rekeningList"
+              :grid-column="{ md: '4', cols: '12' }" 
+              title="Pilih Rekening" 
+              @change="cetak" 
+              :rules="[requiredValidator]" />
             </VCol>
             <VCol cols="12" class="d-flex gap-4 ">
               <VBtn type="submit" @click="store">

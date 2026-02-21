@@ -165,7 +165,7 @@ console.log(interiors)
               @click="navigateTo(`/admin/memo/add?id=${id}&perusahaan=${cii.perusahaan}`)">
                 Buat Surat Jalan
                 <VTooltip open-on-focus location="top" activator="parent">
-                  Buat Memo
+                  Buat Surat jalan
                 </VTooltip>
                 <VIcon end icon="tabler-truck"/>
               </VBtn>
@@ -177,6 +177,7 @@ console.log(interiors)
                 <VIcon end icon="tabler-trash" />
               </VBtn>
               <VBtn v-else color="success" @click="showDialogRestore = true">
+                Restore Surat
                 <VTooltip open-on-focus location="top" activator="parent">
                   Restore Surat
                 </VTooltip>
@@ -291,6 +292,7 @@ console.log(interiors)
                 <VIcon end icon="tabler-trash" />
               </VBtn>
               <VBtn v-else color="success" @click="showDialogRestore = true">
+                Restore Surat 
                 <VTooltip open-on-focus location="top" activator="parent">
                   Restore Surat
                 </VTooltip>

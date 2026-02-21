@@ -18,8 +18,8 @@ const loading = ref(false)
 
 
 const deleteInterior = index => cii.deleteInteriorEdit(index)
-const label = interior.nama_interior_request ? `Nama Interior (${interior.nama_interior_request})` : 'Nama Interior'
-
+let label = interior.nama_interior_request ? `Nama Interior (${interior.nama_interior_request})` : 'Nama Interior'
+label += ' (wajib diisi)'
 function formatInput(e) {
   console.log(e)
   let raw = e.target.value.replace(/\D/g, '') // Hanya ambil angka
@@ -43,18 +43,18 @@ onMounted(() => {
         :rules="[requiredValidator]" name="input-nama-interior"/>
     </VCol>
     <VCol cols=" 12" md="3">
-      <AppTextField v-model="interior.harga" label="Harga" placeholder="Masukkan Harga"
-        :rules="[requiredValidator]" 
+      <AppTextField v-model="interior.harga" label="Harga (wajib diisi)" placeholder="Masukkan Harga"
+        :rules="[requiredValidator, minimumFormattedNumberValidator(interior.harga, 2000)]" 
         name="harga"
         @input="formatInput" />
     </VCol>
     <VCol cols="12" md="6" class="pt-3">
       <VRow class="d-flex align-center" no-gutters>
         <VCol>
-          <AppTextField label="volume1" v-model="interior.v1" :rules="[requiredValidator]" append-inner-icon=" "/>
+          <AppTextField label="volume1 (wajib diisi)" v-model="interior.v1" :rules="[requiredValidator]" append-inner-icon=" "/>
         </VCol>
         <div class="mx-2">X</div>
-        <VCol><AppTextField label="volume2" v-model="interior.v2" :rules="[requiredValidator]" append-inner-icon=" "/></VCol>
+        <VCol><AppTextField label="volume2 (wajib diisi)" v-model="interior.v2" :rules="[requiredValidator]" append-inner-icon=" "/></VCol>
       </VRow>
     </VCol>
     <VCol cols="12" md="3">

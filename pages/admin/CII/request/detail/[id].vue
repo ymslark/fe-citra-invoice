@@ -3,7 +3,7 @@
   <VRow class="mb-4">
     <VCol cols="12" md="6" class="mt-md-5">
       <VCard class="text-black">
-        <VCardTitle class="mb-2"> Detail Request Citra Furniture </VCardTitle>
+        <VCardTitle class="mb-2"> Detail Request Citra Interior </VCardTitle>
         <VCardText class="d-flex flex-column gap-y-6">
           <div class="d-flex gap-x-3 align-center">
             <VAvatar
@@ -85,14 +85,14 @@
             <tr>
               <th>No</th>
               <th>Nama interior</th>
-              <th>Qty</th>
+              <th>volume</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(item, index) in surat?.interior" :key="index">
               <td>{{ index + 1 }}</td>
               <td>{{ item.nama_interior }}</td>
-              <td>{{ item.qty }}</td>
+              <td>{{ `${item.v1} x ${item.v2}m` }}&sup2;</td>
             </tr>
           </tbody>
         </VTable>
