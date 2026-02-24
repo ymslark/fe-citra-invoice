@@ -145,11 +145,12 @@ const currentPage = ref(1)
 const surats = ref([])
 const totalPages = ref(1)
 const search = ref('')
-const dateRange = ref()
+const dateRange = ref('')
 const filterData = async (page = 1) => {
   try {
     let start = ''
     let end = ''
+    console.log(dateRange.value)
     if (dateRange.value) {
       let range = dateRange.value.split(' to ')
       console.log(range)
@@ -239,6 +240,6 @@ function goToEditPage(id) {
 // })
 
 
-filterData(1)
+await filterData(1)
 
 </script>
