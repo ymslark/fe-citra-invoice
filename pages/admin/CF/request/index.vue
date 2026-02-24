@@ -4,7 +4,7 @@
       <VCardTitle>
         <div class="">
           <h2 class="text-lg font-weight-medium d-inline">
-            Data Permintaan Citra Furniture
+            Data Permintaan Surat Citra Furniture
           </h2>
         </div>
       </VCardTitle>
@@ -68,7 +68,6 @@
               </td>
               <td>
                 {{ formatTanggalIndonesia(surat.tanggal) }}
-                <!-- {{ surat.tanggal }} -->
               </td>
               <td>
                 <!-- <VIcon :color="status[surat.status].color">{{ status[surat.status].icon }}</VIcon> -->
@@ -102,9 +101,9 @@
                   <VIcon @click="goToDetailPage(surat._id)">
                     tabler-info-circle</VIcon>
                 </VBtn>
-                <VBtn size="38" class="ml-2" icon color="warning" title="Edit">
+                <VBtn size="38" class="ml-2" icon color="warning" title="Buat Surat Penawaran">
                   <VTooltip open-on-focus location="top" activator="parent">
-                    BUat Surat Penawaran
+                    Buat Surat Penawaran
                   </VTooltip>
                   <VIcon @click="navigateTo({ name: `admin-CF-add-id`, params: { id: surat._id } })">tabler-edit
                   </VIcon>
@@ -133,13 +132,13 @@ definePageMeta({
   middleware: 'auth-client',
   requiresAuth: true,
 })
-import { useCFStore } from '@/stores/cf'
+import { useCiStore } from '@/stores/ciis'
 import {useAlertStore} from '@/stores/alert'
 import { buildQueryFilterParams } from '@/utils/apiFilterQuery'
 
 
 const { $api } = useNuxtApp()
-const cf = useCFStore()
+const cii = useCiStore()
 const alert = useAlertStore()
 const currentPage = ref(1)
 const surats = ref([])
@@ -161,13 +160,13 @@ const filterData = async (page = 1) => {
         end = range[1]
       }
     }
-    const query = buildQueryFilterParams({ startDate: start, endDate: end,page, search: search.value, limit:20 }, false);
+    const query = buildQueryFilterParams({ startDate: start, endDate: end,page, search: search.value, limit:10 }, false);
     const response = await $api.get('/Request/CF', { ...query });
-    //console.log(response)
+    console.log(response)
     surats.value = response.docs
     totalPages.value = response.totalPages // backend kirim total halaman
     currentPage.value = response.page
-    console.log(surats)
+    //console.log(surats.value)
   } catch (error) {
     //console.log(error.message)
     alert.showAlertObject({
@@ -177,6 +176,17 @@ const filterData = async (page = 1) => {
   }
 }
 
+// Ambil data dari backend, backend sudah siapkan pagination
+const fetchItems = async (page = 1) => {
+  try {
+    const response = await $api.get(`/CF?page=${page}&limit=10`)
+    //console.log(response)
+    surats.value = response.docs
+    totalPages.value = response.totalPages // backend kirim total halaman
+  } catch (error) {
+    console.error('Gagal mengambil data:', error)
+  }
+}
 
 watch(currentPage, (page) => {
   if (search.value.length >= 3) {
@@ -215,15 +225,15 @@ let status = {
     color: 'error'
   }
 }
-// let surats = await cf.getCF()
+// let surats = await cii.getCF()
 // //console.log(surats)
 
 function goToDetailPage(id) {
-  navigateTo({ name: `admin-CF-request-detail-id`, params: { id } })
+  navigateTo({ name: `admin-CF-Request-detail-id`, params: { id } })
 }
 
 function goToEditPage(id) {
-  navigateTo(`CF/edit/${id}`)
+  navigateTo(`CF/add/${id}`)
 }
 
 const search = ref('')
@@ -240,5 +250,4 @@ const search = ref('')
 
 const dateRange = ref()
 filterData(1)
-
 </script>
