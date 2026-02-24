@@ -144,39 +144,80 @@ const currentPage = ref(1)
 const surats = ref([])
 const totalPages = ref(1)
 
+// const filterData = async (page = 1) => {
+//   try {
+//     let start = ''
+//     let end = ''
+//     if (dateRange.value) {
+//       let range = dateRange.value.split(' to ')
+//       //console.log(range)
+//       if( range.length == 1) {
+//         start = range[0]
+//         end = range[0]
+//       }
+//       else if (range.length == 2) {
+//         start = range[0]
+//         end = range[1]
+//       }
+//     }
+//     const query = buildQueryFilterParams({ startDate: start, endDate: end,page, search: search.value, limit:10 }, false);
+//     const response = await $api.get('/Request/CII', { ...query });
+//     console.log(response)
+//     surats.value = response.docs
+//     totalPages.value = response.totalPages // backend kirim total halaman
+//     currentPage.value = response.page
+//     //console.log(surats.value)
+//   } catch (error) {
+//     //console.log(error.message)
+//     alert.showAlertObject({
+//       type: 'error',
+//       message: error.message || 'Gagal mengambil data',
+//     })
+//   }
+// }
+
+// Ambil data dari backend, backend sudah siapkan pagination
+
 const filterData = async (page = 1) => {
   try {
     let start = ''
     let end = ''
-    if (dateRange.value) {
-      let range = dateRange.value.split(' to ')
-      //console.log(range)
-      if( range.length == 1) {
+
+    const rawRange = dateRange?.value
+
+    if (typeof rawRange === 'string' && rawRange.length > 0) {
+      const range = rawRange.split(' to ')
+
+      if (range.length === 1) {
         start = range[0]
         end = range[0]
-      }
-      else if (range.length == 2) {
+      } else if (range.length === 2) {
         start = range[0]
         end = range[1]
       }
     }
-    const query = buildQueryFilterParams({ startDate: start, endDate: end,page, search: search.value, limit:10 }, false);
+
+    const query = buildQueryFilterParams({
+      startDate: start,
+      endDate: end,
+      page,
+      search: search?.value ?? '',
+      limit: 10
+    }, false);
+
     const response = await $api.get('/Request/CII', { ...query });
-    console.log(response)
-    surats.value = response.docs
-    totalPages.value = response.totalPages // backend kirim total halaman
-    currentPage.value = response.page
-    //console.log(surats.value)
+
+    surats.value = response.docs ?? []
+    totalPages.value = response.totalPages ?? 1
+    currentPage.value = response.page ?? 1
+
   } catch (error) {
-    //console.log(error.message)
     alert.showAlertObject({
       type: 'error',
-      message: error.message || 'Gagal mengambil data',
+      message: error?.message || 'Gagal mengambil data',
     })
   }
 }
-
-// Ambil data dari backend, backend sudah siapkan pagination
 const fetchItems = async (page = 1) => {
   try {
     const response = await $api.get(`/CII?page=${page}&limit=10`)
@@ -248,7 +289,7 @@ const search = ref('')
 //   }
 // })
 
-const dateRange = ref()
+const dateRange = ref('')
 onMounted( async () => {
     const query = buildQueryFilterParams({ limit:10 }, false);
     const response = await $api.get('/Request/CII', { ...query });
