@@ -144,14 +144,15 @@ const alert = useAlertStore()
 const currentPage = ref(1)
 const surats = ref([])
 const totalPages = ref(1)
-
+const search = ref('')
+const dateRange = ref()
 const filterData = async (page = 1) => {
   try {
     let start = ''
     let end = ''
     if (dateRange.value) {
       let range = dateRange.value.split(' to ')
-      //console.log(range)
+      console.log(range)
       if( range.length == 1) {
         start = range[0]
         end = range[0]
@@ -161,7 +162,7 @@ const filterData = async (page = 1) => {
         end = range[1]
       }
     }
-    const query = buildQueryFilterParams({ startDate: start, endDate: end,page, search: search.value, limit:10 }, false);
+    const query = buildQueryFilterParams({ startDate: start, endDate: end,page, search: search.value, limit:20 }, false);
     const response = await $api.get('/request/CII', { ...query });
     //console.log(response)
     surats.value = response.docs
@@ -226,7 +227,6 @@ function goToEditPage(id) {
   navigateTo(`CII/edit/${id}`)
 }
 
-const search = ref('')
 
 //fungsi untuk search data
 
@@ -238,7 +238,7 @@ const search = ref('')
 //   }
 // })
 
-const dateRange = ref()
+
 filterData(1)
 
 </script>

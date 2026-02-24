@@ -161,7 +161,7 @@ const filterData = async (page = 1) => {
         end = range[1]
       }
     }
-    const query = buildQueryFilterParams({ startDate: start, endDate: end,page, search: search.value, limit:2 }, false);
+    const query = buildQueryFilterParams({ startDate: start, endDate: end,page, search: search.value, limit:20 }, false);
     const response = await $api.get('/Request/CF', { ...query });
     //console.log(response)
     surats.value = response.docs
