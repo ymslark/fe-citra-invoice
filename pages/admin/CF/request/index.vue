@@ -249,5 +249,10 @@ const search = ref('')
 // })
 
 const dateRange = ref()
-filterData(1)
+onMounted( async () => {
+    const query = buildQueryFilterParams({ limit:10 }, false);
+    const response = await $api.get('/Request/CF', { ...query });
+    console.log(response)
+    surats.value = response.docs
+})
 </script>
