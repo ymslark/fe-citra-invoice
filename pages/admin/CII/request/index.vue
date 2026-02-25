@@ -292,10 +292,10 @@ const search = ref('')
 //   }
 // })
 
-onMounted( async () => {
-    const query = buildQueryFilterParams({ limit:10 }, false);
-    const response = await $api.get('/Request/CII', { ...query });
-    console.log(response)
-    surats.value = response.docs
-})
+// onMounted( async () => {
+//     const query = buildQueryFilterParams({ limit:10 }, false);
+//     const response = await $api.get('/Request/CII', { ...query });
+//     console.log(response)
+//     surats.value = response.docs
+// })
 </script>
