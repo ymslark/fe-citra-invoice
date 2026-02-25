@@ -58,7 +58,7 @@
             </tr>
           </thead>
 
-          <tbody>
+          <tbody v-if="surats.length > 0">
             <tr v-for="(surat, index) in surats" :key="index">
               <td>
                 {{ index + 1 }}
