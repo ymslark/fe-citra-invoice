@@ -177,13 +177,13 @@ const totalPages = ref(1)
 // }
 
 // Ambil data dari backend, backend sudah siapkan pagination
-
+const dateRange = ref('')
 const filterData = async (page = 1) => {
   try {
     let start = ''
     let end = ''
 
-    const rawRange = dateRange?.value
+    const rawRange = dateRange.value ?? ''
 
     if (typeof rawRange === 'string' && rawRange.length > 0) {
       const range = rawRange.split(' to ')
@@ -191,7 +191,7 @@ const filterData = async (page = 1) => {
       if (range.length === 1) {
         start = range[0]
         end = range[0]
-      } else if (range.length === 2) {
+      } else if (range.length >= 2) {
         start = range[0]
         end = range[1]
       }
@@ -203,18 +203,18 @@ const filterData = async (page = 1) => {
       page,
       search: search?.value ?? '',
       limit: 10
-    }, false);
+    }, false)
 
-    const response = await $api.get('/Request/CII', { ...query });
+    const response = await $api.get('/Request/CF', { ...query })
 
-    surats.value = response.docs ?? []
-    totalPages.value = response.totalPages ?? 1
-    currentPage.value = response.page ?? 1
+    surats.value = response?.docs ?? []
+    totalPages.value = response?.totalPages ?? 1
+    currentPage.value = response?.page ?? 1
 
   } catch (error) {
     alert.showAlertObject({
       type: 'error',
-      message: error?.message || 'Gagal mengambil data',
+      message: error?.message ?? 'Gagal mengambil data'
     })
   }
 }
@@ -291,7 +291,7 @@ const search = ref('')
 //   }
 // })
 
-const dateRange = ref('')
+
 onMounted( async () => {
     const query = buildQueryFilterParams({ limit:10 }, false);
     const response = await $api.get('/Request/CF', { ...query });
