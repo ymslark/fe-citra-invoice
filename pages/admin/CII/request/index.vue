@@ -178,7 +178,7 @@ const totalPages = ref(1)
 
 // Ambil data dari backend, backend sudah siapkan pagination
 
-const dateRange = ref('st')
+const dateRange = ref('')
 const filterData = async (page = 1) => {
   try {
     let start = ''
@@ -210,10 +210,10 @@ const filterData = async (page = 1) => {
 
     const response = await $api.get('/Request/CII', { ...query })
 
-    surats.value = response?.docs ?? []
-    totalPages.value = response?.totalPages ?? 1
-    currentPage.value = response?.page ?? 1
-
+    surats.value = response.docs || []
+    totalPages.value = response.totalPages || 1
+    currentPage.value = response.page || 1
+    console.log('ini isi surat dari filterData', surats.value)
   } catch (error) {
     alert.showAlertObject({
       type: 'error',
@@ -292,10 +292,19 @@ const search = ref('')
 //   }
 // })
 
-// onMounted( async () => {
-//     const query = buildQueryFilterParams({ limit:10 }, false);
-//     const response = await $api.get('/Request/CII', { ...query });
-//     console.log(response)
-//     surats.value = response.docs
-// })
+onMounted( async () => {
+  try {
+    const query = buildQueryFilterParams({ limit:10 }, false);
+    const response = await $api.get('/Request/CII', { ...query });
+    console.log(response)
+    surats.value = response.docs
+    console.log('Ini isi surats dari onMOunted' ,surats.value)
+  } catch (error) {
+    console.error('Gagal mengambil data:', error)
+    alert.showAlertObject({
+      type: 'error',
+      message: error?.message ?? 'Gagal mengambil data'
+    })
+  }
+})
 </script>

@@ -184,10 +184,11 @@ const filterData = async (page = 1) => {
     let start = ''
     let end = ''
 
-    const rawRange = dateRange.value ?? ''
+    const rawRange = dateRange.value || ''
+    console.log('Date Range:', dateRange.value)
     console.log('Raw Range:', rawRange)
     console.log('Type of Raw Range:', typeof rawRange)
-    if (typeof rawRange === 'string' && rawRange.length > 0) {
+    if (typeof rawRange === 'string' && rawRange.length > 3) {
       const range = rawRange.split(' to ')
 
       if (range.length === 1) {
@@ -209,10 +210,10 @@ const filterData = async (page = 1) => {
 
     const response = await $api.get('/Request/CF', { ...query })
 
-    surats.value = response?.docs ?? []
-    totalPages.value = response?.totalPages ?? 1
-    currentPage.value = response?.page ?? 1
-
+    surats.value = response.docs || []
+    totalPages.value = response.totalPages || 1
+    currentPage.value = response.page || 1
+    console.log('Response:', response)
   } catch (error) {
     alert.showAlertObject({
       type: 'error',
@@ -294,10 +295,18 @@ const search = ref('')
 // })
 
 
-// onMounted( async () => {
-//     const query = buildQueryFilterParams({ limit:10 }, false);
-//     const response = await $api.get('/Request/CF', { ...query });
-//     console.log(response)
-//     surats.value = response.docs
-// })
+onMounted( async () => {
+  try {
+    const query = buildQueryFilterParams({ limit:10 }, false);
+    const response = await $api.get('/Request/CF', { ...query });
+    console.log(response)
+    surats.value = response.docs
+  } catch (error) {
+    console.error('Gagal mengambil data:', error)
+    alert.showAlertObject({
+      type: 'error',
+      message: error?.message ?? 'Gagal mengambil data'
+    })
+  }
+})
 </script>
