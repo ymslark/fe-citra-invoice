@@ -178,16 +178,17 @@ const totalPages = ref(1)
 
 // Ambil data dari backend, backend sudah siapkan pagination
 
-const dateRange = ref('')
-
+const dateRange = ref('st')
 const filterData = async (page = 1) => {
   try {
     let start = ''
     let end = ''
 
-    const rawRange = dateRange.value ?? ''
-
-    if (typeof rawRange === 'string' && rawRange.length > 0) {
+    const rawRange = dateRange.value || ''
+    console.log('Date Range:', dateRange.value)
+    console.log('Raw Range:', rawRange)
+    console.log('Type of Raw Range:', typeof rawRange)
+    if (typeof rawRange === 'string' && rawRange.length > 3) {
       const range = rawRange.split(' to ')
 
       if (range.length === 1) {
