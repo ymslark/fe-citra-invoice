@@ -278,6 +278,7 @@ let barangs = hitungInvoiceBarang(surat.barang, surat.ppn)
                 <VIcon end icon="tabler-trash" />
               </VBtn>
               <VBtn v-else color="success" @click="showDialogRestore = true">
+                Restore Surat
                 <VTooltip open-on-focus location="top" activator="parent">
                   Restore Surat
                 </VTooltip>
@@ -312,7 +313,10 @@ let barangs = hitungInvoiceBarang(surat.barang, surat.ppn)
                   </p>
                 </VListItem>
                 <VListItem>
-                  4. Pembayaran harap di transfer melalui rekening :
+                  4. Catatan Invoice : {{ surat.catatan[0] }}
+                </VListItem>
+                <VListItem>
+                  5. Pembayaran harap di transfer melalui rekening :
                   <VSpacer />
                   <VList>
                     <VListItem>

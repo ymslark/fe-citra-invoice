@@ -98,7 +98,7 @@
                   <VTooltip open-on-focus location="top" activator="parent">
                     Detail
                   </VTooltip>
-                  <VIcon @click="goToDetailPage(surat._id)">
+                  <VIcon @click="navigateTo({ name: `admin-CF-request-detail-id`, params: { id: surat._id } })">
                     tabler-info-circle</VIcon>
                 </VBtn>
                 <VBtn size="38" class="ml-2" icon color="warning" title="Buat Surat Penawaran">

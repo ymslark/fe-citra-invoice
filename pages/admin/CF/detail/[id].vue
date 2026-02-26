@@ -278,6 +278,7 @@ let barangs = hitungInvoiceBarang(surat.barang, surat.ppn)
                 <VIcon end icon="tabler-trash" />
               </VBtn>
               <VBtn v-else color="success" @click="showDialogRestore = true">
+                Restore Surat
                 <VTooltip open-on-focus location="top" activator="parent">
                   Restore Surat
                 </VTooltip>

@@ -159,7 +159,7 @@ const barangs = res.Barangs
             <!-- 👉 Company -->
             
               <VCol cols="12" md="6">
-              <AppTextField v-model="surat.alamat" label="Alamat" placeholder="Masukkan Alamat" readonly/>
+              <AppTextField v-model="surat.alamat" label="Alamat (wajib diisi)" placeholder="Masukkan Alamat" readonly/>
               </VCol> 
            
           </VRow>

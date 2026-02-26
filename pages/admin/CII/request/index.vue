@@ -98,7 +98,7 @@
                   <VTooltip open-on-focus location="top" activator="parent">
                     Detail
                   </VTooltip>
-                  <VIcon @click="goToDetailPage(surat._id)">
+                  <VIcon @click="navigateTo({ name: `admin-CII-request-detail-id`, params: { id: surat._id } })">
                     tabler-info-circle</VIcon>
                 </VBtn>
                 <VBtn size="38" class="ml-2" icon color="warning" title="Buat Surat Penawaran">
@@ -298,7 +298,7 @@ onMounted( async () => {
     const response = await $api.get('/Request/CII', { ...query });
     console.log(response)
     surats.value = response.docs
-    console.log('Ini isi surats dari onMOunted' ,surats.value)
+    console.log('Ini isi surats dari onmounted' ,surats.value)
   } catch (error) {
     console.error('Gagal mengambil data:', error)
     alert.showAlertObject({
