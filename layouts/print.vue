@@ -1,59 +1,46 @@
-<script setup>
-import { definePageMeta } from '#imports';
-// Atur metadata default untuk semua halaman yang menggunakan layout ini
-definePageMeta({
-  backgroundColor: "#FFFFFF" // Default background untuk semua halaman
-})
-</script>
-
 <template>
-  <div>
-    <slot />
-  </div>
+  <slot />
 </template>
 
-
 <style>
-
-@media screen {
-  
-  body {
-    /* font-family: 'Times New Roman', sans-serif; */
-    font-size: 11pt !important;
-    background-color: #ffffff;
-    color: #000000;
-    margin: 20px;
-  }
-  
-  /* .page {
-    max-width: 800px;
-    margin: auto;
-    padding: 20px;
-    background: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    } */
-    
-    .no-preview {
-      display: none;
-    }
-  }
-
 @media print {
-  * {
-    font-family: 'Times New Roman', sans-serif !important;
-    color: #000000 !important;
-    
+  html {
+    font-size: 11pt;
   }
 
   body {
-    font-family: 'Times New Roman', sans-serif !important;
-    /* font-size: 11pt !important; */
-    /* background-color: #ffffff !important; */
-    margin: 0.5cm !important;
+    font-family: 'Times New Roman', serif;
+    font-size: 11pt;
+    color: #000;
+    margin: 2cm;
   }
 
-  @page{
-    size: 'A4';
+  p {
+    text-align: justify;
+    line-height: 1.4;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10pt;
+  }
+
+  th, td {
+    border: 1px solid #000;
+    padding: 4pt;
+  }
+
+  .angka-kanan {
+    text-align: right;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  @page {
+    size: A4;
     margin: 2cm;
   }
 }

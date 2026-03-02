@@ -5,8 +5,8 @@ definePageMeta({
 })
 import { useAlertStore } from '@/stores/alert'
 import { useCiStore } from '@/stores/ciis'
-import { formatRupiah, formatTanggalIndonesia, pembilang } from '@/utils/format'
-import {  hitungInvoiceBarang } from '@/utils/invoice/hitungInvoiceBarang'
+import { formatAngkaIndo, formatRupiah, formatTanggalIndonesia } from '@/utils/format'
+import {  hitungInvoiceInterior } from '@/utils/invoice/hitungInvoiceInterior'
 import { getDate } from '@/utils/global'
 const route = useRoute()
 const router = useRouter()
@@ -28,8 +28,8 @@ let interior = null
 try {
   await cii.getCIIById(id)
   surat = cii.surat
-  console.log(surat.doc)
-  interior = hitungInvoiceBarang(surat.interior, surat.ppn) 
+  // // console.log(surat.doc)
+  interior = hitungInvoiceInterior(surat.interior, surat.ppn) 
   // console.log(interior)
 } catch (error) {
   alert.showAlert({
@@ -39,9 +39,9 @@ try {
 }
 
 // onMounted(() => {
-//   document.title = 'Surat Penawaran ' + surat.tujuan + ' - Citra Furniture'
+//   // document.title = surat.no_seri +' Surat Penawaran ' + surat.tujuan + ' - Citra Interior'
 //   if(process.client){
-//     document.title = 'Surat Penawaran ' + surat.tujuan + ' - Citra Furniture'
+//     document.title = surat.no_seri + ' Surat Penawaran ' + surat.tujuan + ' - Citra Interior'
 //     setTimeout(() => {
 //       window.print()
 //     }, 1000)
@@ -321,7 +321,7 @@ try {
   padding: 20px;
   margin:auto;
   box-sizing: border-box;
-  font-size: 24px;
+  /* font-size: 24px; */
   
 }
 .box::after {

@@ -44,13 +44,16 @@
                 No.
               </th>
               <th class="text-uppercase">
-                No.Seri
-              </th>
-              <th class="text-uppercase">
                 Tujuan
               </th>
               <th class="text-uppercase">
                 Tanggal
+              </th>
+              <th class="text-uppercase">
+                Nama Supir
+              </th>
+              <th class="text-uppercase">
+                Perusahaan
               </th>
               <th class="text-uppercase">
                 Status
@@ -66,14 +69,18 @@
               <td>
                 {{ index + 1 }}
               </td>
-              <td>
-                {{ surat.no_seri }}
-              </td>
+
               <td>
                 {{ surat.tujuan }}
               </td>
               <td>
                 {{ formatTanggalIndonesia(surat.tanggal) }}
+              </td>
+              <td>
+                {{ surat.supir.nama_supir }}
+              </td>
+              <td>
+                {{ surat.perusahaan }}
               </td>
               <td>
                 <VIcon :color="status[surat.status].color">{{ status[surat.status].icon }}</VIcon>

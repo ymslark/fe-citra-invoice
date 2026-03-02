@@ -5,12 +5,13 @@ definePageMeta({
 })
 import { useAlertStore } from '@/stores/alert'
 import { useCiStore } from '@/stores/ciis'
-import { formatAngkaIndo, formatRupiah, formatTanggalIndonesia } from '@/utils/format'
+import { formatRupiah, formatAngkaIndo, formatTanggalIndonesia, pembilang } from '@/utils/format'
 import {  hitungInvoiceInterior } from '@/utils/invoice/hitungInvoiceInterior'
 import { getDate } from '@/utils/global'
+import jsPDF from 'jspdf'
 const route = useRoute()
 const router = useRouter()
-const cii = useCiStore()
+const cf = useCiStore()
 const id = route.query.id || null
 const alert = useAlertStore()
 const printArea = ref(null)
@@ -21,16 +22,16 @@ if (!id) {
     timeout: 3000
   })
   console.error('ID tidak ditemukan')
-  navigateTo({ name: 'admin-CII' })
+  navigateTo({ name: 'admin-CI' })
 }
 let surat = null
 let interior = null
 try {
-  await cii.getCIIById(id)
-  surat = cii.surat
+  await cf.getCIIById(id)
+  surat = cf.surat
   // // console.log(surat.doc)
   interior = hitungInvoiceInterior(surat.interior, surat.ppn) 
-  // console.log(interior)
+  // console.log(barang)
 } catch (error) {
   alert.showAlert({
     type: 'error',
@@ -38,18 +39,28 @@ try {
   })
 }
 
-onMounted(() => {
-  // document.title = surat.no_seri +' Surat Penawaran ' + surat.tujuan + ' - Citra Interior'
-  if(process.client){
-    document.title = surat.no_seri + ' Surat Penawaran ' + surat.tujuan + ' - Citra Interior'
-    setTimeout(() => {
-      window.print()
-    }, 1000)
+// onMounted(() => {
+//   if(process.client){
+//     document.title = surat.no_seri + ' Surat Penawaran ' + surat.tujuan + ' - Citra Furniture'
+//     setTimeout(() => {
+//       window.print()
+//     }, 1000)
 
-    window.addEventListener('afterprint', () => {
-        window.location.replace('/admin/CII/detail/' + id)
-    })
-  }
+//     window.addEventListener('afterprint', () => {
+//         window.location.replace('/admin/CII/detail/' + id)
+//     })
+//   }
+// })
+onMounted(async () => {
+
+  await nextTick()
+
+  // setTimeout(() => {
+    window.print()
+  // }, 1000)
+  //   window.addEventListener('afterprint', () => {
+  //     window.location.replace('/admin/CII/detail/' + id)
+  //   })
 })
 
 </script>
@@ -58,7 +69,7 @@ onMounted(() => {
     <div class="header">
       <img 
         class="kop-img" 
-        src="/images/citragroup/CII/CII_Kop.png" 
+        src="/images/citragroup/CII/CII_Kop.jpg" 
         alt="" 
         srcset="">
     </div>
@@ -80,19 +91,18 @@ onMounted(() => {
         </div>
       </div>
       <p style="text-indent:2em; line-height:1.4; margin-bottom: 1em;">Dengan hormat, bersama surat ini kami sampaikan penawaran harga terkait produk yang kami tawarkan sesuai dengan kebutuhan Bapak/Ibu. Adapun rincian penawaran kami sajikan pada tabel berikut untuk dapat dipelajari dan dipertimbangkan.
-      </p>
+        </p>
       <table class="table-items">
         <thead>
           <tr>
             <th>No</th>
             <th>Nama Interior</th>
-            <th>Harga <br> (per m&sup3; )
-            </th>
-            <th>Ukuran</th>
+            <th>Harga Satuan</th>
+            <th>Qty</th>
             <th>subtotal</th>
             <th>Diskon</th>
             <th>Total</th>
-          </tr>
+          </tr> 
         </thead>
         <tbody>
           <tr v-for="(item, index) in interior.interiors" :key="index">
@@ -104,8 +114,7 @@ onMounted(() => {
               <span class="rp">Rp.</span>
               <span class="nilai">{{ formatRupiah(item.dpp_tanpa_diskon) }}</span>
             </td>
-            <!-- <td class="text-center" id="qty" style="padding: 1pt;">{{ (item.v1 * item.v2).toFixed(2)}}m&sup2;</td> -->
-            <td class="text-center" id="qty" style="padding: 1pt;">{{ formatAngkaIndo(item.v1) + 'x' + formatAngkaIndo(item.v2)}}m&sup2;</td>
+            <td class="text-center" id="qty" style="padding: 1pt;">{{ formatAngkaIndo(item.v1) }}m x {{ formatAngkaIndo(item.v2) }}m</td>
             <td class="angka-kanan">
               <span class="rp">Rp.</span>
               <span class="nilai">{{ formatRupiah(item.total_dpp_tanpa_diskon) }}</span>
@@ -122,7 +131,7 @@ onMounted(() => {
   
           <tr style="font-weight: bold;">
             <td colspan="3" class="br-0"></td>
-            <td class="bl-0 total-harga">Total</td>
+            <td class="bl-0" style="font-size: 9pt !important;">Total</td>
             <td class="angka-kanan">
               <span class="rp">Rp</span>
               <span class="nilai">{{formatRupiah( interior.dpp_tanpa_diskon )}}</span>
@@ -150,7 +159,7 @@ onMounted(() => {
             <td class="bl-0">Total Harga Akhir</td>
             <td class="angka-kanan">
               <span class="rp">Rp</span>
-              <span class="nilai">{{formatRupiah( interior.dpp )}}</span>
+              <span class="nilai">{{formatRupiah( barang.dpp )}}</span>
               </td>
           </tr> -->
           <!-- <tr>
@@ -171,7 +180,7 @@ onMounted(() => {
           </tr>
           <tr style="font-weight: bold;">
             <td colspan="5" class="br-0"></td>
-            <td class="bl-0 total-harga">Total</td>
+            <td class="bl-0 total-text" style="font-size: 9pt !important;">Total</td>
             <td class="angka-kanan">
               <span class="rp">Rp.</span>
               <span class="nilai">{{ formatRupiah(surat.harga_akhir) }}</span>
@@ -184,11 +193,12 @@ onMounted(() => {
         <ol id="note-list">
           <li v-if="surat.ppn > 0" >Harga Termasuk PPN {{surat.ppn}}%</li>
           <li v-else>Harga Tidak Termasuk PPN</li>
-          <li v-if="surat.ongkos_kirim && surat.instalasi">Harga Sudah Termasuk Ongkos Kirim & Sudah Termasuk Biaya
+          <li>Harga <b>{{ surat.ongkos_kirim ? 'sudah' : 'belum' }}</b> termasuk ongkos kirim & <b>{{ surat.instalasi ? 'sudah' : 'belum' }}</b> termasuk instalasi</li>
+          <!-- <li v-if="surat.ongkos_kirim && surat.instalasi">Harga Sudah Termasuk Ongkos Kirim & Sudah Termasuk Biaya
             Instalasi</li>
           <li v-else-if="surat.instalasi">Harga Sudah Termasuk Biaya Instalasi</li>
-          <li v-else-if="surat.ongkos_kirim">Harga Sudah Termasuk Biaya Ongkos Kirim</li>
-          <!-- <li v-if="surat.catatan.length > 0 && surat.catatan[0].length > 3">{{surat.catatan[0]}}</li> -->
+          <li v-else-if="surat.ongkos_kirim">Harga Sudah Termasuk Biaya Ongkos Kirim</li> -->
+          <!-- <li v-if="surat.catatan[0].length > 3">{{surat.catatan[0]}}</li> -->
           <li>Pembayaran Via Transfer ke rekening :</li>
         </ol>
       <table class="rekening">
@@ -213,7 +223,7 @@ onMounted(() => {
         <div class="tanggal">Bekasi, {{ formatTanggalIndonesia(getDate()) }}</div>
         <div class="mt-n3">Hormat Kami</div>
         <img src="/images/citragroup/CII/CII_Logo.png" alt="Logo Perusahaan" />
-        <div class="nama-perusahaan">Citra Interior Indonesia</div>
+        <div class="nama-perusahaan">Citra Furniture Indonesia</div>
       </div>
     </div>
   
@@ -243,7 +253,7 @@ onMounted(() => {
     color: #000 !important;
     margin: 0px;
     padding: 0px;
-    font-size: 11pt;
+    font-size: 11pt !important;
   }
 
   .footer-surat img{
@@ -251,6 +261,15 @@ onMounted(() => {
     height: auto;
   }
 
+  div.table-items{
+    page-break-inside: avoid !important;
+    font-size: 9pt !important;
+  }
+
+  .table-items tbody td{
+    font-family: 'Times New Roman', sans-serif !important;
+    font-size: 9pt !important;
+  }
 /* 5%, 35%, 12%, 8%, 12%, 8%, 20% */
   .table-items thead th:first-child {
     width: 3% !important;
@@ -269,7 +288,7 @@ onMounted(() => {
 
   .table-items thead th:nth-child(4) {
     /* width: 5% !important; */
-    text-wrap: nowrap;
+    text-wrap: nowrap; 
   }
   .table-items thead th:nth-child(5) {
     /* width: 16% !important; */
@@ -288,9 +307,9 @@ onMounted(() => {
     border: 1px solid #000000 !important;
   }
 
-  table.table-items tbody tr td {
+  .table-items tbody td {
     padding: 0px;
-    font-size: 8pt !important;
+    font-size: 9pt !important;
   }
 
   #qty{
@@ -303,7 +322,10 @@ onMounted(() => {
   .table-items .br-0{
     border-right: 0 !important;
   }
-
+  
+  span.nilai, .angka-kanan span.rp {
+    font-size: 9pt !important;
+  }
   
   /* .table-items {
     font-size: 9pt !important;
@@ -318,21 +340,10 @@ onMounted(() => {
     padding: 1px;
   }
 
-  .table-items tbody td {
-  padding-right: 0.5ch !important;
-  font-family: 'Times New Roman', sans-serif !important;
-
-  .total-harga {
-    font-weight: bold;
+  #note-list{
     font-size: 11pt !important;
-    padding: 1px !important;
   }
-  .angka-kanan{
-    text-align: right;
-    margin-right: 1ch;
-    font-size: 8pt !important;
-  }
-}
+
   body{
     size: A4;
   }
@@ -362,7 +373,7 @@ onMounted(() => {
   /* margin-bottom: 20px; */
 }
 .kop-img {
-  width: 100%;
+  width: 94%;
   height: auto;
 }
 .meta {
@@ -379,7 +390,7 @@ onMounted(() => {
   /* width: 90%; */
   border-collapse: collapse;
   margin: auto;
-  font-size: 24px;
+  font-size: 24px !important;
 }
 
 
@@ -400,10 +411,6 @@ onMounted(() => {
   padding: 2px 4px;
   
   /* text-align: left; */
-}
-
-.table-items tbody td {
-  padding-right: 1px;
 }
 #info-akhir {
   width: 100%;
@@ -469,8 +476,6 @@ div .footer {
 
 .angka-kanan {
   text-align: right;
-  margin-right: 1ch;
-  font-size: 8pt !important;
 }
 
 .angka-kanan .rp {
@@ -481,9 +486,10 @@ div .footer {
 
 .angka-kanan .nilai {
   display: inline-block;
-  min-width: 8ch; /* biarkan panjang angka fleksibel */
+  min-width: 6ch; /* biarkan panjang angka fleksibel */
   text-align: right;
-  /* margin-right: 5px; jarak antara angka dan Rp */
+  
+  margin-right: 5px; /* jarak antara angka dan Rp */
 }
 
 

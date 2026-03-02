@@ -303,7 +303,7 @@ let barangs = hitungInvoiceBarang(surat.barang, surat.ppn)
                   1. Harga {{ surat.ppn == 0 ? 'Tidak' : '' }} Termasuk PPN <span v-if="surat.ppn>0"> {{ surat.ppn }}%</span>
                 </VListItem>
                 <VListItem>
-                  2. Harga {{ !surat.ongkir ? 'Tidak' : '' }} Termasuk Ongkir
+                  2. Harga {{ surat.ongkos_kirim ? 'Sudah' : 'Belum' }} Termasuk Ongkir & {{ surat.instalasi ? 'Sudah' : 'Belum' }} Termasuk Instalasi
                 </VListItem>
                 <VListItem>
                   3. Tempo Pembayaran {{ surat.tempo ? `Hingga ${formatTanggalIndonesia(surat.tanggal_tempo)}`

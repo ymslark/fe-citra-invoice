@@ -1,41 +1,18 @@
 <template>
   <div>
-    <VDialog v-model="isDialogVisible" persistent class="v-dialog-sm">
-
-      <!-- Dialog close btn -->
-      <DialogCloseBtn @click="isDialogVisible = !isDialogVisible" />
-
-      <!-- Dialog Content -->
-      <VCard title="Yakin Ingin Menghapus Data Ini?">
-        <VCardText>
-          Data yang dihapus mungkin tidak dapat dikembalikan.
-        </VCardText>
-
-        <VCardText class="d-flex justify-end gap-3 flex-wrap">
-          <VBtn color="secondary" variant="tonal" @click="isDialogVisible = false">
-            Batal
-          </VBtn>
-          <VBtn @click="isDialogVisible = false">
-            Yakin
-          </VBtn>
-        </VCardText>
-      </VCard>
-    </VDialog>
     <VCard>
       <VCardTitle>
         <div class="">
           <h2 class="text-lg font-weight-medium d-inline">
-            Data Surat Jalan
+            Data Surat Jalan 30 Hari Terakhir
           </h2>
-          <VBtn class="ml-auto d-flex" color="primary" @click="navigateTo('/admin/memo/add')">
-            Tambah Surat Jalan
-          </VBtn>
         </div>
       </VCardTitle>
       <VCardItem>
-        <VRow>
-          <VCol cols="12" offset-md="8" md="4">
-
+        <VRow class="d-flex justify-end">
+          <VCol cols="12" md="4">
+            <AppTextField v-model="search" label="Cari Tujuan" variant="outlined"
+              append-inner-icon="tabler-search" />
           </VCol>
         </VRow>
         <VTable fixed-header class="text-no-wrap mb-4">
@@ -53,14 +30,8 @@
               <th class="text-uppercase">
                 Nama Supir
               </th>
-              <!-- <th class="text-uppercase">
-                Alamat
-              </th> -->
               <th class="text-uppercase">
                 Perusahaan
-              </th>
-              <th class="text-uppercase">
-                Jenis
               </th>
               <th class="text-uppercase">
                 Status
@@ -72,7 +43,7 @@
           </thead>
 
           <tbody>
-            <tr v-if="memos" v-for="(memo, index) in memos" :key="index">
+            <tr v-for="(memo, index) in memos" :key="index">
               <td>
                 {{ index + 1 }}
               </td>
@@ -80,30 +51,44 @@
                 {{ memo.tujuan }}
               </td>
               <td>
-                {{ memo.tanggal }}
+                {{ formatTanggalIndonesia(memo.tanggal) }}
               </td>
               <td>
                 {{ memo.supir.nama_supir }}
               </td>
-              <!-- <td>
-                {{ memo.alamat }}
-              </td> -->
               <td>
                 {{ memo.perusahaan }}
-              </td>
-              <td>
-                {{ memo.jenis_memo }}
               </td>
               <td>
                 <VIcon :color="status[memo.status].color">{{ status[memo.status].icon }}</VIcon>
                 {{ memo.status }}
               </td>
+              <!-- <td>
+                <IconBtn size="38" @click="goToDetailPage(surat._id)">
+                  <VTooltip open-on-focus location="top" activator="parent">
+                    Detail
+                  </VTooltip>
+                  <VIcon>tabler-info-circle</VIcon>
+                </IconBtn>
+                <IconBtn size="38" @click="goToEditPage(surat._id)">
+                  <VTooltip open-on-focus location="top" activator="parent">
+                    Edit
+                  </VTooltip>
+                  <VIcon>tabler-edit</VIcon>
+                </IconBtn>
+                <IconBtn size="38" @click="navigateTo(`/admin/SCI/print/invoice?id=${surat._id}`)">
+                  <VTooltip open-on-focus location="top" activator="parent">
+                    Hapus
+                  </VTooltip>
+                  <VIcon>tabler-trash</VIcon>
+                </IconBtn>
+              </td> -->
               <td>
                 <VBtn size="38" icon color="primary" title="Detail">
                   <VTooltip open-on-focus location="top" activator="parent">
                     Detail
                   </VTooltip>
-                  <VIcon @click="navigateTo({ name: `admin-memo-detail-id`, params: { id: memo._id } })">
+                  <VIcon @click="goToDetailPage(memo._id)">
                     tabler-info-circle</VIcon>
                 </VBtn>
                 <VBtn size="38" class="ml-2" icon color="warning" title="Edit">
@@ -123,6 +108,8 @@
             </tr>
           </tbody>
         </VTable>
+        <!-- <div class="d-flex justify-end">
+        </div> -->
         <VPagination v-model="currentPage" :length="totalPages" />
       </VCardItem>
     </VCard>
@@ -130,10 +117,73 @@
 </template>
 
 <script setup>
+
+definePageMeta({
+  middleware: 'auth-client',
+  requiresAuth: true,
+})
+import { useMemoStore } from '@/stores/memo'
+import {useAlertStore} from '@/stores/alert'
+import { buildQueryFilterParams } from '@/utils/apiFilterQuery'
+
+
 const { $api } = useNuxtApp()
+const memo = useMemoStore()
+const alert = useAlertStore()
+const currentPage = ref(1)
+const memos = ref([])
+const totalPages = ref(1)
 
-const isDialogVisible = ref(false)
+const filterData = async (page = 1) => {
+  try {
 
+    const query = buildQueryFilterParams({ page, search: search.value, limit:30 }, true);
+    const response = await $api.get('/Memo', { ...query });
+    console.log(response)
+    memos.value = response.docs
+    totalPages.value = response.totalPages // backend kirim total halaman
+    currentPage.value = response.page
+    //console.log(memos.value)
+  } catch (error) {
+    //console.log(error.message)
+    alert.showAlertObject({
+      type: 'error',
+      message: error.message || 'Gagal mengambil data',
+    })
+  }
+}
+
+// Ambil data dari backend, backend sudah siapkan pagination
+// const fetchItems = async (page = 1) => {
+//   try {
+//     const response = await $api.get(`/SCI?page=${page}&limit=10`)
+//     //console.log(response)
+//     memos.value = response.docs
+//     totalPages.value = response.totalPages // backend kirim total halaman
+//   } catch (error) {
+//     console.error('Gagal mengambil data:', error)
+//   }
+// }
+
+watch(currentPage, (page) => {
+  if (search.value.length >= 3) {
+    filterData(page)
+  }
+  else if (search.value.length === 0) {
+    //console.log(page)
+    filterData(page)
+  }
+
+})
+
+
+
+let smallPagination = ref(3)
+let supir = {
+  nama: '',
+  no_telp: '',
+  no_kendaraan: '',
+}
 let status = {
   'WAITING': {
     icon: 'tabler-hourglass',
@@ -152,47 +202,59 @@ let status = {
     color: 'error'
   }
 }
-// const memos = await $api.get('/memo')
-// console.log(memos.docs)
-
-const deleteMemo = async (id) => {
-  try {
-
-    const response = await $api.delete(`/memo/${id}`)
-    console.log(response)
-  } catch (error) {
-    console.log(error)
-  }
-}
+// let memos = await sci.getSCI()
+// //console.log(memos)
 
 function goToDetailPage(id) {
-  navigateTo(`memo/detail/${id}`)
+  navigateTo({ name: `admin-memo-detail-id`, params: { id } })
 }
 
 function goToEditPage(id) {
   navigateTo(`memo/edit/${id}`)
 }
 
-const currentPage = ref(1)
-const memos = ref([])
-const totalPages = ref(1)
+const search = ref('')
 
-// Ambil data dari backend, backend sudah siapkan pagination
-const fetchItems = async (page = 1) => {
-  try {
-    const response = await $api.get(`/memo?page=${page}&limit=20`)
-    console.log(response)
-    memos.value = response.docs
-    totalPages.value = response.totalPages // backend kirim total halaman
-    console.log(memos.value)
-  } catch (error) {
-    console.error('Gagal mengambil data:', error)
-  }
-}
+//fungsi untuk search data
 
-watch(currentPage, (page) => {
-  fetchItems(page)
-})
+// watch(search, (newValue) => {
+//   if (newValue.length >= 3) {
+//     //console.log(newValue)
+//   } else if (newValue.length === 0) {
+//     //console.log(newValue)
+//   }
+// })
 
-fetchItems(currentPage.value)
+
+
+// const getDocumentByRange = async (page) => {
+//   try {
+//     let start = ''
+//     let end = ''
+//     if (!dateRange.value) throw { message: 'Pilih rentang tanggal terlebih dahulu' }
+//     let range = dateRange.value.split(' to ')
+//     //console.log(range)
+//     if( range.length == 1) {
+//       start = range[0]
+//       end = range[0]
+//     }
+//     else if (range.length == 2) {
+//       start = range[0]
+//       end = range[1]
+//     }
+//     const response = await sci.getSCIByPeriods(start, end, page, search.value)
+//     //console.log(response)
+//     surats.value = response.docs
+//     totalPages.value = response.totalPages // backend kirim total halaman
+//     // currentPage.value = page || 1
+//     //console.log(surats.value)
+//   } catch (error) {
+//     //console.log(error.message)
+//     alert.showAlertObject({
+//       type: 'error',
+//       message: error.message || 'Gagal mengambil data',
+//     })
+//   }
+// }
+filterData(1)
 </script>

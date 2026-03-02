@@ -186,17 +186,18 @@ onMounted(async () => {
           <td class="bl-0 br-0 font-normal" colspan="7">
             <span class=" m-left">Note:</span>
             <ol id="note-list">
-              <li v-if="surat.ppn > 0" >Harga Termasuk PPN {{surat.ppn}}%</li>
-              <li v-else>Harga Tidak Termasuk PPN</li>
-              <li v-if="surat.ongkos_kirim && surat.instalasi">Harga Sudah Termasuk Ongkos Kirim & Sudah Termasuk Biaya
+              <li v-if="surat.ppn > 0" >Harga sudah termasuk PPN {{surat.ppn}}%</li>
+              <li v-else>Harga tidak termasuk PPN</li>
+              <li>Harga <b>{{ surat.ongkos_kirim ? 'sudah' : 'belum' }}</b> termasuk ongkos kirim & <b>{{ surat.instalasi ? 'sudah' : 'belum' }}</b> termasuk instalasi</li>
+              <!-- <li v-if="surat.ongkos_kirim && surat.instalasi">Harga Sudah Termasuk Ongkos Kirim & Sudah Termasuk Biaya
                 Instalasi</li>
               <li v-else-if="surat.instalasi">Harga Sudah Termasuk Biaya Instalasi</li>
-              <li v-else-if="surat.ongkos_kirim">Harga Sudah Termasuk Biaya Ongkos Kirim</li>
+              <li v-else-if="surat.ongkos_kirim">Harga Sudah Termasuk Biaya Ongkos Kirim</li> -->
               <li v-if="surat.tempo">Tempo pembayaran hingga {{ formatTanggalIndonesia(surat.tanggal_tempo) }}</li>
               <li v-else>{{ surat.catatan_tempo }}</li>
               <!-- <li v-for="(note, index) in surat.catatan" :key="index" v-if="note.length > 3">{{note}}</li> -->
                <li v-if="surat.catatan[0] && surat.catatan[0].length > 3">{{ surat.catatan[0] }}</li>
-              <li>Pembayaran Via Transfer</li>
+              <li>Pembayaran via transfer</li>
             </ol>
           </td>
         </tr>
@@ -351,7 +352,7 @@ onMounted(async () => {
   }
 /* 5%, 35%, 12%, 8%, 12%, 8%, 20% */
   .table-items thead th:first-child {
-    width: 3% !important;
+    width: 4% !important;
   }
 
   .table-items thead th:nth-child(2) {
@@ -635,7 +636,7 @@ table.rekening {
   display: inline-block;
   min-width: 7ch; /* biarkan panjang angka fleksibel */
   text-align: right;
-  margin-right: 2pt; /* jarak antara angka dan Rp */
+  margin-right: 1pt; /* jarak antara angka dan Rp */
 }
 
 </style>
