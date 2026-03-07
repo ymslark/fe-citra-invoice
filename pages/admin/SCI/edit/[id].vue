@@ -1,36 +1,36 @@
 <script setup>
 import { useAlertStore } from '@/stores/alert'
-import { useCFStore } from '@/stores/cf'
+import { useSCIStore } from '@/stores/sci'
 import { navigateTo } from 'nuxt/app'
 import { VForm } from 'vuetify/components/VForm'
 
-const cf = useCFStore()
+const sci = useSCIStore()
 const route = useRoute()
 const id = route.params.id
-// const addedBarang = cf.addedBarang
+// const addedBarang = sci.addedBarang
 let alert = useAlertStore()
 
 const allowedStatus = ['WAITING', 'PROCCESS', 'DONE', 'CANCEL']
 const { $api } = useNuxtApp()
-await cf.editSuratCF(id)
+await sci.editSuratSCI(id)
 
 if (id) {
   try {
-    const response = await cf.editSuratCF(id)
+    const response = await sci.editSuratSCI(id)
     // console.log(response)
-    cf.editSurat = response.doc
-    cf.insertTempIdEdit()
-    // delete cf.editSurat._id
-    // delete cf.editSurat.__v
-    // delete cf.editSurat.createdAt
-    // delete cf.editSurat.updatedAt
+    sci.editSurat = response.doc
+    sci.insertTempIdEdit()
+    // delete sci.editSurat._id
+    // delete sci.editSurat.__v
+    // delete sci.editSurat.createdAt
+    // delete sci.editSurat.updatedAt
   } catch (error) {
-    // console.error("Error fetching CF data:", error)
+    // console.error("Error fetching SCI data:", error)
     // alert.showAlertObject({
-    //   message: 'Gagal mengambil data CF',
+    //   message: 'Gagal mengambil data SCI',
     //   type: 'error',
     // })
-    // navigateTo({ name: 'admin-CF' })
+    // navigateTo({ name: 'admin-SCI' })
 
   }
 }
@@ -42,18 +42,18 @@ const store = async () => {
     // console.log(valid)
 
     if (!valid.valid) { window.scrollTo(0, 0); return }
-    if (cf.editSurat.barang.length == 0) throw { message: 'Barang tidak boleh kosong' }
+    if (sci.editSurat.barang.length == 0) throw { message: 'Barang tidak boleh kosong' }
 
-    const response = await cf.updateCF(id)
+    const response = await sci.updateSCI(id)
     // console.log(response)
     alert.showAlertObject({
-      message: 'Berhasil Mengubah Surat Citra Furniture',
+      message: 'Berhasil Mengubah Surat Sentral Citra',
       type: 'success',
     })
     window.scrollTo(0, 0)
 
     setTimeout(() => {
-      navigateTo({ name: 'admin-CF-detail-id', params: { id: id } })
+      navigateTo({ name: 'admin-SCI-detail-id', params: { id: id } })
     }, 4000)
 
   } catch (error) {
@@ -64,7 +64,7 @@ const store = async () => {
       type: 'error',
     })
     // setTimeout(() => {
-    //   cf.setAlertNull()
+    //   sci.setAlertNull()
     // }, 4000)
   }
 }
@@ -84,21 +84,21 @@ function scrollTo(id) {
   }
 }
 const tambahBarang = () => {
-  cf.addBarangEdit()
+  sci.addBarangEdit()
 
-  console.log(cf.editSurat.barang.length)
-  const idItem = `item-${cf.editSurat.barang.length}`
+  console.log(sci.editSurat.barang.length)
+  const idItem = `item-${sci.editSurat.barang.length}`
   // scrollTo(idItem)
   setTimeout(() => {
     scrollTo(idItem)
   }, 200);
 }
-await cf.getConfig()
-// await cf.getCFRequestById(id)
-const config = cf.config
+await sci.getConfig()
+// await sci.getSCIRequestById(id)
+const config = sci.config
 let rekeningList = config.rekening
 
-const surat = cf.editSurat
+const surat = sci.editSurat
 
 let ppnSelection = [
   { title: 'Ya', value: config.ppn },
@@ -159,7 +159,7 @@ let timeout = null
 const refForm = ref()
 
 const toDetailPage = () => {
-  navigateTo(`/admin/CF/detail/${id}`,)
+  navigateTo(`/admin/SCI/detail/${id}`,)
 }
 
 //Testing Code
@@ -179,7 +179,7 @@ const barangs = res.Barangs
     <VForm ref="refForm" @submit.prevent>
       <VCard class="mt-4">
         <VCardTitle>
-          Edit Surat Citra Furniture
+          Edit Surat Sentral Citra
         </VCardTitle>
         <Tes />
         <VCardItem>
@@ -232,8 +232,8 @@ const barangs = res.Barangs
           </VCol>
         </VRow>
         <VCardItem>
-          <VCol cols="12" v-for="(barang, index) in cf.editSurat.barang" :key="barang._tempId" :id="`item-${index+1}`">
-            <CFAddBarangEdit :barang="barang" :index="index" :items="barangs" />
+          <VCol cols="12" v-for="(barang, index) in sci.editSurat.barang" :key="barang._tempId" :id="`item-${index+1}`">
+            <SCIAddBarangEdit :barang="barang" :index="index" :items="barangs" />
           </VCol>
           </VCardItem>
       </VCard>

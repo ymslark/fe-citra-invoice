@@ -4,7 +4,7 @@
       <VCardTitle>
         <div class="">
           <h3 class="font-weight-medium text-wrap">
-            Data Surat Citra Furniture 30 Hari Terakhir
+            Data Surat Sentral Citra 30 Hari Terakhir
           </h3>
         </div>
       </VCardTitle>
@@ -67,7 +67,7 @@
                   <VTooltip open-on-focus location="top" activator="parent">
                     Edit
                   </VTooltip>
-                  <VIcon @click="navigateTo({ name: `admin-CF-edit-id`, params: { id: surat._id } })">tabler-edit
+                  <VIcon @click="navigateTo({ name: `admin-SCI-edit-id`, params: { id: surat._id } })">tabler-edit
                   </VIcon>
                 </VBtn> -->
                 <!-- <VBtn size="38" class="ml-2" icon color="error" title="Hapus">
@@ -96,11 +96,11 @@ definePageMeta({
   // roles: ['admin', 'superadmin'],
 })
 import { toRaw } from 'vue'
-import { useCFStore } from '@/stores/cf'
+import { useSCIStore } from '@/stores/sci'
 import {buildQueryFilterParams} from '@/utils/apiFilterQuery'
 
 const { $api } = useNuxtApp()
-const cf = useCFStore()
+const sci = useSCIStore()
 const alert = useAlertStore()
 const currentPage = ref(1)
 let surats = []
@@ -112,7 +112,7 @@ let suratsFiltered = ref([])
 const fetchIndex = async (page = 1) => { 
   try {
     const query = buildQueryFilterParams({ limit:10, page, search: search.value}, true); // defaultLast30Days = true
-    const res = await $api.get("/CF/filterData", { ...query });
+    const res = await $api.get("/SCI/filterData", { ...query });
     
     surats = res.docs;
     totalPages.value = res.totalPages;
@@ -129,7 +129,7 @@ const fetchIndex = async (page = 1) => {
 // Ambil data dari backend, backend sudah siapkan pagination
 // const fetchItems = async (page = 1) => {
 //   try {
-//     const response = await $api.get(`/CF/?page=${page}&limit=10`)
+//     const response = await $api.get(`/SCI/?page=${page}&limit=10`)
 //     // console.log(response)
 //     surats.value = response.docs
 //     totalPages.value = response.totalPages // backend kirim total halaman
@@ -176,15 +176,15 @@ let status = {
     color: 'error'
   }
 }
-// let surats = await cf.getCF()
+// let surats = await sci.getSCI()
 // // console.log(surats)
 
 function goToDetailPage(id) {
-  navigateTo({ name: `admin-CF-detail-id`, params: { id } })
+  navigateTo({ name: `admin-SCI-detail-id`, params: { id } })
 }
 
 function goToEditPage(id) {
-  navigateTo(`CF/edit/${id}`)
+  navigateTo(`SCI/edit/${id}`)
 }
 
 

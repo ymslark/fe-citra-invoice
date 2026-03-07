@@ -4,14 +4,14 @@ definePageMeta({
   backgroundColor: '#FFFFFF'
 })
 import { useAlertStore } from '@/stores/alert'
-import { useCFStore } from '@/stores/cf'
+import { useSCIStore } from '@/stores/sci'
 import { formatRupiah, formatTanggalIndonesia, pembilang } from '@/utils/format'
 import {  hitungInvoiceBarang } from '@/utils/invoice/hitungInvoiceBarang'
 import { getDate } from '@/utils/global'
 import jsPDF from 'jspdf'
 const route = useRoute()
 const router = useRouter()
-const cf = useCFStore()
+const sci = useSCIStore()
 const id = route.query.id || null
 const alert = useAlertStore()
 const printArea = ref(null)
@@ -22,13 +22,13 @@ if (!id) {
     timeout: 3000
   })
   console.error('ID tidak ditemukan')
-  navigateTo({ name: 'admin-CF' })
+  navigateTo({ name: 'admin-SCI' })
 }
 let surat = null
 let barang = null
 try {
-  await cf.getCFById(id)
-  surat = cf.surat
+  await sci.getSCIById(id)
+  surat = sci.surat
   // // console.log(surat.doc)
   barang = hitungInvoiceBarang(surat.barang, surat.ppn) 
   // console.log(barang)
@@ -41,13 +41,13 @@ try {
 
 // onMounted(() => {
 //   if(process.client){
-//     document.title = surat.no_seri + ' Surat Penawaran ' + surat.tujuan + ' - Citra Furniture'
+//     document.title = surat.no_seri + ' Surat Penawaran ' + surat.tujuan + ' - Sentral Citra'
 //     setTimeout(() => {
 //       window.print()
 //     }, 1000)
 
 //     window.addEventListener('afterprint', () => {
-//         window.location.replace('/admin/CF/detail/' + id)
+//         window.location.replace('/admin/SCI/detail/' + id)
 //     })
 //   }
 // })
@@ -59,7 +59,7 @@ onMounted(async () => {
     window.print()
   }, 1000)
     window.addEventListener('afterprint', () => {
-      window.location.replace('/admin/CF/detail/' + id)
+      window.location.replace('/admin/SCI/detail/' + id)
     })
 })
 
@@ -69,7 +69,7 @@ onMounted(async () => {
     <div class="header">
       <img 
         class="kop-img" 
-        src="/images/citragroup/CF/CF_Kop.jpeg" 
+        src="/images/citragroup/SCI/SCI_Kop.jpg" 
         alt="" 
         srcset="">
     </div>
@@ -223,8 +223,8 @@ onMounted(async () => {
       <div class="footer-surat">
         <div class="tanggal">Bekasi, {{ formatTanggalIndonesia(getDate()) }}</div>
         <div class="mt-n3">Hormat Kami</div>
-        <img src="/images/citragroup/CF/CF_Logo.png" alt="Logo Perusahaan" />
-        <div class="nama-perusahaan">Citra Furniture Indonesia</div>
+        <img src="/images/citragroup/SCI/SCI_Logo.png" alt="Logo Perusahaan" />
+        <div class="nama-perusahaan">Sentral Citra Indonesia</div>
       </div>
     </div>
   

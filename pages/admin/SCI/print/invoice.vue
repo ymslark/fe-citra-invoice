@@ -4,13 +4,13 @@ definePageMeta({
   backgroundColor: '#FFFFFF'
 })
 import { useAlertStore } from '@/stores/alert'
-import { useCFStore } from '@/stores/cf'
+import { useSCIStore } from '@/stores/sci'
 import { formatRupiah, formatTanggalIndonesia, pembilang } from '@/utils/format'
 import { hitungInvoiceBarang } from '@/utils/invoice/hitungInvoiceBarang'
 import { getDate } from '@/utils/global'
 const route = useRoute()
 const router = useRouter()
-const cf = useCFStore()
+const sci = useSCIStore()
 const id = route.query.id || null
 const alert = useAlertStore()
 let surat = null
@@ -24,10 +24,10 @@ if (!id) {
     timeout: 3000
   })
   console.error('ID tidak ditemukan')
-  navigateTo({ name: 'admin-CF' })
+  navigateTo({ name: 'admin-SCI' })
 }
 try {
-  const response = await cf.getCFById(id)
+  const response = await sci.getSCIById(id)
   surat = response.doc
   console.log(surat)
   barang = hitungInvoiceBarang(surat.barang, surat.ppn)
@@ -47,23 +47,23 @@ try {
 onMounted(async () => {
   // await fetchData()
   await nextTick()
-  document.title = surat.no_seri + ' Invoice ' + surat.tujuan + ' - Citra Furniture'
+  document.title = surat.no_seri + ' Invoice ' + surat.tujuan + ' - Sentral Citra'
 
   setTimeout(() => {
     window.print()
   }, 2000)
     window.addEventListener('afterprint', () => {
-      window.location.replace('/admin/CF/detail/' + id)
+      window.location.replace('/admin/SCI/detail/' + id)
     })
 })
 // onMounted(() => {
 //   if(process.client){
-//     document.title = surat.no_seri + ' Invoice ' + surat.tujuan + ' - Citra Furniture'
+//     document.title = surat.no_seri + ' Invoice ' + surat.tujuan + ' - Sentral Citra'
 //     setTimeout(() => {
 //       window.print()
 //     }, 1000)
 //       window.addEventListener('afterprint', () => {
-//         window.location.replace('/admin/CF/detail/' + id)
+//         window.location.replace('/admin/SCI/detail/' + id)
 //       })
 //   }
 // })
@@ -72,7 +72,7 @@ onMounted(async () => {
 
 <template>
   <div class="header">
-    <img class="kop-img" src="/images/citragroup/CF/CF_Kop.jpeg" alt="" srcset="">
+    <img class="kop-img" src="/images/citragroup/SCI/SCI_Kop.jpg" alt="" srcset="">
   </div>
 
   <!-- box -->
@@ -230,8 +230,8 @@ onMounted(async () => {
         </td>
         <td class="br-0">
           <div>Bekasi, {{ formatTanggalIndonesia(getDate()) }}</div>
-          <img src="/images/citragroup/CF/CF_Logo.png" id="logo">
-          <div>Citra Furniture Indonesia</div>
+          <img src="/images/citragroup/SCI/SCI_Logo.png" id="logo">
+          <div>Sentral Citra Indonesia</div>
         </td>
       </tr>
     </table>
