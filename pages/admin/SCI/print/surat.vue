@@ -4,14 +4,14 @@ definePageMeta({
   backgroundColor: '#FFFFFF'
 })
 import { useAlertStore } from '@/stores/alert'
-import { useSCIStore } from '@/stores/sci'
+import { useCFStore } from '@/stores/cf'
 import { formatRupiah, formatTanggalIndonesia, pembilang } from '@/utils/format'
 import {  hitungInvoiceBarang } from '@/utils/invoice/hitungInvoiceBarang'
 import { getDate } from '@/utils/global'
 import jsPDF from 'jspdf'
 const route = useRoute()
 const router = useRouter()
-const sci = useSCIStore()
+const cf = useCFStore()
 const id = route.query.id || null
 const alert = useAlertStore()
 const printArea = ref(null)
@@ -22,13 +22,13 @@ if (!id) {
     timeout: 3000
   })
   console.error('ID tidak ditemukan')
-  navigateTo({ name: 'admin-SCI' })
+  navigateTo({ name: 'admin-CF' })
 }
 let surat = null
 let barang = null
 try {
-  await sci.getSCIById(id)
-  surat = sci.surat
+  await cf.getCFById(id)
+  surat = cf.surat
   // // console.log(surat.doc)
   barang = hitungInvoiceBarang(surat.barang, surat.ppn) 
   // console.log(barang)
@@ -41,13 +41,13 @@ try {
 
 // onMounted(() => {
 //   if(process.client){
-//     document.title = surat.no_seri + ' Surat Penawaran ' + surat.tujuan + ' - Sentral Citra'
+//     document.title = surat.no_seri + ' Surat Penawaran ' + surat.tujuan + ' - Citra Furniture'
 //     setTimeout(() => {
 //       window.print()
 //     }, 1000)
 
 //     window.addEventListener('afterprint', () => {
-//         window.location.replace('/admin/SCI/detail/' + id)
+//         window.location.replace('/admin/CF/detail/' + id)
 //     })
 //   }
 // })
@@ -59,7 +59,7 @@ onMounted(async () => {
     window.print()
   }, 1000)
     window.addEventListener('afterprint', () => {
-      window.location.replace('/admin/SCI/detail/' + id)
+      window.location.replace('/admin/CF/detail/' + id)
     })
 })
 
@@ -69,7 +69,7 @@ onMounted(async () => {
     <div class="header">
       <img 
         class="kop-img" 
-        src="/images/citragroup/SCI/SCI_Kop.jpg" 
+        src="/images/citragroup/CF/CF_Kop.jpeg" 
         alt="" 
         srcset="">
     </div>
@@ -111,16 +111,16 @@ onMounted(async () => {
             <td v-else class="text-uppercase text-wrap" style="padding-left: 1ch !important;">{{ item.nama_barang }}</td>
   
             <td class="angka-kanan">
-              <span class="rp">Rp.</span>
+              <span class="rp">Rp</span>
               <span class="nilai">{{ formatRupiah(item.dpp_tanpa_diskon) }}</span>
             </td>
             <td class="text-center" id="qty" style="padding: 1pt;">{{ item.qty }}</td>
             <td class="angka-kanan">
-              <span class="rp">Rp.</span>
+              <span class="rp">Rp</span>
               <span class="nilai">{{ formatRupiah(item.total_dpp_tanpa_diskon) }}</span>
             </td>
             <td class="angka-kanan">
-              <span class="rp">Rp.</span>
+              <span class="rp">Rp</span>
               <span class="nilai">{{ formatRupiah(item.total_diskon) }}</span>
             </td>
             <td class="angka-kanan">
@@ -131,7 +131,7 @@ onMounted(async () => {
   
           <tr style="font-weight: bold;">
             <td colspan="3" class="br-0"></td>
-            <td class="bl-0">Total</td>
+            <td class="bl-0" style="font-size: 9pt !important;">Total</td>
             <td class="angka-kanan">
               <span class="rp">Rp</span>
               <span class="nilai">{{formatRupiah( barang.dpp_tanpa_diskon )}}</span>
@@ -172,7 +172,7 @@ onMounted(async () => {
           </tr> -->
           <tr v-if="surat.ppn > 0">
             <td colspan="5" class="br-0"></td>
-            <td class="bl-0">PPN 11%</td>
+            <td class="bl-0" style="font-size: 9pt !important;">PPN 11%</td>
             <td class="angka-kanan">
               <span class="rp">Rp</span>
               <span class="nilai">{{formatRupiah( barang.ppn )}}</span>
@@ -180,9 +180,9 @@ onMounted(async () => {
           </tr>
           <tr style="font-weight: bold;">
             <td colspan="5" class="br-0"></td>
-            <td class="bl-0">Total</td>
+            <td class="bl-0" style="font-size: 9pt !important;">Total</td>
             <td class="angka-kanan">
-              <span class="rp">Rp.</span>
+              <span class="rp">Rp</span>
               <span class="nilai">{{ formatRupiah(surat.harga_akhir) }}</span>
             </td>
           </tr>
@@ -193,10 +193,12 @@ onMounted(async () => {
         <ol id="note-list">
           <li v-if="surat.ppn > 0" >Harga Termasuk PPN {{surat.ppn}}%</li>
           <li v-else>Harga Tidak Termasuk PPN</li>
-          <li v-if="surat.ongkos_kirim && surat.instalasi">Harga Sudah Termasuk Ongkos Kirim & Sudah Termasuk Biaya
+          <li>Harga <b>{{ surat.ongkos_kirim ? 'sudah' : 'belum' }}</b> termasuk ongkos kirim & <b>{{ surat.instalasi ? 'sudah' : 'belum' }}</b> termasuk instalasi</li>
+
+          <!-- <li v-if="surat.ongkos_kirim && surat.instalasi">Harga Sudah Termasuk Ongkos Kirim & Sudah Termasuk Biaya
             Instalasi</li>
           <li v-else-if="surat.instalasi">Harga Sudah Termasuk Biaya Instalasi</li>
-          <li v-else-if="surat.ongkos_kirim">Harga Sudah Termasuk Biaya Ongkos Kirim</li>
+          <li v-else-if="surat.ongkos_kirim">Harga Sudah Termasuk Biaya Ongkos Kirim</li> -->
           <!-- <li v-if="surat.catatan[0].length > 3">{{surat.catatan[0]}}</li> -->
           <li>Pembayaran Via Transfer ke rekening :</li>
         </ol>
@@ -221,8 +223,8 @@ onMounted(async () => {
       <div class="footer-surat">
         <div class="tanggal">Bekasi, {{ formatTanggalIndonesia(getDate()) }}</div>
         <div class="mt-n3">Hormat Kami</div>
-        <img src="/images/citragroup/SCI/SCI_Logo.png" alt="Logo Perusahaan" />
-        <div class="nama-perusahaan">Sentral Citra Indonesia</div>
+        <img src="/images/citragroup/CF/CF_Logo.png" alt="Logo Perusahaan" />
+        <div class="nama-perusahaan">Citra Furniture Indonesia</div>
       </div>
     </div>
   
@@ -276,31 +278,31 @@ onMounted(async () => {
 
   .table-items thead th:nth-child(2) {
     width: 27% !important;
-    text-wrap: wrap;
+    white-space: wrap;
     
   }
 
   .table-items thead th:nth-child(3) {
     /* width: 15% !important; */
-    text-wrap: nowrap;
+    white-space: nowrap;
   }
 
   .table-items thead th:nth-child(4) {
     /* width: 5% !important; */
-    text-wrap: nowrap; 
+    white-space: nowrap; 
   }
   .table-items thead th:nth-child(5) {
     /* width: 16% !important; */
-    text-wrap: nowrap;
+    white-space: nowrap;
   }
   .table-items thead th:nth-child(6) {
     /* width: 16% !important; */
-    text-wrap: nowrap;
+    white-space: nowrap;
   }
 
   .table-items thead th:last-child {
     /* width: 18% !important; */
-    text-wrap: nowrap;
+    white-space: nowrap;
   }
   .table-items th, .table-items td {
     border: 1px solid #000000 !important;
@@ -336,12 +338,17 @@ onMounted(async () => {
     padding: 1px;
   }
 
+  span.nilai, .angka-kanan span.rp {
+    font-size: 9pt !important;
+  }
+
   body{
     size: A4;
   }
   @page {
     size: A4;
     margin: 0.5cm;
+    orientation: landscape;
   }
 }
 
@@ -394,7 +401,7 @@ onMounted(async () => {
 }
 
 .table-items th:nth-child(2){
-  text-wrap: wrap;
+  white-space: wrap;
 }
 
 .table-items th,

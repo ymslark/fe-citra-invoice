@@ -286,7 +286,7 @@ const copySelected = () => {
               v-model:selected-radio="selectedRadio" 
               :radio-content="rekeningList"
               :grid-column="{ md: '4', cols: '12' }" 
-              title="Pilih Rekening" 
+              title="Pilih Rekening (wajib dipilih)" 
               @change="cetak" 
               :rules="[requiredValidator]" />
             </VCol>

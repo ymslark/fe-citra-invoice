@@ -1,36 +1,36 @@
 <script setup>
 import { useAlertStore } from '@/stores/alert'
-import { useSCIStore } from '@/stores/sci'
+import { useCFStore } from '@/stores/cf'
 import { navigateTo } from 'nuxt/app'
 import { VForm } from 'vuetify/components/VForm'
 
-const sci = useSCIStore()
+const cf = useCFStore()
 const route = useRoute()
 const id = route.params.id
-// const addedBarang = sci.addedBarang
+// const addedBarang = cf.addedBarang
 let alert = useAlertStore()
 
 const allowedStatus = ['WAITING', 'PROCCESS', 'DONE', 'CANCEL']
 const { $api } = useNuxtApp()
-await sci.editSuratSCI(id)
+await cf.editSuratCF(id)
 
 if (id) {
   try {
-    const response = await sci.editSuratSCI(id)
+    const response = await cf.editSuratCF(id)
     // console.log(response)
-    sci.editSurat = response.doc
-    sci.insertTempIdEdit()
-    // delete sci.editSurat._id
-    // delete sci.editSurat.__v
-    // delete sci.editSurat.createdAt
-    // delete sci.editSurat.updatedAt
+    cf.editSurat = response.doc
+    cf.insertTempIdEdit()
+    // delete cf.editSurat._id
+    // delete cf.editSurat.__v
+    // delete cf.editSurat.createdAt
+    // delete cf.editSurat.updatedAt
   } catch (error) {
-    // console.error("Error fetching SCI data:", error)
+    // console.error("Error fetching CF data:", error)
     // alert.showAlertObject({
-    //   message: 'Gagal mengambil data SCI',
+    //   message: 'Gagal mengambil data CF',
     //   type: 'error',
     // })
-    // navigateTo({ name: 'admin-SCI' })
+    // navigateTo({ name: 'admin-CF' })
 
   }
 }
@@ -42,18 +42,18 @@ const store = async () => {
     // console.log(valid)
 
     if (!valid.valid) { window.scrollTo(0, 0); return }
-    if (sci.editSurat.barang.length == 0) throw { message: 'Barang tidak boleh kosong' }
+    if (cf.editSurat.barang.length == 0) throw { message: 'Barang tidak boleh kosong' }
 
-    const response = await sci.updateSCI(id)
+    const response = await cf.updateCF(id)
     // console.log(response)
     alert.showAlertObject({
-      message: 'Berhasil Mengubah Surat Sentral Citra',
+      message: 'Berhasil Mengubah Surat Citra Furniture',
       type: 'success',
     })
     window.scrollTo(0, 0)
 
     setTimeout(() => {
-      navigateTo({ name: 'admin-SCI-detail-id', params: { id: id } })
+      navigateTo({ name: 'admin-CF-detail-id', params: { id: id } })
     }, 4000)
 
   } catch (error) {
@@ -64,7 +64,7 @@ const store = async () => {
       type: 'error',
     })
     // setTimeout(() => {
-    //   sci.setAlertNull()
+    //   cf.setAlertNull()
     // }, 4000)
   }
 }
@@ -84,21 +84,21 @@ function scrollTo(id) {
   }
 }
 const tambahBarang = () => {
-  sci.addBarangEdit()
+  cf.addBarangEdit()
 
-  console.log(sci.editSurat.barang.length)
-  const idItem = `item-${sci.editSurat.barang.length}`
+  console.log(cf.editSurat.barang.length)
+  const idItem = `item-${cf.editSurat.barang.length}`
   // scrollTo(idItem)
   setTimeout(() => {
     scrollTo(idItem)
   }, 200);
 }
-await sci.getConfig()
-// await sci.getSCIRequestById(id)
-const config = sci.config
+await cf.getConfig()
+// await cf.getCFRequestById(id)
+const config = cf.config
 let rekeningList = config.rekening
 
-const surat = sci.editSurat
+const surat = cf.editSurat
 
 let ppnSelection = [
   { title: 'Ya', value: config.ppn },
@@ -159,7 +159,7 @@ let timeout = null
 const refForm = ref()
 
 const toDetailPage = () => {
-  navigateTo(`/admin/SCI/detail/${id}`,)
+  navigateTo(`/admin/CF/detail/${id}`,)
 }
 
 //Testing Code
@@ -179,20 +179,20 @@ const barangs = res.Barangs
     <VForm ref="refForm" @submit.prevent>
       <VCard class="mt-4">
         <VCardTitle>
-          Edit Surat Sentral Citra
+          Edit Surat Citra Furniture
         </VCardTitle>
         <Tes />
         <VCardItem>
           <VRow>
             <!-- 👉 First Name -->
             <VCol cols="12" md="6">
-              <AppTextField v-model="surat.tujuan" label="Tujuan" placeholder="Tujuan (wajib diisi)" :rules="[requiredValidator]" />
+              <AppTextField v-model="surat.tujuan" label="Tujuan (wajib diisi)" placeholder="Tujuan" :rules="[requiredValidator]" />
             </VCol>
             <VCol cols="12" md="6">
-              <AppTextField v-model="surat.no_hp" label="No. Hp" placeholder="No. Hp (wajib diisi)" :rules="[requiredValidator]" />
+              <AppTextField v-model="surat.no_hp" label="No. Hp (wajib diisi)" placeholder="No. Hp" :rules="[requiredValidator]" />
             </VCol>
             <VCol cols="12" md="6">
-              <AppTextField v-model="surat.hal" label="Hal" placeholder="Hal (wajib diisi)" :rules="[requiredValidator]" />
+              <AppTextField v-model="surat.hal" label="Hal (wajib diisi)" placeholder="Hal" :rules="[requiredValidator]" />
             </VCol>
             <VCol cols="12" md="6">
               <AppTextField v-model="surat.alamat" label="Alamat (wajib diisi)" placeholder="Alamat (wajib diisi)" :rules="[requiredValidator]" />
@@ -232,8 +232,8 @@ const barangs = res.Barangs
           </VCol>
         </VRow>
         <VCardItem>
-          <VCol cols="12" v-for="(barang, index) in sci.editSurat.barang" :key="barang._tempId" :id="`item-${index+1}`">
-            <SCIAddBarangEdit :barang="barang" :index="index" :items="barangs" />
+          <VCol cols="12" v-for="(barang, index) in cf.editSurat.barang" :key="barang._tempId" :id="`item-${index+1}`">
+            <CFAddBarangEdit :barang="barang" :index="index" :items="barangs" />
           </VCol>
           </VCardItem>
       </VCard>

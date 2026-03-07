@@ -4,7 +4,7 @@
       <VCardTitle>
         <div class="">
           <h2 class="text-lg font-weight-medium d-inline">
-            Data Surat Sentral Citra
+            Data Surat Citra Furniture
           </h2>
         </div>
       </VCardTitle>
@@ -67,7 +67,7 @@
                   </VTooltip>
                   <VIcon>tabler-edit</VIcon>
                 </IconBtn>
-                <IconBtn size="38" @click="navigateTo(`/admin/SCI/print/invoice?id=${surat._id}`)">
+                <IconBtn size="38" @click="navigateTo(`/admin/CF/print/invoice?id=${surat._id}`)">
                   <VTooltip open-on-focus location="top" activator="parent">
                     Hapus
                   </VTooltip>
@@ -86,7 +86,7 @@
                   <VTooltip open-on-focus location="top" activator="parent">
                     Edit
                   </VTooltip>
-                  <VIcon @click="navigateTo({ name: `admin-SCI-edit-id`, params: { id: surat._id } })">tabler-edit
+                  <VIcon @click="navigateTo({ name: `admin-CF-edit-id`, params: { id: surat._id } })">tabler-edit
                   </VIcon>
                 </VBtn>
                 <!-- <VBtn size="38" class="ml-2" icon color="error" title="Hapus">
@@ -110,11 +110,11 @@ definePageMeta({
   // middleware: 'auth.client',
   requiresAuth: true,
 })
-import { useSCIStore } from '@/stores/sci'
+import { useCFStore } from '@/stores/cf'
 import { onMounted, ref } from 'vue'
 
 
-const sci = useSCIStore()
+const cf = useCFStore()
 const isDialogVisible = ref(false)
 const firstName = ref('')
 const middleName = ref('')
@@ -147,15 +147,15 @@ let status = {
     color: 'error'
   }
 }
-let surats = await sci.getSCIDeleted()
+let surats = await cf.getCFDeleted()
 // console.log(surats)
 
 function goToDetailPage(id) {
-  navigateTo({ name: `admin-SCI-detail-id`, params: { id } })
+  navigateTo({ name: `admin-CF-detail-id`, params: { id } })
 }
 
 function goToEditPage(id) {
-  navigateTo(`SCI/edit/${id}`)
+  navigateTo(`CF/edit/${id}`)
 }
 
 // function cekButton(i, button){

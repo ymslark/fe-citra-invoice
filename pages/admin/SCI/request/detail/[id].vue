@@ -3,7 +3,7 @@
   <VRow class="mb-4">
     <VCol cols="12" md="6" class="mt-md-5">
       <VCard class="text-black">
-        <VCardTitle class="mb-2"> Detail Request Sentral Citra </VCardTitle>
+        <VCardTitle class="mb-2"> Detail Request Citra Furniture </VCardTitle>
         <VCardText class="d-flex flex-column gap-y-6">
           <div class="d-flex gap-x-3 align-center">
             <VAvatar
@@ -70,7 +70,7 @@
           </div>
         </VCardText>
         <VCardItem>
-          <VBtn color="primary" @click="navigateTo(`/admin/sci/add/${surat._id}`)">Buat Surat Penawaran <VIcon size="28">tabler-truck</VIcon>
+          <VBtn color="primary" @click="navigateTo(`/admin/cf/add/${surat._id}`)">Buat Surat Penawaran <VIcon size="28">tabler-truck</VIcon>
           </VBtn>
         </VCardItem>
       </VCard>
@@ -110,7 +110,7 @@ const id = route.params.id
 let surat = null
 try {
   const {$api} = useNuxtApp()
-  const response = await $api.get(`/Request/detail/SCI/${id}`)
+  const response = await $api.get(`/Request/detail/CF/${id}`)
   surat = response.doc
   // // console.log(surat)
 } catch (error) {

@@ -2,18 +2,18 @@
 definePageMeta({
   middleware: 'auth',
   head: {
-    title: 'Tambah Surat Sentral Citra - Admin',
+    title: 'Tambah Surat Citra Furniture - Admin',
   },
 })
 
 import { useAlertStore } from '@/stores/alert'
-import { useSCIStore } from '@/stores/sci'
+import { useCFStore } from '@/stores/cf'
 import { VForm } from 'vuetify/components/VForm'
 import {ref, nextTick} from 'vue'
-const sci = useSCIStore()
+const cf = useCFStore()
 const route = useRoute()
 const id = route.params.id
-const addedBarang = sci.addedBarang
+const addedBarang = cf.addedBarang
 let alert = useAlertStore()
 
 const { $api } = useNuxtApp()
@@ -25,18 +25,18 @@ const store = async () => {
     // // console.log(valid)
 
     if (!valid.valid) { window.scrollTo(0, 0); return }
-    if (sci.addedBarang.length == 0) throw { message: 'Barang tidak boleh kosong' }
+    if (cf.addedBarang.length == 0) throw { message: 'Barang tidak boleh kosong' }
 
-    const response = await sci.storeSCI()
+    const response = await cf.storeCF()
     // // console.log(response)
     alert.showAlertObject({
-      message: 'Berhasil Menambah Surat Sentral Citra',
+      message: 'Berhasil Menambah Surat Citra Furniture',
       type: 'success',
     })
     window.scrollTo(0, 0)
-    // await sci.setStatusRequest(id)
+    // await cf.setStatusRequest(id)
     setTimeout(() => {
-      navigateTo({ name: 'admin-SCI' })
+      navigateTo({ name: 'admin-CF' })
     }, 4000)
 
   } catch (error) {
@@ -47,7 +47,7 @@ const store = async () => {
       type: 'error',
     })
     // setTimeout(() => {
-    //   sci.setAlertNull()
+    //   cf.setAlertNull()
     // }, 4000)
   }
 }
@@ -64,21 +64,21 @@ async function scrollTo(id) {
   }
 }
 const tambahBarang = () => {
-  sci.addBarang()
+  cf.addBarang()
 
-  console.log(sci.addedBarang.length)
-  const idItem = `item-${sci.addedBarang.length}`
+  console.log(cf.addedBarang.length)
+  const idItem = `item-${cf.addedBarang.length}`
   // scrollTo(idItem)
   setTimeout(() => {
     scrollTo(idItem)
   }, 200);
 }
 
-await sci.getConfig()
-const config = sci.config
+await cf.getConfig()
+const config = cf.config
 const rekeningList = config.rekening
 
-const surat = sci.newSurat
+const surat = cf.newSurat
 
 let ppnSelection = [
   { title: 'Ya', value: config.ppn },
@@ -139,7 +139,7 @@ const barangs = res.Barangs
     <VForm ref="refForm" @submit.prevent>
       <VCard class="mt-4">
         <VCardTitle>
-          Tambah Surat Sentral Citra
+          Tambah Surat Citra Furniture
         </VCardTitle>
         <Tes />
         <VCardItem>
@@ -192,10 +192,10 @@ const barangs = res.Barangs
         </VRow>
         <VCardItem>
           <!-- <VCol cols="12" offset-md="8" md="4">
-          <SCIAddBarang v-for="(barang, index) in sci.addedBarang" :key="index" :barang="barang" :index="index" :items="barangs" />
+          <CFAddBarang v-for="(barang, index) in cf.addedBarang" :key="index" :barang="barang" :index="index" :items="barangs" />
           </VCol> -->
-          <VCol cols="12" v-for="(barang, index) in sci.addedBarang" :key="barang._tempId" :id="`item-${index+1}`" >
-            <SCIAddBarang :barang="barang" :index="index" :items="barangs" />
+          <VCol cols="12" v-for="(barang, index) in cf.addedBarang" :key="barang._tempId" :id="`item-${index+1}`" >
+            <CFAddBarang :barang="barang" :index="index" :items="barangs" />
           </VCol>
         </VCardItem>
       </VCard>

@@ -1,30 +1,30 @@
 <script setup>
 import { useAlertStore } from '@/stores/alert'
-import { useSCIStore } from '@/stores/sci'
+import { useCFStore } from '@/stores/cf'
 // import {html2pdf} from 'html2pdf.js'
 const { $ppn } = useNuxtApp()
 import { formatRupiah, formatTanggalIndonesia } from '@/utils/format'
 import { hitungInvoiceBarang } from '@/utils/invoice/hitungInvoiceBarang'
-const sci = useSCIStore()
+const cf = useCFStore()
 const route = useRoute()
 const id = route.params.id
 const alert = useAlertStore()
 
-await sci.getConfig()
+await cf.getConfig()
 
 const showDialog = ref(false)
 const showDialogRestore = ref(false)
 // // console.log(id)
 let opsi = 2
 try {
-  const response = await sci.getSCIById(id)
+  const response = await cf.getCFById(id)
 
   // // console.log(response)
 } catch (error) {
   // // console.log(error)
 }
-const surat = sci.surat
-const listBarang = sci.surat.barang
+const surat = cf.surat
+const listBarang = cf.surat.barang
 
 const ppnSelection = [
   'Ya',
@@ -61,19 +61,19 @@ const tempoItems = [
 const anu = false
 
 const toEditPage = computed(() => {
-  navigateTo(`/admin/SCI/edit/${id}`)
+  navigateTo(`/admin/CF/edit/${id}`)
 })
 
 
-const deleteSCI = async () => {
+const deleteCF = async () => {
   if (id) {
     try {
-      await sci.deleteSCI(id)
+      await cf.deleteCF(id)
       alert.showAlertObject({
         message: 'Surat berhasil dihapus',
         type: 'success',
       })
-      navigateTo({ name: 'admin-SCI' })
+      navigateTo({ name: 'admin-CF' })
     } catch (error) {
       console.error('Error deleting memo:', error)
       alert.showAlertObject({
@@ -88,17 +88,17 @@ const deleteSCI = async () => {
     })
   }
 }
-const restoreSCI = async () => {
+const restoreCF = async () => {
   if (id) {
     try {
-      await sci.restoreSCI(id)
+      await cf.restoreCF(id)
       alert.showAlertObject({
         message: 'Surat berhasil di-restore',
         type: 'success',
       })
-      sci.surat.isActive = true
+      cf.surat.isActive = true
       showDialogRestore.value = false
-      // navigateTo({ name: 'admin-SCI-detail-id', params: { id } })
+      // navigateTo({ name: 'admin-CF-detail-id', params: { id } })
     } catch (error) {
       console.error('Error deleting memo:', error)
       alert.showAlertObject({
@@ -133,7 +133,7 @@ let barangs = hitungInvoiceBarang(surat.barang, surat.ppn)
                 </VTooltip>
                 <VIcon end icon="tabler-edit"/>
               </VBtn>
-              <VBtn color="info" @click="navigateTo(`/admin/SCI/print/surat?id=${id}`)" class="d-none d-md-inline-block">
+              <VBtn color="info" @click="navigateTo(`/admin/CF/print/surat?id=${id}`)" class="d-none d-md-inline-block">
 >
                 Print Surat
                 <VTooltip open-on-focus location="top" activator="parent">
@@ -141,7 +141,7 @@ let barangs = hitungInvoiceBarang(surat.barang, surat.ppn)
                 </VTooltip>
                 <VIcon end icon="tabler-printer"/>
               </VBtn>
-              <VBtn color="secondary" @click="navigateTo(`/admin/SCI/print/invoice?id=${id}`)"  class="d-none d-md-inline-block">
+              <VBtn color="secondary" @click="navigateTo(`/admin/CF/print/invoice?id=${id}`)"  class="d-none d-md-inline-block">
                 Print Invoice
                 <VTooltip open-on-focus location="top" activator="parent">
                   Print Invoice
@@ -149,7 +149,7 @@ let barangs = hitungInvoiceBarang(surat.barang, surat.ppn)
                 <VIcon end icon="tabler-invoice"/>
               </VBtn>
               <VBtn color="warning"
-              @click="navigateTo(`/admin/memo/add?id=${id}&perusahaan=${sci.perusahaan}`)">
+              @click="navigateTo(`/admin/memo/add?id=${id}&perusahaan=${cf.perusahaan}`)">
                 Buat Surat Jalan
                 <VTooltip open-on-focus location="top" activator="parent">
                   Buat Memo
@@ -170,16 +170,16 @@ let barangs = hitungInvoiceBarang(surat.barang, surat.ppn)
                 <VIcon>tabler-restore</VIcon>
               </VBtn>
               <UtilsConfirmDialog :show="showDialog" message="Apakah Anda Yakin Ingin menghapus surat ini??"
-                @confirm="deleteSCI" @cancel="showDialog = false" />
+                @confirm="deleteCF" @cancel="showDialog = false" />
               <UtilsConfirmDialog :show="showDialogRestore" message="Apakah Anda Yakin Ingin me-restore surat ini??"
-                title="Restore Surat" @confirm="restoreSCI" @cancel="showDialogRestore = false" />              
+                title="Restore Surat" @confirm="restoreCF" @cancel="showDialogRestore = false" />              
             </div>      
   
             </VCardItem>
           </VCard>
           <VCard>
             <VCardTitle>
-              Detail Surat Sentral Citra
+              Detail Surat Citra Furniture
             </VCardTitle>
             <VCardItem>
               <VRow>
@@ -240,14 +240,14 @@ let barangs = hitungInvoiceBarang(surat.barang, surat.ppn)
                 </VTooltip>
                 <VIcon end icon="tabler-edit"/>
               </VBtn>
-              <VBtn color="info" @click="navigateTo(`/admin/SCI/print/surat?id=${id}`)">
+              <VBtn color="info" @click="navigateTo(`/admin/CF/print/surat?id=${id}`)">
                 Print Surat
                 <VTooltip open-on-focus location="top" activator="parent">
                   Print Surat Penawaran
                 </VTooltip>
                 <VIcon end icon="tabler-printer"/>
               </VBtn>
-              <VBtn color="secondary" @click="navigateTo(`/admin/SCI/print/invoice?id=${id}`)">
+              <VBtn color="secondary" @click="navigateTo(`/admin/CF/print/invoice?id=${id}`)">
                 Print Invoice
                 <VTooltip open-on-focus location="top" activator="parent">
                   Print Invoice
@@ -255,7 +255,7 @@ let barangs = hitungInvoiceBarang(surat.barang, surat.ppn)
                 <VIcon end icon="tabler-invoice"/>
               </VBtn>
               <VBtn color="warning"
-              @click="navigateTo(`/admin/memo/add?id=${id}&perusahaan=${sci.perusahaan}`)">
+              @click="navigateTo(`/admin/memo/add?id=${id}&perusahaan=${cf.perusahaan}`)">
                 Buat Surat Jalan
                 <VTooltip open-on-focus location="top" activator="parent">
                   Buat Surat Jalan
@@ -263,7 +263,7 @@ let barangs = hitungInvoiceBarang(surat.barang, surat.ppn)
                 <VIcon end icon="tabler-truck"/>
               </VBtn>
               <!-- <VBtn color="warning"
-              @click="navigateTo(`/admin/memo/add?id=${id}&perusahaan=${sci.perusahaan}`)">
+              @click="navigateTo(`/admin/memo/add?id=${id}&perusahaan=${cf.perusahaan}`)">
                 Buat Surat Permintaan Faktur Pajak
                 <VTooltip open-on-focus location="top" activator="parent">
                   Buat Surat Permintaan Faktur Pajak
@@ -285,9 +285,9 @@ let barangs = hitungInvoiceBarang(surat.barang, surat.ppn)
                 <VIcon>tabler-restore</VIcon>
               </VBtn>
               <UtilsConfirmDialog :show="showDialog" message="Apakah Anda Yakin Ingin menghapus surat ini??"
-                @confirm="deleteSCI" @cancel="showDialog = false" />
+                @confirm="deleteCF" @cancel="showDialog = false" />
               <UtilsConfirmDialog :show="showDialogRestore" message="Apakah Anda Yakin Ingin me-restore surat ini??"
-                title="Restore Surat" @confirm="restoreSCI" @cancel="showDialogRestore = false" />              
+                title="Restore Surat" @confirm="restoreCF" @cancel="showDialogRestore = false" />              
             </div>
             </VCardItem>
           </VCard>

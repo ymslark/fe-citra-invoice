@@ -4,13 +4,13 @@ definePageMeta({
   backgroundColor: '#FFFFFF'
 })
 import { useAlertStore } from '@/stores/alert'
-import { useSCIStore } from '@/stores/sci'
+import { useCFStore } from '@/stores/cf'
 import { formatRupiah, formatTanggalIndonesia, pembilang } from '@/utils/format'
 import { hitungInvoiceBarang } from '@/utils/invoice/hitungInvoiceBarang'
 import { getDate } from '@/utils/global'
 const route = useRoute()
 const router = useRouter()
-const sci = useSCIStore()
+const cf = useCFStore()
 const id = route.query.id || null
 const alert = useAlertStore()
 let surat = null
@@ -24,10 +24,10 @@ if (!id) {
     timeout: 3000
   })
   console.error('ID tidak ditemukan')
-  navigateTo({ name: 'admin-SCI' })
+  navigateTo({ name: 'admin-CF' })
 }
 try {
-  const response = await sci.getSCIById(id)
+  const response = await cf.getCFById(id)
   surat = response.doc
   console.log(surat)
   barang = hitungInvoiceBarang(surat.barang, surat.ppn)
@@ -47,23 +47,23 @@ try {
 onMounted(async () => {
   // await fetchData()
   await nextTick()
-  document.title = surat.no_seri + ' Invoice ' + surat.tujuan + ' - Sentral Citra'
+  document.title = surat.no_seri + ' Invoice ' + surat.tujuan + ' - Citra Furniture'
 
   setTimeout(() => {
     window.print()
   }, 2000)
     window.addEventListener('afterprint', () => {
-      window.location.replace('/admin/SCI/detail/' + id)
+      window.location.replace('/admin/CF/detail/' + id)
     })
 })
 // onMounted(() => {
 //   if(process.client){
-//     document.title = surat.no_seri + ' Invoice ' + surat.tujuan + ' - Sentral Citra'
+//     document.title = surat.no_seri + ' Invoice ' + surat.tujuan + ' - Citra Furniture'
 //     setTimeout(() => {
 //       window.print()
 //     }, 1000)
 //       window.addEventListener('afterprint', () => {
-//         window.location.replace('/admin/SCI/detail/' + id)
+//         window.location.replace('/admin/CF/detail/' + id)
 //       })
 //   }
 // })
@@ -72,7 +72,7 @@ onMounted(async () => {
 
 <template>
   <div class="header">
-    <img class="kop-img" src="/images/citragroup/SCI/SCI_Kop.jpg" alt="" srcset="">
+    <img class="kop-img" src="/images/citragroup/CF/CF_Kop.jpeg" alt="" srcset="">
   </div>
 
   <!-- box -->
@@ -190,10 +190,11 @@ onMounted(async () => {
             <ol id="note-list">
               <li v-if="surat.ppn > 0" >Harga Termasuk PPN {{surat.ppn}}%</li>
               <li v-else>Harga Tidak Termasuk PPN</li>
-              <li v-if="surat.ongkos_kirim && surat.instalasi">Harga Sudah Termasuk Ongkos Kirim & Sudah Termasuk Biaya
+              <li>Harga <b>{{ surat.ongkos_kirim ? 'sudah' : 'belum' }}</b> termasuk ongkos kirim & <b>{{ surat.instalasi ? 'sudah' : 'belum' }}</b> termasuk instalasi</li>
+              <!-- <li v-if="surat.ongkos_kirim && surat.instalasi">Harga Sudah Termasuk Ongkos Kirim & Sudah Termasuk Biaya
                 Instalasi</li>
               <li v-else-if="surat.instalasi">Harga Sudah Termasuk Biaya Instalasi</li>
-              <li v-else-if="surat.ongkos_kirim">Harga Sudah Termasuk Biaya Ongkos Kirim</li>
+              <li v-else-if="surat.ongkos_kirim">Harga Sudah Termasuk Biaya Ongkos Kirim</li> -->
               <li v-if="surat.tempo">Tempo pembayaran hingga {{ formatTanggalIndonesia(surat.tanggal_tempo) }}</li>
               <li v-else>{{ surat.catatan_tempo }}</li>
               <!-- <li v-for="(note, index) in surat.catatan" :key="index" v-if="note.length > 3">{{note}}</li> -->
@@ -229,8 +230,8 @@ onMounted(async () => {
         </td>
         <td class="br-0">
           <div>Bekasi, {{ formatTanggalIndonesia(getDate()) }}</div>
-          <img src="/images/citragroup/SCI/SCI_Logo.png" id="logo">
-          <div>Sentral Citra Indonesia</div>
+          <img src="/images/citragroup/CF/CF_Logo.png" id="logo">
+          <div>Citra Furniture Indonesia</div>
         </td>
       </tr>
     </table>
@@ -669,7 +670,7 @@ table.rekening {
   display: inline-block;
   min-width: 8ch; /* biarkan panjang angka fleksibel */
   text-align: right;
-  margin-right: 5px; /* jarak antara angka dan Rp */
+  margin-right: 2px; /* jarak antara angka dan Rp */
 }
 
 </style>

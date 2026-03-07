@@ -186,13 +186,13 @@ const barangs = res.Barangs
           <VRow>
             <!-- 👉 First Name -->
             <VCol cols="12" md="6">
-              <AppTextField v-model="surat.tujuan" label="Tujuan" placeholder="Tujuan (wajib diisi)" :rules="[requiredValidator]" />
+              <AppTextField v-model="surat.tujuan" label="Tujuan (wajib diisi)" placeholder="Tujuan" :rules="[requiredValidator]" />
             </VCol>
             <VCol cols="12" md="6">
-              <AppTextField v-model="surat.no_hp" label="No. Hp" placeholder="No. Hp (wajib diisi)" :rules="[requiredValidator]" />
+              <AppTextField v-model="surat.no_hp" label="No. Hp (wajib diisi)" placeholder="No. Hp" :rules="[requiredValidator]" />
             </VCol>
             <VCol cols="12" md="6">
-              <AppTextField v-model="surat.hal" label="Hal" placeholder="Hal (wajib diisi)" :rules="[requiredValidator]" />
+              <AppTextField v-model="surat.hal" label="Hal (wajib diisi)" placeholder="Hal" :rules="[requiredValidator]" />
             </VCol>
             <VCol cols="12" md="6">
               <AppTextField v-model="surat.alamat" label="Alamat (wajib diisi)" placeholder="Alamat (wajib diisi)" :rules="[requiredValidator]" />

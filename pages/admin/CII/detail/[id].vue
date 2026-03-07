@@ -296,7 +296,7 @@ console.log(interiors)
                 <VTooltip open-on-focus location="top" activator="parent">
                   Restore Surat
                 </VTooltip>
-                <VIcon>tabler-restore</VIcon>
+                <VIcon end icon="tabler-restore"/>
               </VBtn>
               <UtilsConfirmDialog :show="showDialog" message="Apakah Anda Yakin Ingin menghapus surat ini??"
                 @confirm="deleteCII" @cancel="showDialog = false" />

@@ -216,10 +216,10 @@ const toDetailPage = () => {
           <VRow>
             <!-- 👉 First Name -->
             <VCol cols="12" md="6">
-              <AppTextField v-model="surat.tujuan" label="Tujuan" placeholder="Tujuan" :rules="[requiredValidator]" />
+              <AppTextField v-model="surat.tujuan" label="Tujuan (wajib diisi)" placeholder="Tujuan" :rules="[requiredValidator]" />
             </VCol>
             <VCol cols="12" md="6">
-              <AppTextField v-model="surat.hal" label="Hal" placeholder="Hal" :rules="[requiredValidator]" />
+              <AppTextField v-model="surat.hal" label="Hal (wajib diisi)" placeholder="Hal" :rules="[requiredValidator]" />
             </VCol>
 
 
@@ -227,19 +227,19 @@ const toDetailPage = () => {
 
             <!-- 👉 Country -->
             <VCol cols="12" md="6">
-              <AppDateTimePicker v-model="surat.tanggal" label="Tanggal" placeholder="Pilih Tanggal"
+              <AppDateTimePicker v-model="surat.tanggal" label="Tanggal (wajib diisi)" placeholder="Pilih Tanggal"
                 :rules="[requiredValidator]" />
             </VCol>
             <VCol cols="12" md="6">
-              <AppTextField v-model="surat.no_hp" label="Nomor Hp" placeholder="Nomor Hp"
+              <AppTextField v-model="surat.no_hp" label="Nomor Hp (wajib diisi)" placeholder="Nomor Hp"
                 :rules="[requiredValidator]" />
             </VCol>
             <VCol cols="12" md="6">
-              <AppTextarea v-model="surat.alamat" label="Alamat" placeholder="Alamat"
+              <AppTextarea v-model="surat.alamat" label="Alamat (wajib diisi)" placeholder="Alamat"
                 :rules="[requiredValidator]" rows="1" auto-grow />
             </VCol>
             <VCol cols="12" md="6">
-              <AppSelect v-model="surat.status" :items="allowedStatus" label="Status" placeholder="Pilih Status"
+              <AppSelect v-model="surat.status" :items="allowedStatus" label="Status (wajib diisi)" placeholder="Pilih Status"
                 :rules="[requiredValidator]" />
             </VCol>
 
@@ -334,7 +334,7 @@ const toDetailPage = () => {
                 </VCardText> 
               -->
               <FormElementsCustomRadiosWithIcon v-model:selected-radio="surat.rekening" :radio-content="rekeningList"
-                :grid-column="{ md: '4', cols: '12' }" title="Pilih Rekening" @change="cetak" :rules="[requiredValidator]" />
+                :grid-column="{ md: '4', cols: '12' }" title="Pilih Rekening (wajib dipilih)" @change="cetak" :rules="[requiredValidator]" />
             </VCol>
             <VCol cols="12" class="d-flex gap-4 ">
               <VBtn type="submit" @click="store">

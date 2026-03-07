@@ -4,7 +4,7 @@
       <VCardTitle>
         <div class="">
           <h2 class="text-lg font-weight-medium d-inline">
-            Data Permintaan Surat Sentral Citra
+            Data Permintaan Surat Citra Furniture
           </h2>
         </div>
       </VCardTitle>
@@ -86,7 +86,7 @@
                   </VTooltip>
                   <VIcon>tabler-edit</VIcon>
                 </IconBtn>
-                <IconBtn size="38" @click="navigateTo(`/admin/SCI/print/invoice?id=${surat._id}`)">
+                <IconBtn size="38" @click="navigateTo(`/admin/CF/print/invoice?id=${surat._id}`)">
                   <VTooltip open-on-focus location="top" activator="parent">
                     Hapus
                   </VTooltip>
@@ -98,14 +98,14 @@
                   <VTooltip open-on-focus location="top" activator="parent">
                     Detail
                   </VTooltip>
-                  <VIcon @click="navigateTo({ name: `admin-SCI-request-detail-id`, params: { id: surat._id } })">
+                  <VIcon @click="navigateTo({ name: `admin-CF-request-detail-id`, params: { id: surat._id } })">
                     tabler-info-circle</VIcon>
                 </VBtn>
                 <VBtn size="38" class="ml-2" icon color="warning" title="Buat Surat Penawaran">
                   <VTooltip open-on-focus location="top" activator="parent">
                     Buat Surat Penawaran
                   </VTooltip>
-                  <VIcon @click="navigateTo({ name: `admin-SCI-add-id`, params: { id: surat._id } })">tabler-edit
+                  <VIcon @click="navigateTo({ name: `admin-CF-add-id`, params: { id: surat._id } })">tabler-edit
                   </VIcon>
                 </VBtn>
                 <!-- <VBtn size="38" class="ml-2" icon color="error" title="Hapus">
@@ -161,7 +161,7 @@ const totalPages = ref(1)
 //       }
 //     }
 //     const query = buildQueryFilterParams({ startDate: start, endDate: end,page, search: search.value, limit:10 }, false);
-//     const response = await $api.get('/Request/SCI', { ...query });
+//     const response = await $api.get('/Request/CF', { ...query });
 //     console.log(response)
 //     surats.value = response.docs
 //     totalPages.value = response.totalPages // backend kirim total halaman
@@ -208,7 +208,7 @@ const filterData = async (page = 1) => {
       limit: 10
     }, false)
 
-    const response = await $api.get('/Request/SCI', { ...query })
+    const response = await $api.get('/Request/CF', { ...query })
 
     surats.value = response.docs || []
     totalPages.value = response.totalPages || 1
@@ -225,7 +225,7 @@ const filterData = async (page = 1) => {
 
 const fetchItems = async (page = 1) => {
   try {
-    const response = await $api.get(`/SCI?page=${page}&limit=10`)
+    const response = await $api.get(`/CF?page=${page}&limit=10`)
     //console.log(response)
     surats.value = response.docs
     totalPages.value = response.totalPages // backend kirim total halaman
@@ -271,15 +271,15 @@ let status = {
     color: 'error'
   }
 }
-// let surats = await cii.getSCI()
+// let surats = await cii.getCF()
 // //console.log(surats)
 
 function goToDetailPage(id) {
-  navigateTo({ name: `admin-SCI-Request-detail-id`, params: { id } })
+  navigateTo({ name: `admin-CF-Request-detail-id`, params: { id } })
 }
 
 function goToEditPage(id) {
-  navigateTo(`SCI/add/${id}`)
+  navigateTo(`CF/add/${id}`)
 }
 
 const search = ref('')
@@ -298,7 +298,7 @@ const search = ref('')
 onMounted( async () => {
   try {
     const query = buildQueryFilterParams({ limit:10 }, false);
-    const response = await $api.get('/Request/SCI', { ...query });
+    const response = await $api.get('/Request/CF', { ...query });
     console.log(response)
     surats.value = response.docs
   } catch (error) {
