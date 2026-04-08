@@ -125,3 +125,14 @@ export const alphaDashValidator = value => {
   
   return /^[\w-]*$/.test(valueAsString) || 'semua karakter tidak valid'
 }
+
+export const existsValidator = (value, existingValue, jenis) => {
+  // console.log('existingValue:', existingValue, 'value:', value)
+  if (!value || value === '') return true
+  
+  if (existingValue?.includes(value)) {
+    return `${jenis} sudah ada`
+  }
+  
+  return true
+}

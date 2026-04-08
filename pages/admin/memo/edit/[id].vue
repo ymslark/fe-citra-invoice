@@ -143,12 +143,11 @@ const update = async () => {
           <VCol cols="12" md="6">
             <AppSelect :items="status" v-model="editMemo.status" label="Status" :rules="[requiredValidator]" />
           </VCol>
-        </VRow>
-        <VRow>
-          <VCol cols="12">
-            <VTextarea v-model="editMemo.alamat" label="Alamat" auto-grow rows="1" />
+          <VCol cols="12" md="6">
+            <AppTextarea v-model="editMemo.alamat" label="Alamat" auto-grow rows="1" />
           </VCol>
         </VRow>
+
       </VCardText>
       <VCardItem>
         <VCol cols="12" offset-md="8" md="4">

@@ -3,6 +3,7 @@ import { VForm } from 'vuetify/components/VForm';
 import { useAlertStore } from '../../../../stores/alert';
 import { useMemoStore } from '../../../../stores/memo';
 import { useSupirStore } from '../../../../stores/supir';
+import { formatTanggalIndonesia } from '@/utils/format';
 
 const memo = useMemoStore()
 const supir = useSupirStore()
@@ -157,7 +158,7 @@ const restoreMemo = async () => {
               :rules="[requiredValidator]" disabled/> -->
           </VCol>
           <VCol cols="12" md="6">
-            <AppDateTimePicker v-model="detailMemo.tanggal" label="Tanggal" placeholder="Pilih Tanggal"
+            <AppTextField :value="formatTanggalIndonesia(detailMemo.tanggal)" label="Tanggal" placeholder="Pilih Tanggal"
               :rules="[requiredValidator]" readonly />
           </VCol>
         </VRow>

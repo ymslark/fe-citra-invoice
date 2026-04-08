@@ -6,7 +6,7 @@
       <DialogCloseBtn @click="isEditDialogVisible = !isEditDialogVisible" />
 
       <!-- Dialog Content -->
-      <VCard title="Edit Data Supir">
+      <VCard title="Edit Data Barang">
         <VCardText>
           <VRow v-if="errorMessage">
             <VCol cols="12">
@@ -17,15 +17,15 @@
           </VRow>
           <VRow>
             <VCol cols="12">
-              <AppTextField v-model="editSupir.driver_name" label="Nama" placeholder="Nama Lengkap"
+              <AppTextField v-model="editBarang.nama" label="Nama Barang" placeholder="Nama Lengkap"
                 :rules="[requiredValidator,]" />
             </VCol>
             <VCol cols="12">
-              <AppTextField v-model="editSupir.driver_phone" label="Nomor Telepon" placeholder="Nomor Telepon"
+              <AppTextField v-model="editBarang.kode" label="Kode Barang" placeholder="Kode Barang"
                 :rules="[requiredValidator]" />
             </VCol>
             <VCol cols="12">
-              <AppTextField v-model="editSupir.vehicle_number" label="Nomor Kendaraan" placeholder="Nomor Kendaraan"
+              <AppTextField v-model="editBarang.satuan" label="Satuan" placeholder="Satuan Barang"
                 :rules="[requiredValidator]" />
             </VCol>
           </VRow>
@@ -35,7 +35,7 @@
           <VBtn variant="tonal" color="secondary" @click="isEditDialogVisible = false">
             Close
           </VBtn>
-          <VBtn @click="saveEditSupir">
+          <VBtn @click="saveEditBarang(editBarang.id)">
             Save
           </VBtn>
         </VCardText>
@@ -98,40 +98,44 @@
                   </VTooltip>
                   <VIcon>tabler-info-circle</VIcon>
                 </IconBtn>
-                <!-- <IconBtn size="38">
+                <IconBtn size="38">
                   <VTooltip open-on-focus location="top" activator="parent">
                     Edit
                   </VTooltip>
                   <VIcon @click="editDialog(barang._id)">tabler-edit</VIcon>
-                </IconBtn> -->
-                <!-- <IconBtn size="38">
+                </IconBtn>
+                <IconBtn size="38">
                   <VTooltip open-on-focus location="top" activator="parent">
                     Hapus
                   </VTooltip>
-                  <VIcon>tabler-trash</VIcon>
-                </IconBtn> -->
+                    <VIcon @click="isDeleteDialogVisible = true; idBarangToDelete = barang._id">tabler-trash</VIcon>
+                  <!-- <VIcon @click="isDeleteDialogVisible = true">tabler-trash</VIcon> -->
+                </IconBtn>
               </td>
             </tr>
           </tbody>
         </VTable>
       </VCardItem>
     </VCard>
+    <UtilsConfirmDialog :show="isDeleteDialogVisible" title="Hapus Data" message="Apakah Anda yakin ingin menghapus barang ini?" @confirm="deleteBarang(idBarangToDelete)" @cancel="isDeleteDialogVisible = false" />
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue'
+import { useAlertStore } from '@/stores/alert'
+
 
 definePageMeta({
   requiresAuth: true,
 })
 
+const alertStore = useAlertStore()
 const isDialogVisible = ref(false)
 const isEditDialogVisible = ref(false)
+const isDeleteDialogVisible = ref(false)
 const errorMessage = ref('')
-const middleName = ref('')
-const lastName = ref('')
-const email = ref('')
+const idBarangToDelete = ref('')
 const password = ref('')
 const age = ref()
 const interest = ref([])
@@ -142,24 +146,29 @@ let supir = {
   no_kendaraan: '',
 }
 const { $api } = useNuxtApp()
-
-const response = await $api.get('/supir',)
-const supirs = response.Supirs
-function goToDetailPage(id) {
-  navigateTo(`supir/detail/${id}`)
+const barangs = ref([])
+const getBarangs = async () => {
+   try {
+    const res = await $api.get('/barang', { limit: 90 })
+    console.log(res.Barangs.docs)
+    barangs.value = res.Barangs.docs
+   } catch (error) {
+    alertStore.showAlertObject({
+      message: error.message,
+      type: 'error',
+    })
+    console.log(error)
+   }
 }
 
-const barangs = ref([])
-const res = await $api.get('/barang', { limit: 90 })
-console.log(res.Barangs.docs)
-barangs.value = res.Barangs.docs
+
 function cekButton(i, button) {
   if (button == 'edit') {
     supir = supirs[i]
   }
 }
 
-const createSupir = async () => {
+const createBarang = async () => {
   try {
     const response = await $api.post('/supir', supir)
     console.log(response)
@@ -173,45 +182,80 @@ const createSupir = async () => {
     console.log(error)
   }
 }
-let editSupir = {
+const editBarang = ref({
   id: '',
-  driver_name: '',
-  driver_phone: '',
-  vehicle_number: '',
-}
+  nama: '',
+  kode: '',
+  satuan: '',
+})
 
 const editDialog = async (id) => {
   try {
-    const response = await $api.get(`/supir/detail/${id}`)
+    const response = await $api.get(`/barang/detail/${id}`)
     console.log(response)
     if (!response) throw { message: 'Data tidak ditemukan', code: 404 }
-    editSupir.id = response.supir._id
-    editSupir.driver_name = response.supir.nama_supir
-    editSupir.driver_phone = response.supir.no_hp
-    editSupir.vehicle_number = response.supir.no_kendaraan
+    editBarang.value.id = response.barang._id
+    editBarang.value.nama = response.barang.nama
+    editBarang.value.kode = response.barang.kode
+    editBarang.value.satuan = response.barang.satuan
     isEditDialogVisible.value = true
+    await getBarangs()
   } catch (error) {
+    alertStore.showAlertObject({
+      message: error.message,
+      type: 'error',
+    })
     console.log(error)
   }
 }
 
-const saveEditSupir = async () => {
+const saveEditBarang = async (id) => {
   try {
-    console.log(editSupir)
-    const response = await $api.put(`/supir/${editSupir.id}`, editSupir)
+    console.log(editBarang.value)
+    const response = await $api.put(`/Barang/${id}`, editBarang.value)
     console.log(response)
     if (!response) {
       throw { message: 'Ubah Data Gagal', code: 400 }
     }
+    alertStore.showAlertObject({
+      message: 'Data berhasil diubah',
+      type: 'success',
+    })
     isEditDialogVisible.value = false
+    await getBarangs()
   } catch (error) {
-    errorMessage.value = error.message
+    alertStore.showAlertObject({
+      message: error.message,
+      type: 'error',
+    })
     console.log(error)
   }
 }
-onMounted(() => {
+const deleteBarang = async (id) => {
+  try {
+    const response = await $api.delete(`/Barang/${id}`)
+    console.log(response)
+    if (!response) {
+      throw response
+    }
+    alertStore.showAlertObject({
+      message: 'Data berhasil dihapus',
+      type: 'success',
+    })
+    isDeleteDialogVisible.value = false
+    await getBarangs()
+  } catch (error) {
+    alertStore.showAlertObject({
+      message: error.message,
+      type: 'error',
+    })
+    console.log(error)
+  }
+}
+onMounted(async () => {
   // useCookie('asas', { path: '/' }).value = 'jhaskjhkjashjk'
 
   // console.log(useCookie('accessToken').value)
+  await getBarangs()
 })
 </script>

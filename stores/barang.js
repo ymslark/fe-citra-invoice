@@ -1,3 +1,4 @@
+
 export const useBarangStore = defineStore('barang', {
   state: () => ({
     barang: [],
@@ -8,6 +9,7 @@ export const useBarangStore = defineStore('barang', {
       show: false,
     },
     existingKode: [],
+    existingNama: [],
     addedBarang: [],
     errorMessage: null,
     config: {},
@@ -24,6 +26,34 @@ export const useBarangStore = defineStore('barang', {
 
     removeBarang(index){
       this.addedBarang.splice(index, 1)
+    },
+
+
+    setBarangFromExcel(data){
+      if(data.length > 50) {
+        for (let i = 0; i < 50; i++) {
+          this.addedBarang.push(
+            {
+              nama: data[i].nama_barang || '',
+              kode: data[i].kode_barang || '',
+              satuan: data[i].satuan || '',
+            }
+          )
+        }
+      }
+      if(data.length <= 50) {
+        data.forEach(async item => {
+
+          this.addedBarang.push(
+            {
+              nama: item.nama_barang || '',
+              kode: item.kode_barang || '',
+              satuan: item.satuan || '',
+            }
+          )
+          // await delay(100)
+        })
+      }
     },
 
 
@@ -70,6 +100,21 @@ export const useBarangStore = defineStore('barang', {
         return error
       }
     },
+    async getAllBarang() {
+      const { $api } = useNuxtApp()
+      try {
+        const response = await $api.get('/barang/getAllBarang')
+        
+        console.log(response)
+        this.existingKode = response.Barangs.map(barang => barang.kode)
+        this.existingNama = response.Barangs.map(barang => barang.nama)
+        // console.log(this.barang)
+        
+        // return response
+      } catch (error) {
+        return error
+      }
+    },
     setError(message) {
       this.errorMessage = message
     },
@@ -82,6 +127,9 @@ export const useBarangStore = defineStore('barang', {
       const payload = {barang: this.addedBarang}
       const response = await $api.post('/barang', payload)
       return response
+    },
+    resetAddedBarang() {
+      this.addedBarang = []
     },
     async updateBarang() {
       const { $api } = useNuxtApp()
