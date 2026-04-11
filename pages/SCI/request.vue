@@ -9,7 +9,7 @@
             <AppTextField v-model="sci.newRequest.tujuan" label="Nama (wajib diisi)" placeholder="Nama" :rules="[requiredValidator]" />
           </VCol>
           <VCol cols="12">
-            <AppTextarea rows="1" v-model="sci.newRequest.alamat" label="Alamat" placeholder="Alamat (wajib diisi)" auto-grow
+            <AppTextarea rows="1" v-model="sci.newRequest.alamat" label="Alamat(Wajib diisi)" placeholder="Alamat (wajib diisi)" auto-grow
               :rules="[requiredValidator]" />
           </VCol>
           <!-- <VCol cols="12">
@@ -17,7 +17,7 @@
               :rules="[requiredValidator]" />
           </VCol> -->
           <VCol cols="12">
-            <AppTextarea rows="1" v-model="sci.newRequest.no_hp" label="No Hp" placeholder="No.Hp (wajib diisi)" auto-grow
+            <AppTextarea rows="1" v-model="sci.newRequest.no_hp" label="No Hp(Wajib diisi)" placeholder="No.Hp (wajib diisi)" auto-grow
               :rules="[requiredValidator]" />
           </VCol>
           <VCol cols="12" md="12" class="ma-0">

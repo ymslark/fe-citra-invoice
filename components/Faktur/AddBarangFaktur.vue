@@ -28,12 +28,12 @@ onMounted(() => {
 <template>
   <VRow>
     <VCol cols="12" md="3">
-      <AppTextField v-model="barang.nama_barang" label="Nama Barang" placeholder="Masukkan Nama Barang"
+      <AppTextField v-model="barang.nama_barang" label="Nama Barang (Wajib diisi)" placeholder="Masukkan Nama Barang"
         :rules="[requiredValidator]" />
     </VCol>
     <VCol cols="12" md="3">
       <AppTextField 
-      v-model="barang.harga" label="Harga" placeholder="Masukkan Harga" 
+      v-model="barang.harga" label="Harga (Wajib diisi)" placeholder="Masukkan Harga" 
       lazy-validator
       :rules="[minimumFormattedNumberValidator(barang.harga, 2000)]" 
       name="harga"
@@ -42,7 +42,7 @@ onMounted(() => {
     </VCol>
     <VCol cols="12" md="3">
       <AppTextField
-      v-model="barang.qty" label="Qty" placeholder="Masukkan Qty"
+      v-model="barang.qty" label="Qty (Wajib diisi)" placeholder="Masukkan Qty"
       :rules="[minimumFormattedNumberValidator(barang.qty, 1)]"
       />
     </VCol>

@@ -9,14 +9,14 @@
         </div>
       </VCardTitle>
       <VCardItem>
-        <VRow class="d-flex justify-end">
+        <!-- <VRow class="d-flex justify-end">
           <VCol cols="12" md="4">
             <AppTextField v-model="search" label="Cari Tujuan" variant="outlined"
               append-inner-icon="tabler-search" />
           </VCol>
           <VCol cols="12" md="2" class="mt-4">
           </VCol>
-        </VRow>
+        </VRow> -->
         <VTable fixed-header class="text-no-wrap mb-4">
           <thead>
             <tr>

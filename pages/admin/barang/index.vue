@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- Edit Dialog -->
+        <!-- Edit Dialog -->
     <VDialog v-model="isEditDialogVisible" max-width="600">
       <!-- Dialog close btn -->
       <DialogCloseBtn @click="isEditDialogVisible = !isEditDialogVisible" />
@@ -45,17 +45,32 @@
       <VCardTitle>
         <div class="">
           <h2 class="text-lg font-weight-medium d-inline">
-            Data Barang
+            Data Barang Sentral Citra
           </h2>
-          <VBtn class="ml-auto d-flex" color="primary" @click="navigateTo('/admin/barang/add')">
-            Tambah Barang
-          </VBtn>
         </div>
       </VCardTitle>
       <VCardItem>
-        <VRow>
-          <VCol cols="12" offset-md="8" md="4" />
+        <VRow class="d-flex justify-end">
+          <VCol cols="12" md="4">
+            <AppTextField v-model="search" label="Cari Nama/Kode Barang" variant="outlined"
+              append-inner-icon="tabler-search" />
+            </VCol>
+
+          <VCol cols="12" md="2" class="mt-md-5 ">
+              <VBtn color="primary" @click="filterData(page)" class="">Filter Data</VBtn>
+          </VCol>
+          <VCol cols="12" class="d-flex justify-content-end flex-grow-1" >
+            <div >
+            </div>
+            <div>
+
+            </div>
+          </VCol>
+          <VCol cols="12" md="2" class="mt-4">
+          </VCol>
         </VRow>
+        <!-- <div class="d-flex justify-end">
+        </div> -->
         <VTable fixed-header class="text-no-wrap mb-4">
           <thead>
             <tr>
@@ -115,73 +130,64 @@
             </tr>
           </tbody>
         </VTable>
+        <VRow>
+            <VCol md="8" cols="12" offset-md="2">
+                <VPagination v-model="currentPage" :length="totalPages" />
+            </VCol>
+        </VRow>
       </VCardItem>
     </VCard>
-    <UtilsConfirmDialog :show="isDeleteDialogVisible" title="Hapus Data" message="Apakah Anda yakin ingin menghapus barang ini?" @confirm="deleteBarang(idBarangToDelete)" @cancel="isDeleteDialogVisible = false" />
+        <UtilsConfirmDialog :show="isDeleteDialogVisible" title="Hapus Data" message="Apakah Anda yakin ingin menghapus barang ini?" @confirm="deleteBarang(idBarangToDelete)" @cancel="isDeleteDialogVisible = false" />
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
-import { useAlertStore } from '@/stores/alert'
-
 
 definePageMeta({
+  middleware: 'client-auth',
   requiresAuth: true,
+  roles: ['superadmin', 'developer'],
 })
+import {useAlertStore} from '@/stores/alert'
+import { buildQueryFilterParams } from '@/utils/apiFilterQuery'
 
+
+const { $api } = useNuxtApp()
+const alert = useAlertStore()
+const currentPage = ref(1)
+const barangs = ref([])
+const totalPages = ref(1)
 const alertStore = useAlertStore()
 const isDialogVisible = ref(false)
 const isEditDialogVisible = ref(false)
 const isDeleteDialogVisible = ref(false)
 const errorMessage = ref('')
 const idBarangToDelete = ref('')
-const password = ref('')
-const age = ref()
-const interest = ref([])
-let button = ''
-let supir = {
-  nama: '',
-  no_telp: '',
-  no_kendaraan: '',
-}
-const { $api } = useNuxtApp()
-const barangs = ref([])
-const getBarangs = async () => {
-   try {
-    const res = await $api.get('/barang', { limit: 90 })
-    console.log(res.Barangs.docs)
-    barangs.value = res.Barangs.docs
-   } catch (error) {
-    alertStore.showAlertObject({
-      message: error.message,
-      type: 'error',
-    })
-    console.log(error)
-   }
-}
-
-
-function cekButton(i, button) {
-  if (button == 'edit') {
-    supir = supirs[i]
-  }
-}
-
-const createBarang = async () => {
+const searchKode = ref('')
+const dateRange = ref('st')
+const filterData = async (page = 1) => {
   try {
-    const response = await $api.post('/supir', supir)
-    console.log(response)
-    if (!response) {
-      throw { message: 'Tambah Data Gagal', code: 400 }
-    }
-    message
-    isDialogVisible.value = false
+    const query = buildQueryFilterParams({
+      page,
+      search: search?.value ?? '',
+      limit: 25
+    }, false)
+
+    const response = await $api.get('/Barang/filterData', { ...query })
+
+    barangs.value = response.barangs || []
+    totalPages.value = response.totalPages || 1
+    currentPage.value = response.page || 1
+    console.log('Response:', response)
   } catch (error) {
-    errorMessage.value = error.message
-    console.log(error)
+    alert.showAlertObject({
+      type: 'error',
+      message: error?.message ?? 'Gagal mengambil data'
+    })
   }
 }
+
+const search = ref('')
 const editBarang = ref({
   id: '',
   nama: '',
@@ -189,73 +195,94 @@ const editBarang = ref({
   satuan: '',
 })
 
-const editDialog = async (id) => {
-  try {
-    const response = await $api.get(`/barang/detail/${id}`)
-    console.log(response)
-    if (!response) throw { message: 'Data tidak ditemukan', code: 404 }
-    editBarang.value.id = response.barang._id
-    editBarang.value.nama = response.barang.nama
-    editBarang.value.kode = response.barang.kode
-    editBarang.value.satuan = response.barang.satuan
-    isEditDialogVisible.value = true
-    await getBarangs()
-  } catch (error) {
-    alertStore.showAlertObject({
-      message: error.message,
-      type: 'error',
-    })
-    console.log(error)
-  }
-}
-
-const saveEditBarang = async (id) => {
-  try {
-    console.log(editBarang.value)
-    const response = await $api.put(`/Barang/${id}`, editBarang.value)
-    console.log(response)
-    if (!response) {
-      throw { message: 'Ubah Data Gagal', code: 400 }
+    const editDialog = async (id) => {
+    try {
+        const response = await $api.get(`/barang/detail/${id}`)
+        console.log(response)
+        if (!response) throw { message: 'Data tidak ditemukan', code: 404 }
+        editBarang.value.id = response.barang._id
+        editBarang.value.nama = response.barang.nama
+        editBarang.value.kode = response.barang.kode
+        editBarang.value.satuan = response.barang.satuan
+        isEditDialogVisible.value = true
+        await filterData()
+    } catch (error) {
+        alertStore.showAlertObject({
+        message: error.message,
+        type: 'error',
+        })
+        console.log(error)
     }
-    alertStore.showAlertObject({
-      message: 'Data berhasil diubah',
-      type: 'success',
-    })
-    isEditDialogVisible.value = false
-    await getBarangs()
-  } catch (error) {
-    alertStore.showAlertObject({
-      message: error.message,
-      type: 'error',
-    })
-    console.log(error)
-  }
-}
-const deleteBarang = async (id) => {
-  try {
-    const response = await $api.delete(`/Barang/${id}`)
-    console.log(response)
-    if (!response) {
-      throw response
     }
-    alertStore.showAlertObject({
-      message: 'Data berhasil dihapus',
-      type: 'success',
-    })
-    isDeleteDialogVisible.value = false
-    await getBarangs()
-  } catch (error) {
-    alertStore.showAlertObject({
-      message: error.message,
-      type: 'error',
-    })
-    console.log(error)
-  }
-}
-onMounted(async () => {
-  // useCookie('asas', { path: '/' }).value = 'jhaskjhkjashjk'
 
-  // console.log(useCookie('accessToken').value)
-  await getBarangs()
+    const saveEditBarang = async (id) => {
+    try {
+        console.log(editBarang.value)
+        const response = await $api.put(`/Barang/${id}`, editBarang.value)
+        console.log(response)
+        if (!response) {
+        throw { message: 'Ubah Data Gagal', code: 400 }
+        }
+        alertStore.showAlertObject({
+        message: 'Data berhasil diubah',
+        type: 'success',
+        })
+        isEditDialogVisible.value = false
+        await filterData()
+    } catch (error) {
+        alertStore.showAlertObject({
+        message: error.message,
+        type: 'error',
+        })
+        console.log(error)
+    }
+    }
+    const deleteBarang = async (id) => {
+    try {
+        const response = await $api.delete(`/Barang/${id}`)
+        console.log(response)
+        if (!response) {
+        throw response
+        }
+        alertStore.showAlertObject({
+        message: 'Data berhasil dihapus',
+        type: 'success',
+        })
+        isDeleteDialogVisible.value = false
+        await filterData()
+    } catch (error) {
+        alertStore.showAlertObject({
+        message: error.message,
+        type: 'error',
+        })
+        console.log(error)
+    }
+    }
+
+watch(currentPage, (page) => {
+  if (search.value.length >= 3) {
+    filterData(page)
+  }
+  else if (search.value.length === 0) {
+    //console.log(page)
+    filterData(page)
+  }
+
+})
+onMounted( async () => {
+  try {
+    const query = buildQueryFilterParams({ limit:25 }, false);
+    const response = await $api.get('/Barang/filterData', { ...query });
+    console.log(response)
+    barangs.value = response.barangs
+    totalPages.value = response.totalPages || 1
+    currentPage.value = response.page || 1
+  } catch (error) {
+    console.error('Gagal mengambil data:', error)
+    alert.showAlertObject({
+      type: 'error',
+      message: error?.message ?? 'Gagal mengambil data'
+    })
+  }
 })
 </script>

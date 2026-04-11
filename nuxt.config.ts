@@ -99,6 +99,7 @@ export default defineNuxtConfig({
 
   experimental: {
     typedPages: true,
+    inlineSSRStyles: false,
   },
 
   typescript: {

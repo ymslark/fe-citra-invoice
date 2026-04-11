@@ -1,5 +1,8 @@
 <script setup>
-import { RecycleScroller } from 'vue-virtual-scroller'
+definePageMeta({
+  requiresAuth: true,
+  roles: ['superadmin', 'developer'],
+})
 import { useAlertStore } from '@/stores/alert';
 import { useBarangStore } from '@/stores/barang';
 import { VForm } from 'vuetify/components/VForm'
@@ -157,6 +160,17 @@ const saveBarang = async () => {
                     Upload
                     <VIcon end icon="tabler-cloud-upload"/>
                   </VBtn>
+                  <VTooltip location="top" 
+                  open-on-click
+                  :open-on-hover="false">
+                  <template #activator="{ props }">
+                    <VBtn color="primary" variant="outlined" v-bind="props">
+                      petunjuk
+                      <VIcon end icon="tabler-info-circle"/>
+                    </VBtn>
+                    </template>
+                    <span>Maksimal 50 barang</span>
+                  </VTooltip>
 
                 </div>
               </VCol>

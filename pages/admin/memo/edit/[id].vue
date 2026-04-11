@@ -115,36 +115,36 @@ const update = async () => {
       <VCardText>
         <VRow>
           <VCol cols="12" md="6">
-            <AppTextField v-if="perusahaan" :value="perusahaanList[perusahaan]" label="Perusahaan" readonly />
+            <AppTextField v-if="perusahaan" :value="perusahaanList[perusahaan]" label="Perusahaan(Wajib diisi)" readonly />
             <AppSelect v-else v-model="editMemo.perusahaan"
-              :items="Object.entries(perusahaanList).map(([value, title]) => ({ value, title }))" label="Perusahaan"
+              :items="Object.entries(perusahaanList).map(([value, title]) => ({ value, title }))" label="Perusahaan(Wajib dipilih)"
               :rules="[requiredValidator]" />
           </VCol>
           <VCol cols="12" md="6">
-            <AppDateTimePicker v-model="editMemo.tanggal" label="Tanggal" placeholder="Pilih Tanggal"
+            <AppDateTimePicker v-model="editMemo.tanggal" label="Tanggal(Wajib diisi)" placeholder="Pilih Tanggal"
               :rules="[requiredValidator]" />
           </VCol>
         </VRow>
         <VRow>
           <VCol cols="12" md="6">
-            <AppSelect v-model="editMemo.jenis_memo" label="Jenis Memo" :items="jenisMemo"
+            <AppSelect v-model="editMemo.jenis_memo" label="Jenis Memo(Wajib dipilih)" :items="jenisMemo"
               :rules="[requiredValidator]" />
           </VCol>
           <VCol cols="12" md="6">
-            <AppTextField v-model="editMemo.tujuan" label="Kepada" :rules="[requiredValidator]" />
+            <AppTextField v-model="editMemo.tujuan" label="Kepada(Wajib diisi)" :rules="[requiredValidator]" />
           </VCol>
           <VCol cols="12" md="6">
-            <AppTextField v-model="editMemo.no_hp" label="Nomor Hp" :rules="[requiredValidator]" />
+            <AppTextField v-model="editMemo.no_hp" label="Nomor Hp(Wajib diisi)" :rules="[requiredValidator]" />
           </VCol>
           <VCol cols="12" md="6">
             <AppSelect :items="supirList" item-value="_id" item-title="nama_supir" v-model="editMemo.id_supir"
-              label="Supir" :rules="[requiredValidator]"/>
+              label="Supir(Wajib dipilih)" :rules="[requiredValidator]"/>
           </VCol>
           <VCol cols="12" md="6">
-            <AppSelect :items="status" v-model="editMemo.status" label="Status" :rules="[requiredValidator]" />
+            <AppSelect :items="status" v-model="editMemo.status" label="Status(Wajib dipilih)" :rules="[requiredValidator]" />
           </VCol>
           <VCol cols="12" md="6">
-            <AppTextarea v-model="editMemo.alamat" label="Alamat" auto-grow rows="1" />
+            <AppTextarea v-model="editMemo.alamat" label="Alamat(Wajib diisi)" auto-grow rows="1" :rules="[requiredValidator]" />
           </VCol>
         </VRow>
 

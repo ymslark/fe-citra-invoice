@@ -41,10 +41,10 @@ try {
 
 // onMounted(() => {
 //   if(process.client){
-//     document.title = surat.no_seri + ' Surat Penawaran ' + surat.tujuan + ' - Citra Furniture'
-//     setTimeout(() => {
-//       window.print()
-//     }, 1000)
+    // document.title = surat.no_seri + ' Surat Penawaran ' + surat.tujuan + ' - Citra Furniture'
+    //     setTimeout(() => {
+      //       window.print()
+      //     }, 1000)
 
 //     window.addEventListener('afterprint', () => {
 //         window.location.replace('/admin/CF/detail/' + id)
@@ -52,10 +52,9 @@ try {
 //   }
 // })
 onMounted(async () => {
-
-  await nextTick()
-
+  // await nextTick()
   setTimeout(() => {
+    document.title = surat.no_seri + ' Surat Penawaran ' + surat.tujuan + ' - Citra Furniture'
     window.print()
   }, 1000)
     window.addEventListener('afterprint', () => {
@@ -76,11 +75,10 @@ onMounted(async () => {
   
     <!-- box -->
     <div class="box">
-  
       <div class="meta">
         <div class="d-flex flex-column">
           <span>Hal : {{surat.hal}}</span>
-          <span>Kepada YTh. <b>{{ surat.tujuan }}</b></span>
+          <span>Kepada Yth. <b>{{ surat.tujuan }}</b></span>
           <span>{{ surat.no_hp }}</span>
           <span>{{ surat.alamat }}</span>
   
@@ -202,7 +200,24 @@ onMounted(async () => {
           <!-- <li v-if="surat.catatan[0].length > 3">{{surat.catatan[0]}}</li> -->
           <li>Pembayaran Via Transfer ke rekening :</li>
         </ol>
-      <table class="rekening">
+      <!-- <table id="rekening">
+        <tr>
+          <td>Atas Nama</td>
+          <td>:</td>
+          <td>{{ surat.rekening.atas_nama }}</td>
+        </tr>
+        <tr>
+          <td>No. Rekening</td>
+          <td>:</td>
+          <td>{{ surat.rekening.no_rekening }}</td>
+        </tr>
+        <tr>
+          <td>Bank</td>
+          <td>:</td>
+          <td>{{ surat.rekening.nama_bank }}</td>
+        </tr>
+      </table> -->
+      <table id="rekening">
         <tr>
           <td>Atas Nama</td>
           <td>:</td>
@@ -231,7 +246,7 @@ onMounted(async () => {
     <!-- box -->
 
 </template>
-<style scoped>
+<style>
 @media screen {
   * {
     font-family: 'Times New Roman', sans-serif !important;
@@ -244,7 +259,7 @@ onMounted(async () => {
 
   @page {
     size: A4;
-    margin: 2cm;
+    margin: 1cm;
   }
 }
 
@@ -256,6 +271,11 @@ onMounted(async () => {
     padding: 0px;
     font-size: 11pt;
   }
+
+  .box{
+    margin: auto;
+  }
+
 
   .footer-surat img{
     max-width: 50%;
@@ -342,13 +362,22 @@ onMounted(async () => {
     font-size: 9pt !important;
   }
 
+  table#rekening{
+    border: none !important;
+  }
+  table#rekening td {
+    border: none !important;
+    padding: 0px !important;
+    font-size: 9pt !important;
+  }
+
   body{
     size: A4;
+  
   }
   @page {
     size: A4;
-    margin: 0.5cm;
-    orientation: landscape;
+    orientation: portrait;
   }
 }
 
@@ -356,7 +385,7 @@ onMounted(async () => {
 .box {
   width: 95%;
   padding: 20px;
-  margin:auto;
+  /* margin:auto; */
   box-sizing: border-box;
   font-size: 24px;
   

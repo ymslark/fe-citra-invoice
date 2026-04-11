@@ -380,7 +380,7 @@ export const useCFStore = defineStore('cf', {
     async getConfig(){
       const { $api } = useNuxtApp()
       try {
-        const response = await $api.get('/getConfig')
+        const response = await $api.get('/Config')
 
         console.log(response)
         this.config = response.config

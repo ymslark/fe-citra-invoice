@@ -45,8 +45,11 @@
       <VCardTitle>
         <div class="">
           <h2 class="text-lg font-weight-medium d-inline">
-            Data Barang Terhapus
+            Data Barang
           </h2>
+          <VBtn class="ml-auto d-flex" color="primary" @click="navigateTo('/admin/barang/add')">
+            Tambah Barang
+          </VBtn>
         </div>
       </VCardTitle>
       <VCardItem>
@@ -103,9 +106,9 @@
                 </IconBtn>
                 <IconBtn size="38">
                   <VTooltip open-on-focus location="top" activator="parent">
-                    Restore
+                    Hapus
                   </VTooltip>
-                    <VIcon @click="isDeleteDialogVisible = true; idBarangToRestore = barang._id">tabler-restore</VIcon>
+                    <VIcon @click="isDeleteDialogVisible = true; idBarangToDelete = barang._id">tabler-trash</VIcon>
                   <!-- <VIcon @click="isDeleteDialogVisible = true">tabler-trash</VIcon> -->
                 </IconBtn>
               </td>
@@ -114,7 +117,7 @@
         </VTable>
       </VCardItem>
     </VCard>
-    <UtilsConfirmDialog :show="isDeleteDialogVisible" title="Restore Data" message="Apakah Anda yakin ingin me-restore barang ini?" @confirm="restoreBarang(idBarangToRestore)" @cancel="isDeleteDialogVisible = false" />
+    <UtilsConfirmDialog :show="isDeleteDialogVisible" title="Hapus Data" message="Apakah Anda yakin ingin menghapus barang ini?" @confirm="deleteBarang(idBarangToDelete)" @cancel="isDeleteDialogVisible = false" />
   </div>
 </template>
 
@@ -122,19 +125,18 @@
 import { onMounted, ref } from 'vue'
 import { useAlertStore } from '@/stores/alert'
 
+
 definePageMeta({
   requiresAuth: true,
-  roles: ['superadmin', 'developer'],
 })
+
 const alertStore = useAlertStore()
 const isDialogVisible = ref(false)
 const isEditDialogVisible = ref(false)
 const isDeleteDialogVisible = ref(false)
 const errorMessage = ref('')
-const idBarangToRestore = ref('')
-const password = ref('')
-const age = ref()
-const interest = ref([])
+const idBarangToDelete = ref('')
+
 let button = ''
 let supir = {
   nama: '',
@@ -145,7 +147,7 @@ const { $api } = useNuxtApp()
 const barangs = ref([])
 const getBarangs = async () => {
    try {
-    const res = await $api.get('/barang/deleted', { limit: 90 })
+    const res = await $api.get('/barang', { limit: 90 })
     console.log(res.Barangs.docs)
     barangs.value = res.Barangs.docs
    } catch (error) {
@@ -171,7 +173,7 @@ const createBarang = async () => {
     if (!response) {
       throw { message: 'Tambah Data Gagal', code: 400 }
     }
-    // message
+    message
     isDialogVisible.value = false
   } catch (error) {
     errorMessage.value = error.message
@@ -227,15 +229,15 @@ const saveEditBarang = async (id) => {
     console.log(error)
   }
 }
-const restoreBarang = async (id) => {
+const deleteBarang = async (id) => {
   try {
-    const response = await $api.patch(`/Barang/restore/${id}`)
+    const response = await $api.delete(`/Barang/${id}`)
     console.log(response)
     if (!response) {
       throw response
     }
     alertStore.showAlertObject({
-      message: 'Data berhasil direstore',
+      message: 'Data berhasil dihapus',
       type: 'success',
     })
     isDeleteDialogVisible.value = false

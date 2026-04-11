@@ -41,27 +41,27 @@ try {
 
 // onMounted(() => {
 //   if(process.client){
-//     document.title = surat.no_seri + ' Surat Penawaran ' + surat.tujuan + ' - Citra Furniture'
-//     setTimeout(() => {
-//       window.print()
-//     }, 1000)
+  //     setTimeout(() => {
+    //       window.print()
+    //     }, 1000)
+    
+    //     window.addEventListener('afterprint', () => {
+      //         window.location.replace('/admin/CII/detail/' + id)
+      //     })
+      //   }
+      // })
+  onMounted(async () => {
+    document.title = surat.no_seri + ' Surat Penawaran ' + surat.tujuan + ' - Citra Interior Indonesia'
+        
+    await nextTick()
 
-//     window.addEventListener('afterprint', () => {
-//         window.location.replace('/admin/CII/detail/' + id)
-//     })
-//   }
-// })
-onMounted(async () => {
-
-  await nextTick()
-
-  // setTimeout(() => {
-    window.print()
-  // }, 1000)
-  //   window.addEventListener('afterprint', () => {
-  //     window.location.replace('/admin/CII/detail/' + id)
-  //   })
-})
+    setTimeout(() => {
+      window.print()
+    }, 1000)
+      window.addEventListener('afterprint', () => {
+        window.location.replace('/admin/CII/detail/' + id)
+      })
+  })
 
 </script>
 
@@ -98,7 +98,7 @@ onMounted(async () => {
             <th>No</th>
             <th>Nama Interior</th>
             <th>Harga Satuan</th>
-            <th>Qty</th>
+            <th>Ukuran</th>
             <th>subtotal</th>
             <th>Diskon</th>
             <th>Total</th>
@@ -131,7 +131,7 @@ onMounted(async () => {
   
           <tr style="font-weight: bold;">
             <td colspan="3" class="br-0"></td>
-            <td class="bl-0" style="font-size: 9pt !important;">Total</td>
+            <td class="bl-0" style="font-size: 10pt !important;">Total</td>
             <td class="angka-kanan">
               <span class="rp">Rp</span>
               <span class="nilai">{{formatRupiah( interior.dpp_tanpa_diskon )}}</span>
@@ -223,14 +223,14 @@ onMounted(async () => {
         <div class="tanggal">Bekasi, {{ formatTanggalIndonesia(getDate()) }}</div>
         <div class="mt-n3">Hormat Kami</div>
         <img src="/images/citragroup/CII/CII_Logo.png" alt="Logo Perusahaan" />
-        <div class="nama-perusahaan">Citra Furniture Indonesia</div>
+        <div class="nama-perusahaan">Citra Interior Indonesia</div>
       </div>
     </div>
   
     <!-- box -->
 
 </template>
-<style scoped>
+<style>
 @media screen {
   * {
     font-family: 'Times New Roman', sans-serif !important;
@@ -256,6 +256,9 @@ onMounted(async () => {
     font-size: 11pt !important;
   }
 
+  .box{
+    margin: 0.5cm;
+  }
   .footer-surat img{
     max-width: 50%;
     height: auto;
@@ -263,12 +266,12 @@ onMounted(async () => {
 
   div.table-items{
     page-break-inside: avoid !important;
-    font-size: 9pt !important;
+    font-size: 10pt !important;
   }
 
   .table-items tbody td{
     font-family: 'Times New Roman', sans-serif !important;
-    font-size: 9pt !important;
+    font-size: 10pt !important;
   }
 /* 5%, 35%, 12%, 8%, 12%, 8%, 20% */
   .table-items thead th:first-child {
@@ -355,7 +358,7 @@ onMounted(async () => {
 
 
 .box {
-  width: 95%;
+  width: 98%;
   padding: 20px;
   margin:auto;
   box-sizing: border-box;

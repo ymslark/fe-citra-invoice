@@ -11,7 +11,7 @@ const barang = props.barang
 
 const cf = useCFStore()
 const deleteBarang = index => cf.deleteBarangRequest(index)
-const label = barang.nama_barang_request ? `Nama Barang (${barang.nama_barang_request})` : 'Nama Barang'
+const label = barang.nama_barang_request ? `Nama Barang (${barang.nama_barang_request})` : 'Nama Barang (wajib diisi)'
 </script>
 
 <template>
@@ -21,7 +21,7 @@ const label = barang.nama_barang_request ? `Nama Barang (${barang.nama_barang_re
         variant="underlined" :label="label" :rules="[requiredValidator]" name="input-nama-barang"/>
     </VCol>
     <VCol cols="8" md="2">
-      <AppTextField v-model="barang.qty" label="Qty" placeholder="Masukkan jumlah barang"
+      <AppTextField v-model="barang.qty" label="Qty (wajib diisi)" placeholder="Masukkan jumlah barang"
         :rules="[requiredValidator, integerValidator, minimumNumberValidator(barang.qty, 1)]" />
     </VCol>
     <VCol cols="2" class="d-flex align-end">

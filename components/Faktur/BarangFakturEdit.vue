@@ -27,7 +27,7 @@ const item = props.item
 const items = ['Barang A', 'Barang B', 'Barang C']
 const selectedBarang = ref(null)
 const harga = ref('0')
-const label = 'Nama Barang'
+const label = 'Nama Barang (Wajib diisi)'
 const nama_barang = ref('')
 const qty = ref(1)
 const diskon_nominal = ref('0')
@@ -70,7 +70,7 @@ onMounted(() => {
     </VCol> -->
     <VCol cols="12" md="3" class="pt-md-5">
       <VTextField 
-        v-model="item.harga" label="Harga" placeholder="Masukkan Harga"
+        v-model="item.harga" label="Harga (Wajib diisi)" placeholder="Masukkan Harga"
         lazy-validator
         :rules="[minimumFormattedNumberValidator(item.harga, 2000)]" 
         name="harga"
@@ -78,7 +78,7 @@ onMounted(() => {
       />
     </VCol>
     <VCol cols="12" md="1" class="pt-md-5">
-      <VTextField v-model="item.qty" label="Qty" placeholder="Masukkan jumlah barang"
+      <VTextField v-model="item.qty" label="Qty (Wajib diisi)" placeholder="Masukkan jumlah barang"
         :rules="[requiredValidator]" />
     </VCol>
     <!-- <VCol cols="12" md="3">

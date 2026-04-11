@@ -54,7 +54,7 @@ const login = async () => {
     if (!isLoggedIn) throw response
     // throw { message: 'Login Gagal! periksa username dan password anda' }
     // console.log(isLoggedIn)
-    if (isLoggedIn) navigateTo({ name: 'admin-supir' })
+    if (isLoggedIn) navigateTo({ name: 'admin-CF' })
   } catch (error) {
     console.log(error)
     if(error.code >= 399 && error.code <= 499) {

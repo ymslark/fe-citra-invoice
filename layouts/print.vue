@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <slot />
 </template>
 
@@ -12,7 +12,7 @@
     font-family: 'Times New Roman', serif;
     font-size: 11pt;
     color: #000;
-    margin: 2cm;
+    margin: 0.5cm;
   }
 
   p {
@@ -41,7 +41,31 @@
 
   @page {
     size: A4;
-    margin: 2cm;
+    margin: 0.5cm;
   }
 }
+</style> -->
+
+<!-- layouts/print-layout.vue -->
+<template>
+  <div class="print-layout">
+    <slot />
+  </div>
+</template>
+
+<style scoped>
+/* Reset total di layout ini */
+.print-layout,
+.print-layout * {
+  all: initial; /* Hati-hati, tapi ini efektif */
+  display: revert; /* Biar balik ke display normal */
+}
+
+/* Atau manual lebih aman: */
+.print-layout {
+  all: unset;
+  display: block;
+}
 </style>
+
+<!-- JANGAN pake global CSS di sini -->

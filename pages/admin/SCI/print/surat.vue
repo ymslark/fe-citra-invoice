@@ -41,18 +41,18 @@ try {
 
 // onMounted(() => {
 //   if(process.client){
-//     document.title = surat.no_seri + ' Surat Penawaran ' + surat.tujuan + ' - Sentral Citra'
-//     setTimeout(() => {
-//       window.print()
-//     }, 1000)
-
-//     window.addEventListener('afterprint', () => {
-//         window.location.replace('/admin/SCI/detail/' + id)
-//     })
-//   }
-// })
-onMounted(async () => {
-
+  //     setTimeout(() => {
+    //       window.print()
+    //     }, 1000)
+    
+    //     window.addEventListener('afterprint', () => {
+      //         window.location.replace('/admin/SCI/detail/' + id)
+      //     })
+      //   }
+      // })
+  onMounted(async () => {
+  document.title = surat.no_seri + ' Surat Penawaran ' + surat.tujuan + ' - Sentral Citra'
+        
   await nextTick()
 
   setTimeout(() => {
@@ -269,7 +269,7 @@ onMounted(async () => {
 
   .table-items tbody td{
     font-family: 'Times New Roman', sans-serif !important;
-    font-size: 9pt !important;
+    font-size: 10pt !important;
   }
 /* 5%, 35%, 12%, 8%, 12%, 8%, 20% */
   .table-items thead th:first-child {
@@ -310,7 +310,7 @@ onMounted(async () => {
 
   .table-items tbody td {
     padding: 0px;
-    font-size: 9pt !important;
+    font-size: 10pt !important;
   }
 
   #qty{

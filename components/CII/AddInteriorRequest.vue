@@ -11,7 +11,7 @@ const interior = props.interior
 
 const cii = useCiStore()
 const deleteInterior = index => cii.deleteInteriorRequest(interior._tempId)
-const label = interior.nama_interior_request ? `Nama Interior (${interior.nama_interior_request})` : 'Nama Interior'
+const label = interior.nama_interior_request ? `Nama Interior (${interior.nama_interior_request})` : 'Nama Interior (wajib diisi)'
 
 function formatInput(e) {
   console.log(e)
@@ -47,10 +47,10 @@ function formatInput(e) {
     <VCol cols="12" md="4" class="pt-3">
       <VRow class="d-flex align-center " no-gutters>
         <VCol>
-          <AppTextField label="volume1(meter)" v-model="interior.v1" :rules="[requiredValidator]" append-inner-icon=" " name="v1" @input="formatInput"/>
+          <AppTextField label="volume1(meter) (wajib diisi)" v-model="interior.v1" :rules="[requiredValidator]" append-inner-icon=" " name="v1" @input="formatInput"/>
         </VCol>
         <div class="mx-2 mt-6">X</div>
-        <VCol><AppTextField label="volume2(meter)" v-model="interior.v2" :rules="[requiredValidator]" append-inner-icon=" " name="v2" @input="formatInput"/></VCol>
+        <VCol><AppTextField label="volume2(meter) (wajib diisi)" v-model="interior.v2" :rules="[requiredValidator]" append-inner-icon=" " name="v2" @input="formatInput"/></VCol>
       </VRow>
     </VCol>
     <VCol cols="12" md="2">

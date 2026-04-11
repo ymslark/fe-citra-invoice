@@ -102,33 +102,33 @@ const store = async () => {
       <VCardText>
         <VRow>
           <VCol cols="12" md="6">
-            <AppTextField v-model="newMemo.tujuan" label="Kepada" :rules="[requiredValidator]" />
+            <AppTextField v-model="newMemo.tujuan" label="Kepada(Wajib diisi)" :rules="[requiredValidator]" />
           </VCol>
           <VCol cols="12" md="6">
             <AppTextField v-if="perusahaan" :value="perusahaanList[perusahaan]" label="Perusahaan" readonly />
             <AppSelect v-else v-model="newMemo.perusahaan"
-            :items="Object.entries(perusahaanList).map(([value, title]) => ({ value, title }))" label="Perusahaan"
+            :items="Object.entries(perusahaanList).map(([value, title]) => ({ value, title }))" label="Perusahaan (wajib dipilih)" placeholder="Pilih Perusahaan"
             :rules="[requiredValidator]" />
           </VCol>
           <VCol cols="12" md="6">
-            <AppDateTimePicker v-model="newMemo.tanggal" label="Tanggal" placeholder="Pilih Tanggal"
+            <AppDateTimePicker v-model="newMemo.tanggal" label="Tanggal(Wajib diisi)" placeholder="Pilih Tanggal"
             :rules="[requiredValidator]" />
           </VCol>
           <VCol cols="12" md="6">
-            <AppTextField v-model="newMemo.no_hp" label="No HP Tujuan" :rules="[requiredValidator]" />
+            <AppTextField v-model="newMemo.no_hp" label="No HP Tujuan(Wajib diisi)" :rules="[requiredValidator]" />
           </VCol>
           <VCol cols="12" md="6">
-            <AppSelect v-model="newMemo.jenis_memo" label="Jenis Memo" :items="jenisMemo"
+            <AppSelect v-model="newMemo.jenis_memo" label="Jenis Memo(wajib dipilih)" :items="jenisMemo"
               :rules="[requiredValidator]" />
           </VCol>
           <VCol cols="12" md="6">
             <AppSelect :items="supirList" item-value="_id" item-title="nama_supir" v-model="newMemo.id_supir"
-              label="Supir" :rules="[requiredValidator]" />
+              label="Supir(wajib dipilih)" :rules="[requiredValidator]" />
           </VCol>
         </VRow>
         <VRow>
           <VCol cols="12">
-            <VTextarea v-model="newMemo.alamat" label="Alamat" auto-grow rows="1" />
+            <VTextarea v-model="newMemo.alamat" label="Alamat(Wajib diisi)" auto-grow rows="1" />
           </VCol>
         </VRow>
       </VCardText>

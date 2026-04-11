@@ -12,7 +12,7 @@
             <AppTextField v-model="CII.newRequest.no_hp" label="Nomor Hp (wajib diisi)" placeholder="Nomor Hp" :rules="[requiredValidator]" />
           </VCol>
           <VCol cols="12">
-            <AppTextarea rows="1" v-model="CII.newRequest.alamat" label="Alamat" placeholder="Alamat (wajib diisi)" auto-grow
+            <AppTextarea rows="1" v-model="CII.newRequest.alamat" label="Alamat(wajib diisi)" placeholder="Alamat (wajib diisi)" auto-grow
               :rules="[requiredValidator]" />
           </VCol>
           <VCol cols="12" md="12" class="ma-0">

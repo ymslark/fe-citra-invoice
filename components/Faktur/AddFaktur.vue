@@ -26,12 +26,12 @@
         <VCardItem v-if="true">
           <VRow>
             <VCol cols="12" md="6" class="d-flex flex-column ga-4 mt-2">
-              <VTextField v-model="faktur.newFaktur.pembeli.nama_pembeli" label="Nama Pembeli" required outlined :rules="[requiredValidator]" />
-              <VTextField v-model="faktur.newFaktur.pembeli.no_hp" label="No Hp" required outlined :rules="[requiredValidator]" />
-              <VTextarea v-model="faktur.newFaktur.pembeli.alamat" label="Alamat" required outlined :rules="[requiredValidator]" rows="1" auto-grow />
-              <VTextField v-model="faktur.newFaktur.pembeli.npwp" label="NPWP" required outlined :rules="[requiredValidator]" />
+              <VTextField v-model="faktur.newFaktur.pembeli.nama_pembeli" label="Nama Pembeli (Wajib diisi)" required outlined :rules="[requiredValidator]" />
+              <VTextField v-model="faktur.newFaktur.pembeli.no_hp" label="No Hp (Wajib diisi)" required outlined :rules="[requiredValidator]" />
+              <VTextarea v-model="faktur.newFaktur.pembeli.alamat" label="Alamat (Wajib diisi)" required outlined :rules="[requiredValidator]" rows="1" auto-grow />
+              <VTextField v-model="faktur.newFaktur.pembeli.npwp" label="NPWP (Wajib diisi)" required outlined :rules="[requiredValidator]" />
 
-              <AppDateTimePicker label="Tanggal Pembelian" v-model="faktur.newFaktur.tanggal_pembelian" required outlined :rules="[requiredValidator]" />
+              <AppDateTimePicker label="Tanggal Pembelian (Wajib diisi)" v-model="faktur.newFaktur.tanggal_pembelian" required outlined :rules="[requiredValidator]" />
               <!-- <VTextField label="Nama Pelanggan" required outlined :rules="[requiredValidator]" />
               <VTextField label="Nama Pelanggan" required outlined :rules="[requiredValidator]" /> -->
             </VCol>

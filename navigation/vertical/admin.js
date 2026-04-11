@@ -45,7 +45,7 @@ export default [
     icon: { icon: 'tabler-truck' },
     children: [
       // { title: 'Daftar Memo', to: 'admin-memo-index' },
-      { title: 'Daftar Surat', to: 'admin-memo' },
+      { title: 'Beranda Surat', to: 'admin-memo' },
       { title: 'Arsip Surat', to: 'admin-memo-lists' },
       { title: 'Tambah Surat', to: 'admin-memo-add' },
       { title: 'Surat Terhapus', to: 'admin-memo-deleted' },
@@ -65,6 +65,7 @@ export default [
     icon: { icon: 'tabler-armchair-2' },
     children: [
       { title: 'Daftar Barang', to: 'admin-barang' },
+      { title: 'Tambah Barang', to: 'admin-barang-add' },
       { title: 'Barang Terhapus', to: 'admin-barang-deleted' },
     ],
     roles: ['developer', 'superadmin'],
