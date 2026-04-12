@@ -123,6 +123,7 @@ import { onMounted, ref } from 'vue'
 import { useAlertStore } from '@/stores/alert'
 
 definePageMeta({
+  middleware: 'auth-client',
   requiresAuth: true,
   roles: ['superadmin', 'developer'],
 })

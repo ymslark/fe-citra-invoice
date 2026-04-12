@@ -144,7 +144,7 @@
 <script setup>
 
 definePageMeta({
-  middleware: 'client-auth',
+  middleware: 'auth-client',
   requiresAuth: true,
   roles: ['superadmin', 'developer'],
 })

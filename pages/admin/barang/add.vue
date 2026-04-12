@@ -1,5 +1,6 @@
 <script setup>
 definePageMeta({
+  middleware: 'auth-client',
   requiresAuth: true,
   roles: ['superadmin', 'developer'],
 })
