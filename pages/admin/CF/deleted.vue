@@ -3,23 +3,23 @@
     <VCard>
       <VCardTitle>
         <div class="">
-          <h2 class="text-lg font-weight-medium d-inline">
-            Data Surat Citra Furniture
-          </h2>
+          <h3 class="font-weight-medium text-wrap">
+            Data Surat Terhapus Citra Furniture
+          </h3>
         </div>
       </VCardTitle>
       <VCardItem>
         <VRow>
-          <VCol cols="12" offset-md="8" md="4" />
+          <VCol cols="12" offset-md="8" md="4" class="d-flex justify-end">
+            <AppTextField v-model="search" label="Cari Tujuan" variant="outlined" class="mb-4"
+              append-inner-icon="tabler-search" @keyup.enter="fetchIndex(1)" />
+          </VCol>
         </VRow>
         <VTable fixed-header class="text-no-wrap mb-4">
           <thead>
             <tr>
               <th class="text-uppercase">
                 No.
-              </th>
-              <th class="text-uppercase">
-                No.Seri
               </th>
               <th class="text-uppercase">
                 Tujuan
@@ -37,7 +37,7 @@
           </thead>
 
           <tbody>
-            <tr v-for="(surat, index) in surats.docs" :key="index">
+            <tr v-for="(surat, index) in suratsFiltered" :key="index">
               <td>
                 {{ index + 1 }}
               </td>
@@ -54,26 +54,7 @@
                 <VIcon :color="status[surat.status].color">{{ status[surat.status].icon }}</VIcon>
                 {{ surat.status }}
               </td>
-              <!-- <td>
-                <IconBtn size="38" @click="goToDetailPage(surat._id)">
-                  <VTooltip open-on-focus location="top" activator="parent">
-                    Detail
-                  </VTooltip>
-                  <VIcon>tabler-info-circle</VIcon>
-                </IconBtn>
-                <IconBtn size="38" @click="goToEditPage(surat._id)">
-                  <VTooltip open-on-focus location="top" activator="parent">
-                    Edit
-                  </VTooltip>
-                  <VIcon>tabler-edit</VIcon>
-                </IconBtn>
-                <IconBtn size="38" @click="navigateTo(`/admin/CF/print/invoice?id=${surat._id}`)">
-                  <VTooltip open-on-focus location="top" activator="parent">
-                    Hapus
-                  </VTooltip>
-                  <VIcon>tabler-trash</VIcon>
-                </IconBtn>
-              </td> -->
+
               <td>
                 <VBtn size="38" icon color="primary" title="Detail">
                   <VTooltip open-on-focus location="top" activator="parent">
@@ -82,13 +63,13 @@
                   <VIcon @click="goToDetailPage(surat._id)">
                     tabler-info-circle</VIcon>
                 </VBtn>
-                <VBtn size="38" class="ml-2" icon color="warning" title="Edit">
+                <!-- <VBtn size="38" class="ml-2" icon color="warning" title="Edit">
                   <VTooltip open-on-focus location="top" activator="parent">
                     Edit
                   </VTooltip>
                   <VIcon @click="navigateTo({ name: `admin-CF-edit-id`, params: { id: surat._id } })">tabler-edit
                   </VIcon>
-                </VBtn>
+                </VBtn> -->
                 <!-- <VBtn size="38" class="ml-2" icon color="error" title="Hapus">
                   <VTooltip open-on-focus location="top" activator="parent">
                     Hapus
@@ -99,6 +80,9 @@
             </tr>
           </tbody>
         </VTable>
+        <!-- <div class="d-flex justify-end">
+        </div> -->
+        <VPagination v-model="currentPage" :length="totalPages" />
       </VCardItem>
     </VCard>
   </div>
@@ -107,23 +91,68 @@
 <script setup>
 
 definePageMeta({
-  // middleware: 'auth.client',
-  requiresAuth: true,
+  // middleware: 'auth-client',
+  // requiresAuth: true,
+  // roles: ['admin', 'superadmin'],
 })
+import { toRaw } from 'vue'
 import { useCFStore } from '@/stores/cf'
-import { onMounted, ref } from 'vue'
+import {buildQueryFilterParams} from '@/utils/apiFilterQuery'
 
-
+const { $api } = useNuxtApp()
 const cf = useCFStore()
-const isDialogVisible = ref(false)
-const firstName = ref('')
-const middleName = ref('')
-const lastName = ref('')
-const email = ref('')
-const password = ref('')
-const age = ref()
-const interest = ref([])
-let button = ''
+const alert = useAlertStore()
+const currentPage = ref(1)
+let surats = []
+const totalPages = ref(1)
+const search = ref('')
+let suratsFiltered = ref([])
+
+
+const fetchIndex = async (page = 1) => { 
+  try {
+    const query = buildQueryFilterParams({ limit:10, page, search: search.value}, false); // defaultLast30Days = true
+    const res = await $api.get("/CF/deleted", { ...query });
+    
+    surats = res.docs;
+    totalPages.value = res.totalPages;
+    currentPage.value = res.page;
+    suratsFiltered.value = surats;
+  } catch (error) {
+    alert.showAlertObject({
+      message: error.message,
+      type: 'error',
+    })
+  }
+  // console.log(suratsFiltered);
+}
+// Ambil data dari backend, backend sudah siapkan pagination
+// const fetchItems = async (page = 1) => {
+//   try {
+//     const response = await $api.get(`/CF/?page=${page}&limit=10`)
+//     // console.log(response)
+//     surats.value = response.docs
+//     totalPages.value = response.totalPages // backend kirim total halaman
+//     // console.log(surats.value)
+//   } catch (error) {
+//     console.error('Gagal mengambil data:', error)
+//   }
+// }
+
+watch(currentPage, (page) => {
+  if (search.value.length >= 3) {
+    fetchIndex(page)
+  }
+  else if (search.value.length === 0) {
+    fetchIndex(page)
+  }
+  // fetchItems(page)
+})
+
+fetchIndex(currentPage.value)
+
+
+let smallPagination = ref(3)
 let supir = {
   nama: '',
   no_telp: '',
@@ -147,8 +176,8 @@ let status = {
     color: 'error'
   }
 }
-let surats = await cf.getCFDeleted()
-// console.log(surats)
+// let surats = await cf.getCF()
+// // console.log(surats)
 
 function goToDetailPage(id) {
   navigateTo({ name: `admin-CF-detail-id`, params: { id } })
@@ -158,12 +187,29 @@ function goToEditPage(id) {
   navigateTo(`CF/edit/${id}`)
 }
 
+
+
+watch(search, (newValue) => {
+  if (newValue.length >= 0) {
+    suratsFiltered.value = surats.filter(surat =>
+      surat.tujuan.toLowerCase().includes(newValue.toLowerCase()) ||
+      surat.no_seri.toLowerCase().includes(newValue.toLowerCase())
+    )
+    // console.log(suratsFiltered)
+  } else if (newValue.length == 0) {
+    suratsFiltered.value = surats.value
+    // // console.log(suratsFiltered)
+  }
+})
+
+
 // function cekButton(i, button){
 //   if(button == 'edit'){
 //     supir = supirs[i]
 //   }
 // }
-onMounted(async () => {
-  // // console.log(useCookie('accessToken').value)
-})
+// onMounted(async () => {
+//   // // console.log(useCookie('accessToken').value)
+// })
+
 </script>

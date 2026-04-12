@@ -10,7 +10,10 @@
       </VCardTitle>
       <VCardItem>
         <VRow>
-          <VCol cols="12" offset-md="8" md="4" />
+          <VCol cols="12" offset-md="8" md="4" class="d-flex justify-end">
+            <AppTextField v-model="search" label="Cari Tujuan" variant="outlined" class="mb-4" clearable
+              append-inner-icon="tabler-search" @keyup.enter="fetchItems()" />
+          </VCol>
         </VRow>
         <VTable fixed-header class="text-no-wrap mb-4">
           <thead>
@@ -37,7 +40,7 @@
           </thead>
 
           <tbody>
-            <tr v-for="(surat, index) in surats.docs" :key="index">
+            <tr v-for="(surat, index) in surats" :key="index">
               <td>
                 {{ index + 1 }}
               </td>
@@ -99,6 +102,9 @@
             </tr>
           </tbody>
         </VTable>
+        <!-- <div class="d-flex justify-end">
+        </div> -->
+        <VPagination v-model="currentPage" :length="totalPages" />
       </VCardItem>
     </VCard>
   </div>
@@ -111,19 +117,51 @@ definePageMeta({
   requiresAuth: true,
 })
 import { useCiStore } from '@/stores/ciis'
-import { onMounted, ref } from 'vue'
+import {buildQueryFilterParams} from '@/utils/apiFilterQuery'
+import { useAlertStore } from '@/stores/alert'
 
-
+const { $api } = useNuxtApp()
 const cii = useCiStore()
-const isDialogVisible = ref(false)
-const firstName = ref('')
-const middleName = ref('')
-const lastName = ref('')
-const email = ref('')
-const password = ref('')
-const age = ref()
-const interest = ref([])
-let button = ''
+const alert = useAlertStore()
+const currentPage = ref(1)
+const surats = ref([])
+const totalPages = ref(1)
+const search = ref('')
+const suratsFiltered = ref([])
+
+// Ambil data dari backend, backend sudah siapkan pagination
+const fetchItems = async (page = 1) => {
+  try {
+    const query = buildQueryFilterParams({ limit:10, page, search: search.value}, false); // defaultLast30Days = true
+    const res = await $api.get("/CII/deleted", { ...query });
+
+    surats.value = res.docs;
+    totalPages.value = res.totalPages;
+    currentPage.value = res.page;
+    suratsFiltered.value = surats;
+  } catch (error) {
+    console.error('Gagal mengambil data:', error)
+    alert.showAlertObject({
+      type: 'error',
+      message: error.message || 'ERROR_OCCURRED',
+    })    
+  }
+}
+
+watch(currentPage, (page) => {
+  if (search.value.length >= 3) {
+    searchData(page)
+  }
+  else if (search.value.length === 0) {
+    fetchItems(page)
+  }
+  // fetchItems(page)
+})
+
+fetchItems(currentPage.value)
+
+
+let smallPagination = ref(3)
 let supir = {
   nama: '',
   no_telp: '',
@@ -147,8 +185,8 @@ let status = {
     color: 'error'
   }
 }
-let surats = await cii.getCIIDeleted()
-console.log(surats)
+// let surats = await cii.getCII()
+// console.log(surats)
 
 function goToDetailPage(id) {
   navigateTo({ name: `admin-CII-detail-id`, params: { id } })
@@ -158,12 +196,15 @@ function goToEditPage(id) {
   navigateTo(`CII/edit/${id}`)
 }
 
+
+
+
 // function cekButton(i, button){
 //   if(button == 'edit'){
 //     supir = supirs[i]
 //   }
 // }
-onMounted(async () => {
-  // console.log(useCookie('accessToken').value)
-})
+// onMounted(async () => {
+//   // console.log(useCookie('accessToken').value)
+// })
 </script>

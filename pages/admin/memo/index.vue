@@ -12,7 +12,7 @@
         <VRow class="d-flex justify-end">
           <VCol cols="12" md="4">
             <AppTextField v-model="search" label="Cari Tujuan" variant="outlined"
-              append-inner-icon="tabler-search" />
+              append-inner-icon="tabler-search" @keyup.enter="filterData(1)"/>
           </VCol>
         </VRow>
         <VTable fixed-header class="text-no-wrap mb-4">

@@ -1,57 +1,21 @@
 <template>
   <div>
-    <VDialog v-model="isDialogVisible" max-width="600">
-      <!-- Dialog close btn -->
-      <DialogCloseBtn @click="isDialogVisible = !isDialogVisible" />
-
-      <!-- Dialog Content -->
-      <VCard title="Tambah Supir">
-        <VCardText>
-          <VRow>
-            <VCol cols="12">
-              <AppTextField v-model="firstName" label="Nama" placeholder="Nama Lengkap" :rules="[requiredValidator,]" />
-            </VCol>
-            <VCol cols="12">
-              <AppTextField v-model="email" label="Nomor Telepon" placeholder="Nomor Telepon"
-                :rules="[requiredValidator]" />
-            </VCol>
-            <VCol cols="12">
-              <AppTextField v-model="password" label="Nomor Kendaraan" placeholder="Nomor Kendaraan"
-                :rules="[requiredValidator,]" />
-            </VCol>
-          </VRow>
-        </VCardText>
-
-        <VCardText class="d-flex justify-end flex-wrap gap-3">
-          <VBtn variant="tonal" color="secondary" @click="isDialogVisible = false">
-            Close
-          </VBtn>
-          <VBtn @click="isDialogVisible = false">
-            Save
-          </VBtn>
-        </VCardText>
-      </VCard>
-    </VDialog>
     <VCard>
       <VCardTitle>
         <div class="">
           <h2 class="text-lg font-weight-medium d-inline">
-            Data Surat Jalan
+            Data Surat Terhapus
           </h2>
-          <VBtn class="ml-auto d-flex" color="primary" @click="isDialogVisible = true">
-            Tambah Surat Jalan
-          </VBtn>
         </div>
       </VCardTitle>
       <VCardItem>
-        <VRow>
-          <VCol cols="12" v-if="memos.length == 0">
-            <h4 class="text-lg font-weight-medium d-inline">
-              Tidak Ada Data
-            </h4>
+        <VRow class="d-flex justify-end">
+          <VCol cols="12" md="4">
+            <AppTextField v-model="search" label="Cari Tujuan" variant="outlined"
+              append-inner-icon="tabler-search" @keyup.enter="filterData(1)"/>
           </VCol>
         </VRow>
-        <VTable v-if="memos.length > 0" fixed-header class="text-no-wrap mt-4 mb-4">
+        <VTable fixed-header class="text-no-wrap mb-4">
           <thead>
             <tr>
               <th class="text-uppercase">
@@ -66,9 +30,6 @@
               <th class="text-uppercase">
                 Nama Supir
               </th>
-              <!-- <th class="text-uppercase">
-                Alamat
-              </th> -->
               <th class="text-uppercase">
                 Perusahaan
               </th>
@@ -82,7 +43,7 @@
           </thead>
 
           <tbody>
-            <tr v-if="memos.length > 0" v-for="(memo, index) in memos" :key="index">
+            <tr v-for="(memo, index) in memos" :key="index">
               <td>
                 {{ index + 1 }}
               </td>
@@ -90,14 +51,11 @@
                 {{ memo.tujuan }}
               </td>
               <td>
-                {{ memo.tanggal }}
+                {{ formatTanggalIndonesia(memo.tanggal) }}
               </td>
               <td>
                 {{ memo.supir.nama_supir }}
               </td>
-              <!-- <td>
-                {{ memo.alamat }}
-              </td> -->
               <td>
                 {{ memo.perusahaan }}
               </td>
@@ -105,12 +63,32 @@
                 <VIcon :color="status[memo.status].color">{{ status[memo.status].icon }}</VIcon>
                 {{ memo.status }}
               </td>
+              <!-- <td>
+                <IconBtn size="38" @click="goToDetailPage(surat._id)">
+                  <VTooltip open-on-focus location="top" activator="parent">
+                    Detail
+                  </VTooltip>
+                  <VIcon>tabler-info-circle</VIcon>
+                </IconBtn>
+                <IconBtn size="38" @click="goToEditPage(surat._id)">
+                  <VTooltip open-on-focus location="top" activator="parent">
+                    Edit
+                  </VTooltip>
+                  <VIcon>tabler-edit</VIcon>
+                </IconBtn>
+                <IconBtn size="38" @click="navigateTo(`/admin/SCI/print/invoice?id=${surat._id}`)">
+                  <VTooltip open-on-focus location="top" activator="parent">
+                    Hapus
+                  </VTooltip>
+                  <VIcon>tabler-trash</VIcon>
+                </IconBtn>
+              </td> -->
               <td>
                 <VBtn size="38" icon color="primary" title="Detail">
                   <VTooltip open-on-focus location="top" activator="parent">
                     Detail
                   </VTooltip>
-                  <VIcon @click="navigateTo({ name: `admin-memo-detail-id`, params: { id: memo._id } })">
+                  <VIcon @click="goToDetailPage(memo._id)">
                     tabler-info-circle</VIcon>
                 </VBtn>
                 <VBtn size="38" class="ml-2" icon color="warning" title="Edit">
@@ -130,64 +108,153 @@
             </tr>
           </tbody>
         </VTable>
-        <VPagination v-if="memos.length > 0" v-model="currentPage" :length="totalPages" />
+        <!-- <div class="d-flex justify-end">
+        </div> -->
+        <VPagination v-model="currentPage" :length="totalPages" />
       </VCardItem>
     </VCard>
   </div>
 </template>
 
 <script setup>
-const { $api } = useNuxtApp()
 
-const isDialogVisible = ref(false)
-const firstName = ref('')
-const middleName = ref('')
-const lastName = ref('')
-const email = ref('')
-const password = ref('')
-const age = ref()
-const interest = ref([])
+definePageMeta({
+  middleware: 'auth-client',
+  requiresAuth: true,
+})
+import { useMemoStore } from '@/stores/memo'
+import {useAlertStore} from '@/stores/alert'
+import { buildQueryFilterParams } from '@/utils/apiFilterQuery'
+
+
+const { $api } = useNuxtApp()
+const memo = useMemoStore()
+const alert = useAlertStore()
+const currentPage = ref(1)
+const memos = ref([])
+const totalPages = ref(1)
+
+const filterData = async (page = 1) => {
+  try {
+
+    const query = buildQueryFilterParams({ page, search: search.value, limit:30 }, false);
+    const response = await $api.get('/Memo/deleted', { ...query });
+    console.log(response)
+    memos.value = response.docs
+    totalPages.value = response.totalPages // backend kirim total halaman
+    currentPage.value = response.page
+    //console.log(memos.value)
+  } catch (error) {
+    //console.log(error.message)
+    alert.showAlertObject({
+      type: 'error',
+      message: error.message || 'Gagal mengambil data',
+    })
+  }
+}
+
+// Ambil data dari backend, backend sudah siapkan pagination
+// const fetchItems = async (page = 1) => {
+//   try {
+//     const response = await $api.get(`/SCI?page=${page}&limit=10`)
+//     //console.log(response)
+//     memos.value = response.docs
+//     totalPages.value = response.totalPages // backend kirim total halaman
+//   } catch (error) {
+//     console.error('Gagal mengambil data:', error)
+//   }
+// }
+
+watch(currentPage, (page) => {
+  if (search.value.length >= 3) {
+    filterData(page)
+  }
+  else if (search.value.length === 0) {
+    //console.log(page)
+    filterData(1)
+  }
+
+})
+
+
+
+let smallPagination = ref(3)
+let supir = {
+  nama: '',
+  no_telp: '',
+  no_kendaraan: '',
+}
 let status = {
   'WAITING': {
     icon: 'tabler-hourglass',
     color: 'warning'
   },
-  'APPROVED': {
+  'PROCCESS': {
+    icon: 'tabler-truck-delivery',
+    color: 'primary'
+  },
+  'DONE': {
     icon: 'tabler-check',
     color: 'success'
   },
-  'REJECTED': {
-    icon: 'tabler-x',
-    color: 'error'
-  },
-  'CANCELED': {
+  'CANCEL': {
     icon: 'tabler-x',
     color: 'error'
   }
 }
-// const memos = await $api.get('/memo/deleted')
-// console.log(memos.docs)
+// let memos = await sci.getSCI()
+// //console.log(memos)
 
-const currentPage = ref(1)
-const memos = ref([])
-const totalPages = ref(1)
-
-// Ambil data dari backend, backend sudah siapkan pagination
-const fetchItems = async (page = 1) => {
-  try {
-    const response = await $api.get(`/memo/deleted?page=${page}&limit=100`)
-    console.log(response)
-    memos.value = response.docs
-    totalPages.value = response.totalPages // backend kirim total halaman
-    console.log(memos.value)
-  } catch (error) {
-    console.error('Gagal mengambil data:', error)
-  }
+function goToDetailPage(id) {
+  navigateTo({ name: `admin-memo-detail-id`, params: { id } })
 }
 
-watch(currentPage, (page) => {
-  fetchItems(page)
-})
+function goToEditPage(id) {
+  navigateTo(`memo/edit/${id}`)
+}
 
-fetchItems(currentPage.value)
+const search = ref('')
+
+//fungsi untuk search data
+
+// watch(search, (newValue) => {
+//   if (newValue.length >= 3) {
+//     //console.log(newValue)
+//   } else if (newValue.length === 0) {
+//     //console.log(newValue)
+//   }
+// })
+
+
+
+// const getDocumentByRange = async (page) => {
+//   try {
+//     let start = ''
+//     let end = ''
+//     if (!dateRange.value) throw { message: 'Pilih rentang tanggal terlebih dahulu' }
+//     let range = dateRange.value.split(' to ')
+//     //console.log(range)
+//     if( range.length == 1) {
+//       start = range[0]
+//       end = range[0]
+//     }
+//     else if (range.length == 2) {
+//       start = range[0]
+//       end = range[1]
+//     }
+//     const response = await sci.getSCIByPeriods(start, end, page, search.value)
+//     //console.log(response)
+//     surats.value = response.docs
+//     totalPages.value = response.totalPages // backend kirim total halaman
+//     // currentPage.value = page || 1
+//     //console.log(surats.value)
+//   } catch (error) {
+//     //console.log(error.message)
+//     alert.showAlertObject({
+//       type: 'error',
+//       message: error.message || 'Gagal mengambil data',
+//     })
+//   }
+// }
+filterData(1)
 </script>
