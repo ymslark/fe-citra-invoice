@@ -18,7 +18,7 @@ const loading = ref(false)
 
 
 const deleteInterior = index => cii.deleteInteriorEdit(index)
-let label = interior.nama_interior_request ? `Nama Interior (${interior.nama_interior_request})` : 'Nama Interior'
+let label = interior.nama_interior_request ? `Nama Interior (${interior.nama_interior_request}) ` : 'Nama Interior '
 label += ' (wajib diisi)'
 function formatInput(e) {
   console.log(e)

@@ -11,7 +11,7 @@ const barang = props.barang
 
 const cf = useCFStore()
 const deleteBarang = index => cf.deleteBarangRequest(index)
-const label = barang.nama_barang_request ? `Nama Barang (${barang.nama_barang_request})` : 'Nama Barang (wajib diisi)'
+const label = barang.nama_barang_request ? `Nama Barang (${barang.nama_barang_request})(wajib diisi)` : 'Nama Barang (wajib diisi)'
 </script>
 
 <template>

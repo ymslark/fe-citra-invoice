@@ -22,6 +22,9 @@
                 No.
               </th>
               <th class="text-uppercase">
+                No. Seri
+              </th>
+              <th class="text-uppercase">
                 Tujuan
               </th>
               <th class="text-uppercase">
