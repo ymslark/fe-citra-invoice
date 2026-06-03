@@ -21,7 +21,7 @@ export default defineNuxtConfig({
 
   server: {
     host: '0.0.0.0', // Listen on all interfaces
-    port: process.env.APP_PORT || 8000,
+    port: process.env.APP_PORT || 3000, //change fe port to 3000 to avoid conflict with backend port 8000
   },
 
   devtools: {
@@ -34,7 +34,7 @@ export default defineNuxtConfig({
     '@/plugins/iconify/icons.css',
   ],
   devServer: {
-    port: 8000,
+    port: 3000, //change fe port to 3000 to avoid conflict with backend port 8000
   },  
 
   /*

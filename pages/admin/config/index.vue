@@ -3,11 +3,10 @@
 definePageMeta({
   title: 'Konfigurasi',
   middleware: ['auth'],
-  roles: ['developer', 'superadmin']
+  roles: ['developer', 'superadmin', 'super_admin'] //add super_admin role based on backend role list
 })
 
 const { $api } = useNuxtApp()
-import { ScrollToTop } from '#components'
 import { useAlertStore } from '@/stores/alert'
 const alert = useAlertStore()
 const tab = ref('rekening')
