@@ -1,0 +1,10 @@
+#!/bin/sh
+set -eu
+
+export NUXT_BASE_URL_API="${NUXT_BASE_URL_API:-${API_BASE_URL:-}}"
+export NUXT_PUBLIC_API_URL="${NUXT_PUBLIC_API_URL:-${API_BASE_URL:-}}"
+export NUXT_PUBLIC_APP_NAME="${NUXT_PUBLIC_APP_NAME:-${APP_NAME:-Citra Invoice}}"
+export NUXT_PUBLIC_APP_BASE_URL="${NUXT_PUBLIC_APP_BASE_URL:-${BASE_URL_FE:-http://localhost:3000}}"
+export NUXT_PUBLIC_DEBUG="${NUXT_PUBLIC_DEBUG:-${DEBUG:-false}}"
+
+exec "$@"
