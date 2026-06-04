@@ -1,19 +1,9 @@
-import { h } from 'vue'
-
 // 👉 Redirects
 const redirects = [
   {
     path: '/',
     name: 'index',
-    meta: {
-      middleware: () => ({ name: 'admin-login' }),
-    },
-    component: h('div'),
-  },
-  {
-    path: '/admin/CF',
-    name: 'admin-CF',
-    redirect: () => ({ name: 'admin-CF' }),
+    redirect: () => ({ name: 'admin-login' }),
   },
   {
     path: '/pages/user-profile',
