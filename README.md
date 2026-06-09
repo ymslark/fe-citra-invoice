@@ -33,3 +33,26 @@ npm run dev
 ```sh
 npm run build
 ```
+
+## Docker
+
+Copy the example environment file and adjust the backend URL:
+
+```sh
+cp .env.example .env
+```
+
+Build and run the production container:
+
+```sh
+docker build -t fe-citra-invoice .
+docker run --rm -p 3000:3000 --env-file .env fe-citra-invoice
+```
+
+Or run it with Docker Compose:
+
+```sh
+docker compose up --build
+```
+
+The app is exposed at `http://localhost:3000`.
