@@ -67,6 +67,7 @@ export function parseCurrencyToNumber(formattedValue) {
 
 export function formatTanggalIndonesia(tanggalString, opsi = null) {
   //hari
+  // console.log(tanggalString)
   let hari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']
   const tanggal = new Date(tanggalString)
   // Format tanggal ke string dengan hari

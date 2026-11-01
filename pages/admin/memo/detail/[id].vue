@@ -210,7 +210,7 @@ const restoreMemo = async () => {
               <td>{{ index + 1 }}</td>
               <td>{{ barang.nama_barang }}</td>
               <td class="text-center">{{ barang.qty }}</td>
-              <td>{{ barang.keterangan }}</td>
+              <td class="text-center">{{ barang.keterangan }}</td>
             </tr>
           </tbody>
         </VTable>

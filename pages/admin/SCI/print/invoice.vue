@@ -8,12 +8,16 @@ import { useSCIStore } from '@/stores/sci'
 import { formatRupiah, formatTanggalIndonesia, pembilang } from '@/utils/format'
 import { hitungInvoiceBarang } from '@/utils/invoice/hitungInvoiceBarang'
 import { getDate } from '@/utils/global'
+const config = useRuntimeConfig()
+const documentLetterDateMode = config.public.documentLetterDateMode || 'current' // current or created or date, current = use current date, created = use document created date, date = use document date
+
 const route = useRoute()
 const router = useRouter()
 const sci = useSCIStore()
 const id = route.query.id || null
 const alert = useAlertStore()
-let surat = null
+console.log(getDate())
+let surat = {tanggal: getDate()}
 let barang = null
 // const pembilang = pembilang
 let terbilang = '' 
@@ -87,7 +91,8 @@ onMounted(async () => {
     <div class="detail-invoice">
       <div>Mata Uang : Rupiah</div>
       <div>No. Po: {{ surat.no_seri }}</div>
-      <div>Tanggal PO : {{ formatTanggalIndonesia(surat.tanggal, 'hari') }}</div>
+      <div v-if="documentLetterDateMode == 'current'">Tanggal PO : {{ formatTanggalIndonesia(getDate(), 'hari') }}</div>
+      <div v-else-if="documentLetterDateMode == 'date'">Tanggal PO : {{ formatTanggalIndonesia(surat.tanggal, 'hari') }}</div>
     </div>
 
     <table class="table-items">
@@ -229,7 +234,8 @@ onMounted(async () => {
           </table>
         </td>
         <td class="br-0">
-          <div>Bekasi, {{ formatTanggalIndonesia(getDate()) }}</div>
+          <div v-if="documentLetterDateMode == 'current'">Bekasi, {{ formatTanggalIndonesia(getDate()) }}</div>
+          <div v-if="documentLetterDateMode == 'date'">Bekasi, {{ formatTanggalIndonesia(surat.tanggal) }}</div>
           <img src="/images/citragroup/SCI/SCI_Logo.png" id="logo">
           <div>Sentral Citra Indonesia</div>
         </td>

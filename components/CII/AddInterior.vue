@@ -19,12 +19,12 @@ const loading = ref(false)
 
 
 const deleteInterior = index => cii.deleteInterior(index)
-console.log(interior)
+// console.log(interior)
 let label = interior.nama_interior_request ? `Nama Interior (${interior.nama_interior_request})` : 'Nama Interior'
 label += ' (wajib diisi)'
 
 function formatInput(e) {
-  console.log(e)
+  // console.log(e)
   if(e.target.name == 'harga'){
     let raw = e.target.value.replace(/\D/g, '') // Hanya ambil angka
     // interior[e.target.name] = parseInt(raw || '0').toLocaleString('id-ID') // Format pakai titik
@@ -45,7 +45,7 @@ function formatInput(e) {
     // buang semua kecuali angka & titik
     volume = volume.replace(/[^0-9.]/g, '')
     
-    console.log(volume)
+    // console.log(volume)
     // jaga biar cuma ada 1 titik
     const parts = volume.split('.')
     if (parts.length > 2) {

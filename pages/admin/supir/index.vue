@@ -75,6 +75,8 @@
         </VCardText>
       </VCard>
     </VDialog>
+    <UtilsConfirmDialog :show="isDeleteDialogVisible" message="Apakah Anda Yakin Ingin menghapus supir ini??"
+      @confirm="deleteSupir()" @cancel="isDeleteDialogVisible = false" />
     <VCard>
       <VCardTitle>
         <div class="">
@@ -140,12 +142,12 @@
                   </VTooltip>
                   <VIcon @click="editDialog(supir._id)">tabler-edit</VIcon>
                 </IconBtn>
-                <!-- <IconBtn size="38">
+                <IconBtn size="38">
                   <VTooltip open-on-focus location="top" activator="parent">
                     Hapus
                   </VTooltip>
-                  <VIcon>tabler-trash</VIcon>
-                </IconBtn> -->
+                  <VIcon @click="deleteSupirDialog(supir._id)">tabler-trash</VIcon>
+                </IconBtn>
               </td>
             </tr>
           </tbody>
@@ -165,6 +167,7 @@ const alertStore = useAlertStore()
 
 const isDialogVisible = ref(false)
 const isEditDialogVisible = ref(false)
+const isDeleteDialogVisible = ref(false)
 const errorMessage = ref('')
 const middleName = ref('')
 const lastName = ref('')
@@ -239,6 +242,7 @@ let dataEditSUpir = {
   driver_phone: '',
   vehicle_number: '',
 }
+const deleteSupirId = ref('')
 const editSupir = ref(dataEditSUpir)
 
 const editDialog = async (id) => {
@@ -264,17 +268,66 @@ const editDialog = async (id) => {
 const saveEditSupir = async () => {
   try {
     console.log(editSupir)
-    const response = await $api.put(`/supir/${editSupir.id}`, editSupir)
+    const response = await $api.put(`/supir/${editSupir.value.id}`, editSupir.value)
     console.log(response)
     if (!response) {
       throw { message: 'Ubah Data Gagal', code: 400 }
     }
+    alertStore.showAlertObject({
+      message: 'Data Supir berhasil diubah!',
+      type: 'success',
+    })
+    getSupir()
     isEditDialogVisible.value = false
   } catch (error) {
     errorMessage.value = error.message
     console.log(error)
+    alertStore.showAlertObject({
+      message: 'Data Supir gagal diubah!',
+      type: 'error',
+    })
   }
 }
+
+const deleteSupirDialog = async (id) => {
+  try {
+    deleteSupirId.value = id
+    console.log(deleteSupirId.value)
+    isDeleteDialogVisible.value = true
+  } catch (error) {
+    alertStore.showAlert({
+      message: error.message,
+      type: 'error',
+    })
+    console.log(error)
+  }
+}
+
+const deleteSupir = async () => {
+  try {
+    console.log(deleteSupirId.value)
+    isDeleteDialogVisible.value = true
+    const response = await $api.delete(`/supir/${deleteSupirId.value}`)
+    console.log(response)
+    if (!response) {
+      throw { message: 'Ubah Data Gagal', code: 400 }
+    }
+    isDeleteDialogVisible.value = false
+    alertStore.showAlertObject({
+      message: 'Data Supir berhasil dihapus!',
+      type: 'success',
+    })
+    getSupir()  
+  } catch (error) {
+    errorMessage.value = error.message
+    console.log(error)
+    alertStore.showAlertObject({
+      message: error.message,
+      type: 'error',
+    })
+  }
+}
+
 onMounted(() => {
   useCookie('asas', { path: '/' }).value = 'jhaskjhkjashjk'
 

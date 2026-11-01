@@ -8,6 +8,9 @@ import { useCiStore } from '@/stores/ciis'
 import { formatRupiah, formatTanggalIndonesia, pembilang } from '@/utils/format'
 import { getDate } from '@/utils/global'
 import { hitungInvoiceInterior } from '@/utils/invoice/hitungInvoiceInterior'
+const config = useRuntimeConfig()
+const documentLetterDateMode = config.public.documentLetterDateMode || 'current' // current or created or date, current = use current date, created = use document created date, date = use document date
+
 const route = useRoute()
 const router = useRouter()
 const cii = useCiStore()
@@ -73,7 +76,8 @@ onMounted(async () => {
     <div class="detail-invoice">
       <div>Mata Uang : Rupiah</div>
       <div>No. Po: {{ surat.no_seri }}</div>
-      <div>Tanggal PO : {{ formatTanggalIndonesia(surat.tanggal, 'hari') }}</div>
+      <div v-if="documentLetterDateMode == 'current'">Tanggal PO : {{ formatTanggalIndonesia(getDate(), 'hari') }}</div>
+      <div v-else-if="documentLetterDateMode == 'date'">Tanggal PO : {{ formatTanggalIndonesia(surat.tanggal, 'hari') }}</div>
     </div>
 
     <table class="table-items">
@@ -88,7 +92,7 @@ onMounted(async () => {
         <tr>
           <th class="bl-0">No</th>
           <th>Keterangan</th>
-          <th>Harga perMeter</th>
+          <th>Harga (per m<sup>2</sup>)</th>
           <th>Volume</th>
           <th>Subtotal</th>
           <th>Diskon</th>
@@ -103,7 +107,7 @@ onMounted(async () => {
             <span class="rp">Rp.</span>
             <span class="nilai">{{ formatRupiah(item.dpp_tanpa_diskon) }}</span>
           </td>
-          <td class="text-center">{{ ` ${item.v1} x ${item.v2}m` }}</td>
+          <td class="text-center">{{ ` ${item.v1}m x ${item.v2}m` }}</td>
           <!-- <td class="text-right">{{ formatRupiah(item.harga) }}</td> -->
           <!-- <td class="text-right br-0">{{ formatRupiah(item.total_harga) }}</td> -->
           <td class="angka-kanan br-0">
@@ -227,7 +231,8 @@ onMounted(async () => {
           </table>
         </td>
         <td class="br-0">
-          <div>Bekasi, {{ formatTanggalIndonesia(getDate()) }}</div>
+          <div v-if="documentLetterDateMode == 'current'">Bekasi, {{ formatTanggalIndonesia(getDate()) }}</div>
+          <div v-if="documentLetterDateMode == 'date'">Bekasi, {{ formatTanggalIndonesia(surat.tanggal) }}</div>
           <img src="/images/citragroup/CII/CII_Logo.png" id="logo">
           <div>Citra Interior Indonesia</div>
         </td>

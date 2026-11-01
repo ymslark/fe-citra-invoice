@@ -46,14 +46,15 @@ export default defineNuxtConfig({
     // AUTH_ORIGIN: process.env.AUTH_ORIGIN,
     // AUTH_SECRET: process.env.AUTH_SECRET,
     BASE_URL_API: process.env.API_BASE_URL,
-
+    
     // Public keys that are exposed to the client.
-// nuxt.config.ts
+    // nuxt.config.ts
     public: {
       apiUrl: process.env.API_BASE_URL,
       appName: process.env.APP_NAME,
       appBaseUrl: process.env.BASE_URL_FE,
-      debug: process.env.DEBUG === 'true'
+      debug: process.env.DEBUG === 'true',
+      documentLetterDateMode: 'date' // current or created or date, current = use current date, created = use document created date, date = use document date
     }
   },
   components: {

@@ -21,7 +21,7 @@ const deleteInterior = index => cii.deleteInteriorEdit(index)
 let label = interior.nama_interior_request ? `Nama Interior (${interior.nama_interior_request}) ` : 'Nama Interior '
 label += ' (wajib diisi)'
 function formatInput(e) {
-  console.log(e)
+  // console.log(e)
   let raw = e.target.value.replace(/\D/g, '') // Hanya ambil angka
   // interior[e.target.name] = parseInt(raw || '0').toLocaleString('id-ID') // Format pakai titik
   interior[e.target.name] = parseInt(raw || '0').toLocaleString('id-ID') // Format pakai titik

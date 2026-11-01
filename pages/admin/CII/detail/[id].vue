@@ -510,7 +510,7 @@ console.log(interiors)
                     Rp{{ formatRupiah(item.diskon) }}
                   </td>
                   <td>
-                    {{ item.v1 }}x{{ item.v2 }}m<sup>3</sup>
+                    {{ item.v1 }}x{{ item.v2 }}m<sup>2</sup>
                   </td>
                   <td>
                     Rp{{ formatRupiah((item.harga_akhir - (item.harga_akhir * (surat.ppn/100) ) )) }}

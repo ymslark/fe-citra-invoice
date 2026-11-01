@@ -7,12 +7,14 @@ import { useAlertStore } from '@/stores/alert'
 import { useMemoStore } from '@/stores/memo'
 import { formatRupiah, formatTanggalIndonesia, pembilang } from '@/utils/format'
 import { getDate } from '@/utils/global'
+const config = useRuntimeConfig()
+const documentLetterDateMode = config.public.documentLetterDateMode || 'current' // current or created or date, current = use current date, created = use document created date, date = use document date
+
 const route = useRoute()
 const router = useRouter()
 const memo = useMemoStore()
 const id = route.query.id || null
 const alert = useAlertStore()
-const config = useRuntimeConfig()
 const baseUrl = config.public.apiUrl // Ganti dengan URL API yang sesuai
 if (!id) {
   alert.showAlert({
@@ -69,7 +71,8 @@ onMounted(() => {
 
     <div class="meta">
       <div>Hal : Surat Jalan {{surat.jenis_memo}}</div>
-      <div>Bekasi, {{ formatTanggalIndonesia(getDate(), 'hari') }}</div>
+      <div v-if="documentLetterDateMode == 'current'">Bekasi, {{ formatTanggalIndonesia(getDate(), 'hari') }}</div>
+      <div v-if="documentLetterDateMode == 'date'">Bekasi, {{ formatTanggalIndonesia(surat.tanggal, 'hari') }}</div>
     </div>
     <div class="meta">
       <div style="width: 50%;">
@@ -124,7 +127,8 @@ onMounted(() => {
       </table>
     </div>
     <div class="footer-surat">
-      <div class="tanggal">Bekasi, {{ formatTanggalIndonesia(getDate()) }}</div>
+      <div v-if="documentLetterDateMode == 'current'" class="tanggal">Bekasi, {{ formatTanggalIndonesia(getDate()) }}</div>
+      <div v-if="documentLetterDateMode == 'date'" class="tanggal">Bekasi, {{ formatTanggalIndonesia(surat.tanggal) }}</div>
       <div style="margin-top: -15px; margin-bottom: 5px;">Hormat Kami</div>
       <img :src="logoUrl" alt="Logo Perusahaan" />
       <div class="nama-perusahaan">{{ namaPerusahaan[surat.perusahaan] }}</div>

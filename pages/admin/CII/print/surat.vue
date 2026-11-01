@@ -9,6 +9,9 @@ import { formatRupiah, formatAngkaIndo, formatTanggalIndonesia, pembilang } from
 import {  hitungInvoiceInterior } from '@/utils/invoice/hitungInvoiceInterior'
 import { getDate } from '@/utils/global'
 import jsPDF from 'jspdf'
+const config = useRuntimeConfig()
+const documentLetterDateMode = config.public.documentLetterDateMode || 'current' // current or created or date, current = use current date, created = use document created date, date = use document date
+
 const route = useRoute()
 const router = useRouter()
 const cf = useCiStore()
@@ -86,7 +89,8 @@ try {
   
         </div>
         <div class="d-flex flex-column">
-          <span>{{formatTanggalIndonesia(getDate(), 'hari')}}</span>
+          <span v-if="documentLetterDateMode == 'current'">{{formatTanggalIndonesia(getDate(), 'hari')}}</span>
+          <span v-if="documentLetterDateMode == 'date'">{{formatTanggalIndonesia(surat.tanggal, 'hari')}}</span>
           <span>No.Seri : {{surat.no_seri}}</span>
         </div>
       </div>
@@ -97,7 +101,7 @@ try {
           <tr>
             <th>No</th>
             <th>Nama Interior</th>
-            <th>Harga Satuan</th>
+            <th>Harga (per m&sup2;)</th>
             <th>Ukuran</th>
             <th>subtotal</th>
             <th>Diskon</th>
@@ -220,7 +224,8 @@ try {
       </table>
       </div>
       <div class="footer-surat">
-        <div class="tanggal">Bekasi, {{ formatTanggalIndonesia(getDate()) }}</div>
+        <div v-if="documentLetterDateMode == 'current'" class="tanggal">Bekasi, {{ formatTanggalIndonesia(getDate()) }}</div>
+        <div v-if="documentLetterDateMode == 'date'" class="tanggal">Bekasi, {{ formatTanggalIndonesia(surat.tanggal) }}</div>
         <div class="mt-n3">Hormat Kami</div>
         <img src="/images/citragroup/CII/CII_Logo.png" alt="Logo Perusahaan" />
         <div class="nama-perusahaan">Citra Interior Indonesia</div>

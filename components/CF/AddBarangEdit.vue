@@ -24,7 +24,7 @@ const deleteBarang = _tempId => cf.deleteBarangEditByTempId(_tempId)
 const label = barang.nama_barang_request ? `Nama Barang (${barang.nama_barang_request})(wajib diisi)` : 'Nama Barang (wajib diisi)' 
 
 function formatInput(e) {
-  console.log(e)
+  // console.log(e)
   let raw = e.target.value.replace(/\D/g, '') // Hanya ambil angka
   // interior[e.target.name] = parseInt(raw || '0').toLocaleString('id-ID') // Format pakai titik
   barang[e.target.name] = parseInt(raw || '0').toLocaleString('id-ID') // Format pakai titik

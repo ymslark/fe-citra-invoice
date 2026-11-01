@@ -6,24 +6,29 @@ definePageMeta({
 import jsPDF from 'jspdf'
 import {useFakturStore} from '@/stores/faktur'
 import { formatTanggalIndonesia, formatRupiah, npwpFormat } from '@/utils/format'
-
+import { hitungInvoiceBarang } from '@/utils/invoice/hitungInvoiceBarang'
 const printArea = ref(null)
 const faktur = useFakturStore()
 const route = useRoute()
 const id = route.query.id || null
 let document = null
+let barang = ''
 if (id) {
   try {
     const {$api} = useNuxtApp()
     const response = await $api.get(`/Faktur/detail/${id}`)
     document = response.faktur
+    barang = hitungInvoiceBarang(document.barang, document.ppn, true)
     console.log(document)
+    console.log(barang)
   } catch (error) {
     console.error("Error fetching Faktur data:", error)
     // Handle error, e.g., show an alert or redirect
   }
 }
 const router = useRouter()
+const config = useRuntimeConfig()
+const documentLetterDateMode = config.public.documentLetterDateMode || 'current' // current or created or date, current = use current date, created = use document created date, date = use document date
 
 const { $api } = useNuxtApp()
 let totalHarga = 0
@@ -57,24 +62,32 @@ let htmlContent = `
                 <tbody>`
 
 console.log(document)                    
-document.barang.forEach((item, index) => {
+barang.barangs.forEach((item, index) => {
     htmlContent += `
         <tr>
             <td style="border: 1px solid #333; padding: 6px 8px; text-align: center;">${index + 1}</td>
             <td style="border: 1px solid #333; padding: 6px 8px; text-align: left;">${item.nama_barang}</td>
-            <td style="border: 1px solid #333; padding: 6px 8px; text-align: left;">Rp.${formatRupiah(item.harga)}</td>
+            <td style="border: 1px solid #333; padding: 6px 8px; text-align: left;">Rp${formatRupiah(item.dpp_per_unit)}</td>
             <td style="border: 1px solid #333; padding: 6px 8px; text-align: center;">${item.qty}</td>
-            <td style="border: 1px solid #333; padding: 6px 8px; text-align: right;">Rp.${formatRupiah(item.total)}</td>
+            <td style="border: 1px solid #333; padding: 6px 8px; text-align: right;">Rp${formatRupiah(item.total_dpp)}</td>
         </tr>
     `
-    totalHarga += item.total
+    // totalHarga += item.total_dpp
 })
 htmlContent += `
         </tbody>
             <tfoot>
                 <tr>
+                <td colspan="4" style="border: 1px solid #333; font-weight: bold; text-align: right; padding: 6px 8px;">Total:</td>
+                <td style="border: 1px solid #333; padding: 6px 8px; text-align: right;">Rp${formatRupiah(barang.dpp)}</td>
+                </tr>
+                <tr>
+                <td colspan="4" style="border: 1px solid #333; font-weight: bold; text-align: right; padding: 6px 8px;">PPN:</td>
+                <td style="border: 1px solid #333; padding: 6px 8px; text-align: right;">Rp${formatRupiah(barang.ppn)}</td>
+                </tr>
+                <tr>
                 <td colspan="4" style="border: 1px solid #333; font-weight: bold; text-align: right; padding: 6px 8px;">Grand Total:</td>
-                <td style="border: 1px solid #333; font-weight: bold; text-align: right; padding: 6px 8px;">${formatRupiah(totalHarga)}</td>
+                <td style="border: 1px solid #333; padding: 6px 8px; text-align: right;">Rp${formatRupiah(barang.total)}</td>
                 </tr>
             </tfoot>
             </table>

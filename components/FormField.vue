@@ -15,7 +15,7 @@ const emit = defineEmits(['update:modelValue'])
 
 // cek apakah ada requiredValidator
 const computedLabel = computed(() => {
-console.log(props)
+// console.log(props)
   const isRequired = props.rules?.some(r => r.name === 'requiredValidator')
   return isRequired ? `${props.label} (wajib diisi)` : props.label
 })

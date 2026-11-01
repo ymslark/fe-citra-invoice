@@ -161,6 +161,12 @@ const saveBarang = async () => {
                     Upload
                     <VIcon end icon="tabler-cloud-upload"/>
                   </VBtn>
+                  <a href="https://drive.google.com/file/d/110Wo7ft4mA8Z0XTFqYJoEzFGXu1wb8uF/view?usp=drive_link" target="_blank" download="TemplateBarangCitra">
+                    <VBtn color="secondary" >
+                      Download Template
+                      <VIcon end icon="tabler-cloud-download"/>
+                    </VBtn>
+                  </a>
                   <VTooltip location="top" 
                   open-on-click
                   :open-on-hover="false">
