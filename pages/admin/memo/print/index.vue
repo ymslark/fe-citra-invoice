@@ -29,19 +29,19 @@ let surat = null
 try {
   const response = await memo.getMemoById(id)
   surat = response.doc
-  console.log(surat)
-  // console.log(surat.doc)
+  //console.log(surat)
+  // //console.log(surat.doc)
 } catch (error) {
   alert.showAlert({
     type: 'error',
     message: 'Gagal mengambil data surat',
   })
 }
-console.log(surat)
+//console.log(surat)
 let kopUrl = `/images/citragroup/${surat.perusahaan}/${surat.perusahaan}_Kop.`
 surat.perusahaan == 'CF' ? kopUrl += 'jpeg' : kopUrl += 'jpg'
 const logoUrl = `/images/citragroup/${surat.perusahaan}/${surat.perusahaan}_Logo.png`
-console.log(kopUrl, logoUrl)
+//console.log(kopUrl, logoUrl)
 const namaPerusahaan = {
   CF: 'Citra Furniture',
   CII: 'Citra Interior Indonesia',

@@ -6,8 +6,8 @@ export default defineNuxtRouteMiddleware((to) => {
   if (to.meta.public) return    
   
   if (to.meta.requiresAuth && authStore.isLoggedIn === false) {
-      console.log(to.meta.requiresAuth)
-      console.log(authStore.isLoggedIn)
+      //console.log(to.meta.requiresAuth)
+      //console.log(authStore.isLoggedIn)
       return navigateTo({name: 'admin-login'})
   }
   

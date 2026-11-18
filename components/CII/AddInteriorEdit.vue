@@ -26,6 +26,23 @@ function formatInput(e) {
   // interior[e.target.name] = parseInt(raw || '0').toLocaleString('id-ID') // Format pakai titik
   interior[e.target.name] = parseInt(raw || '0').toLocaleString('id-ID') // Format pakai titik
 }
+
+function formatKoma(e) {
+  if (e.key !== ',') return
+  e.preventDefault()
+
+  const el = e.target
+  const val = el.value
+  const start = el.selectionStart
+  const end = el.selectionEnd
+
+  // kalau sudah ada titik, jangan tambah lagi
+  if (val.includes('.')) return
+
+  el.value = val.slice(0, start) + '.' + val.slice(end)
+  raw.value = el.value
+  el.setSelectionRange(start + 1, start + 1)
+}
 onMounted(() => {
   //
   interior.harga = parseInt(interior.harga || '0').toLocaleString('id-ID') // Format pakai titik
@@ -48,13 +65,12 @@ onMounted(() => {
         name="harga"
         @input="formatInput" />
     </VCol>
-    <VCol cols="12" md="6" class="pt-3">
-      <VRow class="d-flex align-center" no-gutters>
+    <VCol cols="12" md="5" class="pt-3">
+      <VRow class="d-flex align-center">
         <VCol>
-          <AppTextField label="volume1 (wajib diisi)" v-model="interior.v1" :rules="[requiredValidator]" append-inner-icon=" "/>
+          <AppTextField label="volume1(meter) (wajib diisi)" v-model="interior.v1" :rules="[requiredValidator]" append-inner-icon="tabler-letter-m" append-icon="tabler-letter-x" @keydown="formatKoma"/>
         </VCol>
-        <div class="mx-2">X</div>
-        <VCol><AppTextField label="volume2 (wajib diisi)" v-model="interior.v2" :rules="[requiredValidator]" append-inner-icon=" "/></VCol>
+        <VCol><AppTextField label="volume2(meter) (wajib diisi)" v-model="interior.v2" :rules="[requiredValidator]" append-inner-icon="tabler-letter-m" @keydown="formatKoma"/></VCol>
       </VRow>
     </VCol>
     <VCol cols="12" md="3">

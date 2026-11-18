@@ -150,7 +150,7 @@ const totalPages = ref(1)
 //     let end = ''
 //     if (dateRange.value) {
 //       let range = dateRange.value.split(' to ')
-//       //console.log(range)
+//       ////console.log(range)
 //       if( range.length == 1) {
 //         start = range[0]
 //         end = range[0]
@@ -162,13 +162,13 @@ const totalPages = ref(1)
 //     }
 //     const query = buildQueryFilterParams({ startDate: start, endDate: end,page, search: search.value, limit:10 }, false);
 //     const response = await $api.get('/Request/SCI', { ...query });
-//     console.log(response)
+//     //console.log(response)
 //     surats.value = response.docs
 //     totalPages.value = response.totalPages // backend kirim total halaman
 //     currentPage.value = response.page
-//     //console.log(surats.value)
+//     ////console.log(surats.value)
 //   } catch (error) {
-//     //console.log(error.message)
+//     ////console.log(error.message)
 //     alert.showAlertObject({
 //       type: 'error',
 //       message: error.message || 'Gagal mengambil data',
@@ -185,9 +185,9 @@ const filterData = async (page = 1) => {
     let end = ''
 
     const rawRange = dateRange.value || ''
-    console.log('Date Range:', dateRange.value)
-    console.log('Raw Range:', rawRange)
-    console.log('Type of Raw Range:', typeof rawRange)
+    //console.log('Date Range:', dateRange.value)
+    //console.log('Raw Range:', rawRange)
+    //console.log('Type of Raw Range:', typeof rawRange)
     if (typeof rawRange === 'string' && rawRange.length > 3) {
       const range = rawRange.split(' to ')
 
@@ -213,7 +213,7 @@ const filterData = async (page = 1) => {
     surats.value = response.docs || []
     totalPages.value = response.totalPages || 1
     currentPage.value = response.page || 1
-    console.log('Response:', response)
+    //console.log('Response:', response)
   } catch (error) {
     alert.showAlertObject({
       type: 'error',
@@ -226,7 +226,7 @@ const filterData = async (page = 1) => {
 const fetchItems = async (page = 1) => {
   try {
     const response = await $api.get(`/SCI?page=${page}&limit=10`)
-    //console.log(response)
+    ////console.log(response)
     surats.value = response.docs
     totalPages.value = response.totalPages // backend kirim total halaman
   } catch (error) {
@@ -239,7 +239,7 @@ watch(currentPage, (page) => {
     filterData(page)
   }
   else if (search.value.length === 0) {
-    //console.log(page)
+    ////console.log(page)
     filterData(page)
   }
 
@@ -272,7 +272,7 @@ let status = {
   }
 }
 // let surats = await cii.getSCI()
-// //console.log(surats)
+// ////console.log(surats)
 
 function goToDetailPage(id) {
   navigateTo({ name: `admin-SCI-Request-detail-id`, params: { id } })
@@ -288,9 +288,9 @@ const search = ref('')
 
 // watch(search, (newValue) => {
 //   if (newValue.length >= 3) {
-//     //console.log(newValue)
+//     ////console.log(newValue)
 //   } else if (newValue.length === 0) {
-//     //console.log(newValue)
+//     ////console.log(newValue)
 //   }
 // })
 
@@ -299,7 +299,7 @@ onMounted( async () => {
   try {
     const query = buildQueryFilterParams({ limit:10 }, false);
     const response = await $api.get('/Request/SCI', { ...query });
-    console.log(response)
+    //console.log(response)
     surats.value = response.docs
   } catch (error) {
     console.error('Gagal mengambil data:', error)

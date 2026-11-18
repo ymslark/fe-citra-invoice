@@ -22,6 +22,9 @@
                 No.
               </th>
               <th class="text-uppercase">
+                No. Seri
+              </th>
+              <th class="text-uppercase">
                 Tujuan
               </th>
               <th class="text-uppercase">
@@ -63,13 +66,13 @@
                   <VIcon @click="goToDetailPage(surat._id)">
                     tabler-info-circle</VIcon>
                 </VBtn>
-                <!-- <VBtn size="38" class="ml-2" icon color="warning" title="Edit">
+                <VBtn size="38" class="ml-2" icon color="warning" title="Edit">
                   <VTooltip open-on-focus location="top" activator="parent">
                     Edit
                   </VTooltip>
                   <VIcon @click="navigateTo({ name: `admin-SCI-edit-id`, params: { id: surat._id } })">tabler-edit
                   </VIcon>
-                </VBtn> -->
+                </VBtn>
                 <!-- <VBtn size="38" class="ml-2" icon color="error" title="Hapus">
                   <VTooltip open-on-focus location="top" activator="parent">
                     Hapus
@@ -124,16 +127,16 @@ const fetchIndex = async (page = 1) => {
       type: 'error',
     })
   }
-  // console.log(suratsFiltered);
+  // //console.log(suratsFiltered);
 }
 // Ambil data dari backend, backend sudah siapkan pagination
 // const fetchItems = async (page = 1) => {
 //   try {
 //     const response = await $api.get(`/SCI/?page=${page}&limit=10`)
-//     // console.log(response)
+//     // //console.log(response)
 //     surats.value = response.docs
 //     totalPages.value = response.totalPages // backend kirim total halaman
-//     // console.log(surats.value)
+//     // //console.log(surats.value)
 //   } catch (error) {
 //     console.error('Gagal mengambil data:', error)
 //   }
@@ -177,7 +180,7 @@ let status = {
   }
 }
 // let surats = await sci.getSCI()
-// // console.log(surats)
+// // //console.log(surats)
 
 function goToDetailPage(id) {
   navigateTo({ name: `admin-SCI-detail-id`, params: { id } })
@@ -195,10 +198,10 @@ function goToEditPage(id) {
 //       surat.tujuan.toLowerCase().includes(newValue.toLowerCase()) ||
 //       surat.no_seri.toLowerCase().includes(newValue.toLowerCase())
 //     )
-//     // console.log(suratsFiltered)
+//     // //console.log(suratsFiltered)
 //   } else if (newValue.length == 0) {
 //     suratsFiltered.value = surats.value
-//     // // console.log(suratsFiltered)
+//     // // //console.log(suratsFiltered)
 //   }
 // })
 
@@ -209,7 +212,7 @@ function goToEditPage(id) {
 //   }
 // }
 // onMounted(async () => {
-//   // // console.log(useCookie('accessToken').value)
+//   // // //console.log(useCookie('accessToken').value)
 // })
 
 </script>

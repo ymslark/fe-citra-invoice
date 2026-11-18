@@ -106,16 +106,16 @@
 import { formatTanggalIndonesia } from '@/utils/format'
 const route = useRoute()
 const id = route.params.id
-// // console.log(id)
+// // //console.log(id)
 let surat = null
 try {
   const {$api} = useNuxtApp()
   const response = await $api.get(`/Request/detail/CII/${id}`)
   surat = response.doc
-  console.log(surat)
+  //console.log(surat)
 } catch (error) {
   // navigateTo('/admin/cii/request')
-  console.log(error)
+  //console.log(error)
   throw createError({
     statusCode: error.code || 404,
     statusMessage: error.message || 'Request Tidak Ditemukan'

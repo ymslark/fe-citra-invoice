@@ -103,7 +103,7 @@ export const useSCIStore = defineStore('sci', {
         const response = await $api.get('/SCI', query)
 
         this.daftarSurat = response.docs
-        console.log(this.daftarSurat)
+        //console.log(this.daftarSurat)
         
         return response
       } catch (error) {
@@ -119,7 +119,7 @@ export const useSCIStore = defineStore('sci', {
         const response = await $api.get('/SCI/last30Days', query)
 
         this.daftarSurat = response.docs
-        console.log(this.daftarSurat)
+        //console.log(this.daftarSurat)
         
         return response
       } catch (error) {
@@ -154,7 +154,7 @@ export const useSCIStore = defineStore('sci', {
         const response = await $api.get('/SCI/deleted', query)
 
         this.daftarSurat = response.docs
-        console.log(this.daftarSurat)
+        //console.log(this.daftarSurat)
         
         return response
       } catch (error) {
@@ -188,7 +188,7 @@ export const useSCIStore = defineStore('sci', {
     async deleteSCI(id) {
       const { $api } = useNuxtApp()
       const response = await $api.delete(`/sci/${id}`)     
-      console.log(response)  
+      //console.log(response)  
       return response
     },
 
@@ -214,7 +214,7 @@ export const useSCIStore = defineStore('sci', {
         let diskon  = 0
         let total = 0
         this.surat = response.doc
-        console.log(response)
+        //console.log(response)
         response.doc.barang.forEach(item => {
           diskon += parseInt(item.total_diskon)
           total  += parseInt(item.total_harga_awal)
@@ -227,7 +227,7 @@ export const useSCIStore = defineStore('sci', {
         return response
         
       } catch (error) {
-        console.log('Fetch sci failed:', error)
+        //console.log('Fetch sci failed:', error)
         this.setError(error.message)
         
         return error 
@@ -238,7 +238,7 @@ export const useSCIStore = defineStore('sci', {
       //TANPA TRY CATCH
       const { $api } = useNuxtApp()
       const response = await $api.patch(`/SCI/restore/${id}`)
-      console.log(response)
+      //console.log(response)
       return response
     },
     
@@ -248,7 +248,7 @@ export const useSCIStore = defineStore('sci', {
         const response = await $api.get('/Request/SCI')
 
         this.daftarSurat = response.docs.docs
-        console.log(this.daftarSurat)
+        //console.log(this.daftarSurat)
         
         return response.docs
       } catch (error) {
@@ -260,7 +260,7 @@ export const useSCIStore = defineStore('sci', {
       const { $api } = useNuxtApp()
       try {
         const response = await $api.get(`/Request/detail/SCI/${id}`)
-        console.log(response)
+        //console.log(response)
         this.resetNewSurat()
         this.newSurat.tujuan = response.doc.tujuan
         this.newSurat.no_hp = response.doc.no_hp
@@ -277,14 +277,14 @@ export const useSCIStore = defineStore('sci', {
           })
         })
       } catch (error) {
-        console.log(error)
+        //console.log(error)
       }
     },
 
     async editSuratSCI(id) {
       const { $api } = useNuxtApp()
       const response = await $api.get(`/SCI/detail/${id}`)
-      console.log(response.doc)
+      //console.log(response.doc)
       return response
     },
 
@@ -302,7 +302,7 @@ export const useSCIStore = defineStore('sci', {
       })
 
       const response = await $api.put(`/SCI/update/${id}`, this.editSurat)
-      console.log(response)
+      //console.log(response)
       return response
     },
 
@@ -328,11 +328,11 @@ export const useSCIStore = defineStore('sci', {
       })
     },
     deleteBarang(i) {
-      console.log(i)
+      //console.log(i)
       this.addedBarang.splice(i, 1)
     },
     deleteBarangEdit(i) {
-      console.log(i)
+      //console.log(i)
       this.editSurat.barang.splice(i, 1)
     },
     deleteBarangByTempId(_tempId) {
@@ -366,14 +366,14 @@ export const useSCIStore = defineStore('sci', {
 
         const response = await $api.get('/barang/search', { keyword })
         const items = response.item.map(item => item.nama)
-        console.log(items)
+        //console.log(items)
         // Simpan hasil pencarian ke cached
         
         this.searchCache = { ...this.searchCache, [keyword]: items }
 
         return items
       } catch (error) {
-        console.log('Search error:', error)
+        //console.log('Search error:', error)
         return []
       }
     },
@@ -382,7 +382,7 @@ export const useSCIStore = defineStore('sci', {
       try {
         const response = await $api.get('/getConfig')
 
-        console.log(response)
+        //console.log(response)
         this.config = response.config
         let rekeningList = response.config.rekening.sci
         this.config.rekening = rekeningList.map(item => {
@@ -439,6 +439,26 @@ export const useSCIStore = defineStore('sci', {
     }
     this.addedBarang = []
   },
+    resetEditSurat(){
+      this.newSurat = {
+        tanggal: "",
+        hal: "Surat Penawaran Barang",
+        tujuan: "",
+        alamat: "",
+        tempo: true,
+        tanggal_tempo: "-",
+        catatan_tempo: "-",
+        status: "",
+        atas_nama: "",
+        no_rekening: "",
+        nama_bank: "",
+        catatan: "",
+        ongkos_kirim: false,
+        instalasi: true,
+        ppn:0,      
+    }
+    this.addedBarang = []
+  },
 
     resetNewRequest(){
       this.newRequest = {
@@ -460,7 +480,7 @@ export const useSCIStore = defineStore('sci', {
   },
 
   deleteBarangRequest(i) {
-    console.log(this.newRequest)
+    //console.log(this.newRequest)
     this.newRequest.barang.splice(i, 1)
   },
   async storeRequestSCI(){
@@ -472,7 +492,7 @@ export const useSCIStore = defineStore('sci', {
   async getSCIRequestById(id){
     const { $api } = useNuxtApp()
     const response = await $api.get(`/Request/detail/SCI/${id}`)
-    console.log(response)
+    //console.log(response)
     this.newSurat.tujuan = response.doc.tujuan
     this.newSurat.no_hp = response.doc.no_hp
     this.newSurat.alamat = response.doc.alamat
@@ -496,7 +516,7 @@ export const useSCIStore = defineStore('sci', {
 
     const {$api} = useNuxtApp()
     const response = await $api.patch(`/Request/status/${this.perusahaan}/${id}?status=APPROVED`)
-    console.log(response)
+    //console.log(response)
   }
 
   },

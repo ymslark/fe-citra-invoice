@@ -12,17 +12,19 @@ let alert = useAlertStore()
 
 const { $api } = useNuxtApp()
 
+cf.resetNewSurat()
+
 const store = async () => {
   try {
     // refForm?.value?.validate()
     const valid = await refForm?.value?.validate()
-    // // console.log(valid)
+    // // //console.log(valid)
 
     if (!valid.valid) { window.scrollTo(0, 0); return }
     if (cf.addedBarang.length == 0) throw { message: 'Barang tidak boleh kosong' }
 
     const response = await cf.storeCF()
-    // // console.log(response)
+    // // //console.log(response)
     alert.showAlertObject({
       message: 'Berhasil Menambah Surat Citra Furniture',
       type: 'success',
@@ -35,7 +37,7 @@ const store = async () => {
 
   } catch (error) {
     window.scrollTo(0, 0)
-    // // console.log(error)
+    // // //console.log(error)
     alert.showAlertObject({
       message: error.message,
       type: 'error',
@@ -59,7 +61,7 @@ function scrollTo(id) {
 const tambahBarang = () => {
   cf.addBarang()
 
-  console.log(cf.addedBarang.length)
+  //console.log(cf.addedBarang.length)
   const idItem = `item-${cf.addedBarang.length}`
   // scrollTo(idItem)
   setTimeout(() => {
@@ -82,11 +84,11 @@ let ppnSelection = [
 
 const selectedRadio = ref()
 
-// // console.log(selectedRadio.value)
+// // //console.log(selectedRadio.value)
 
 
 const cetak = () => {
-  // // // console.log(selectedRadio.value)
+  // // // //console.log(selectedRadio.value)
   surat.atas_nama = selectedRadio.value.atas_nama
   surat.nama_bank = selectedRadio.value.nama_bank
   surat.no_rekening = selectedRadio.value.no_rekening
@@ -108,7 +110,7 @@ const checkTempo = computed(() => {
 })
 
 const changeComma = event => {
-  // // console.log(event)
+  // // //console.log(event)
 
   return event.target.value.replace(/,/g, '.')
 

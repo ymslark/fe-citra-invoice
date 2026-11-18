@@ -146,7 +146,7 @@
 definePageMeta({
   middleware: 'auth-client',
   requiresAuth: true,
-  roles: ['superadmin', 'developer'],
+  roles: ['super_admin', 'developer', 'superadmin'],
 })
 import {useAlertStore} from '@/stores/alert'
 import { buildQueryFilterParams } from '@/utils/apiFilterQuery'
@@ -178,7 +178,7 @@ const filterData = async (page = 1) => {
     barangs.value = response.barangs || []
     totalPages.value = response.totalPages || 1
     currentPage.value = response.page || 1
-    console.log('Response:', response)
+    //console.log('Response:', response)
   } catch (error) {
     alert.showAlertObject({
       type: 'error',
@@ -198,7 +198,7 @@ const editBarang = ref({
     const editDialog = async (id) => {
     try {
         const response = await $api.get(`/barang/detail/${id}`)
-        console.log(response)
+        //console.log(response)
         if (!response) throw { message: 'Data tidak ditemukan', code: 404 }
         editBarang.value.id = response.barang._id
         editBarang.value.nama = response.barang.nama
@@ -211,15 +211,15 @@ const editBarang = ref({
         message: error.message,
         type: 'error',
         })
-        console.log(error)
+        //console.log(error)
     }
     }
 
     const saveEditBarang = async (id) => {
     try {
-        console.log(editBarang.value)
+        //console.log(editBarang.value)
         const response = await $api.put(`/Barang/${id}`, editBarang.value)
-        console.log(response)
+        //console.log(response)
         if (!response) {
         throw { message: 'Ubah Data Gagal', code: 400 }
         }
@@ -234,13 +234,13 @@ const editBarang = ref({
         message: error.message,
         type: 'error',
         })
-        console.log(error)
+        //console.log(error)
     }
     }
     const deleteBarang = async (id) => {
     try {
         const response = await $api.delete(`/Barang/${id}`)
-        console.log(response)
+        //console.log(response)
         if (!response) {
         throw response
         }
@@ -255,7 +255,7 @@ const editBarang = ref({
         message: error.message,
         type: 'error',
         })
-        console.log(error)
+        //console.log(error)
     }
     }
 
@@ -264,7 +264,7 @@ watch(currentPage, (page) => {
     filterData(page)
   }
   else if (search.value.length === 0) {
-    //console.log(page)
+    ////console.log(page)
     filterData(page)
   }
 
@@ -273,7 +273,7 @@ onMounted( async () => {
   try {
     const query = buildQueryFilterParams({ limit:25 }, false);
     const response = await $api.get('/Barang/filterData', { ...query });
-    console.log(response)
+    //console.log(response)
     barangs.value = response.barangs
     totalPages.value = response.totalPages || 1
     currentPage.value = response.page || 1

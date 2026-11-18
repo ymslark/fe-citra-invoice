@@ -9,7 +9,7 @@ const route = useRoute()
 const id = route.params.id
 // const addedBarang = cf.addedBarang
 let alert = useAlertStore()
-
+cf.resetEditSurat()
 const allowedStatus = ['WAITING', 'PROCCESS', 'DONE', 'CANCEL']
 const { $api } = useNuxtApp()
 await cf.editSuratCF(id)

@@ -71,7 +71,7 @@ export const useFakturStore = defineStore('faktur', {
     async getSurat(no_seri) {
       const { $api } = useNuxtApp()
       if (!no_seri) throw new Error('NO_SERI_REQUIRED')
-        console.log(no_seri)
+        //console.log(no_seri)
       try {
         const response = await $api.get('/faktur/getSurat?no_seri='+ no_seri )
         if(response){
@@ -110,10 +110,10 @@ export const useFakturStore = defineStore('faktur', {
     },
     // async updateFaktur(id, formData) {
     //   const { $api } = useNuxtApp()
-    //   console.log(id)
+    //   //console.log(id)
     //   // if (!id) throw new Error('ID_REQUIRED')
     //   const response = await $api.put('/faktur/' + id, formData)
-    //   console.log(formData)
+    //   //console.log(formData)
     //   return response
     // },
     async hapusFaktur(id){
@@ -132,7 +132,7 @@ export const useFakturStore = defineStore('faktur', {
 
       const {$api} = useNuxtApp()
       const response = await $api.patch(`/Faktur/status/${id}?status=APPROVED`)
-      console.log(response)
+      //console.log(response)
     }
   },
   getters: {

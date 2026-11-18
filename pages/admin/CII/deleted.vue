@@ -186,7 +186,7 @@ let status = {
   }
 }
 // let surats = await cii.getCII()
-// console.log(surats)
+// //console.log(surats)
 
 function goToDetailPage(id) {
   navigateTo({ name: `admin-CII-detail-id`, params: { id } })
@@ -205,6 +205,6 @@ function goToEditPage(id) {
 //   }
 // }
 // onMounted(async () => {
-//   // console.log(useCookie('accessToken').value)
+//   // //console.log(useCookie('accessToken').value)
 // })
 </script>

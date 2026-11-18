@@ -9,7 +9,7 @@ const addedInterior = cii.addedInterior
 let alert = useAlertStore()
 
 const { $api } = useNuxtApp()
-
+cii.resetNewSurat()
 const store = async () => {
   try {
     // refForm?.value?.validate()
@@ -18,7 +18,7 @@ const store = async () => {
     if (cii.addedInterior.length == 0) throw { message: 'Barang tidak boleh kosong' }
 
     const response = await cii.storeCII()
-    console.log(response)
+    //console.log(response)
     alert.showAlertObject({
       message: 'Berhasil Menambah Surat Citra Interior',
       type: 'success',
@@ -31,7 +31,7 @@ const store = async () => {
 
   } catch (error) {
     window.scrollTo(0, 0)
-    console.log(error)
+    //console.log(error)
     alert.showAlertObject({
       message: error.message,
       type: 'error',
@@ -55,7 +55,7 @@ function scrollTo(id) {
 const tambahBarang = () => {
   
   cii.addInterior()
-  console.log(cii.addedInterior.length)
+  //console.log(cii.addedInterior.length)
   const idItem = `item-${cii.addedInterior.length}`
   // scrollTo(idItem)
   setTimeout(() => {
@@ -76,11 +76,11 @@ let ppnSelection = [
 
 const selectedRadio = ref()
 
-console.log(selectedRadio.value)
+//console.log(selectedRadio.value)
 
 
 const cetak = () => {
-  // console.log(selectedRadio.value)
+  // //console.log(selectedRadio.value)
   surat.atas_nama = selectedRadio.value.atas_nama
   surat.nama_bank = selectedRadio.value.nama_bank
   surat.no_rekening = selectedRadio.value.no_rekening
@@ -102,7 +102,7 @@ const checkTempo = computed(() => {
 })
 
 const changeComma = event => {
-  console.log(event)
+  //console.log(event)
 
   return event.target.value.replace(/,/g, '.')
 
@@ -124,10 +124,10 @@ const fetchUsers = async (query) => {
   try {
     const res = await $api.get(`/barang/search?keyword=${query}`);
     timeout = setTimeout(() => {
-      // console.log(res)
+      // //console.log(res)
       lists = res.item.map(barang => barang.nama);
       items.value = lists;
-      console.log(lists)
+      //console.log(lists)
     }, 1000);
   } catch (error) {
     console.error("Error fetching users:", error);

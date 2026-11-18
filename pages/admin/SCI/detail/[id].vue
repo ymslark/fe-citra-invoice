@@ -14,14 +14,14 @@ await sci.getConfig()
 
 const showDialog = ref(false)
 const showDialogRestore = ref(false)
-// // console.log(id)
+// // //console.log(id)
 let opsi = 2
 try {
   const response = await sci.getSCIById(id)
 
-  // // console.log(response)
+  // // //console.log(response)
 } catch (error) {
-  // // console.log(error)
+  // // //console.log(error)
 }
 const surat = sci.surat
 const listBarang = sci.surat.barang

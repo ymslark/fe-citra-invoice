@@ -13,12 +13,15 @@ let alert = useAlertStore()
 
 const allowedStatus = ['WAITING', 'PROCCESS', 'DONE', 'CANCEL']
 const { $api } = useNuxtApp()
+
+cii.resetEditSurat()
+
 await cii.editSuratCII(id)
 
 if (id) {
   try {
     const response = await cii.editSuratCII(id)
-    console.log(response)
+    //console.log(response)
     cii.editSurat = response.doc
     // delete cii.editSurat._id
     // delete cii.editSurat.__v
@@ -49,13 +52,13 @@ const store = async () => {
   try {
     // refForm?.value?.validate()
     const valid = await refForm?.value?.validate()
-    console.log(valid)
+    //console.log(valid)
 
     if (!valid.valid) { window.scrollTo(0, 0); return }
     if (cii.editSurat.interior.length == 0) throw { message: 'Interior tidak boleh kosong' }
 
     const response = await cii.updateCII(id)
-    console.log(response)
+    //console.log(response)
     alert.showAlertObject({
       message: 'Berhasil Mengubah Surat Citra Interior',
       type: 'success',
@@ -68,7 +71,7 @@ const store = async () => {
 
   } catch (error) {
     window.scrollTo(0, 0)
-    console.log(error)
+    //console.log(error)
     alert.showAlertObject({
       message: error.message,
       type: 'error',
@@ -107,14 +110,14 @@ let rekening = {
   tagLine: 'Data Saat Ini',
 }
 rekeningList.unshift(rekening)
-console.log(rekeningList)
+//console.log(rekeningList)
 const selectedRadio = ref(surat.rekening)
 
-// console.log(selectedRadio.value)
+// //console.log(selectedRadio.value)
 
 
 const cetak = () => {
-  // console.log(selectedRadio.value)
+  // //console.log(selectedRadio.value)
   surat.atas_nama = selectedRadio.value.atas_nama
   surat.nama_bank = selectedRadio.value.nama_bank
   surat.no_rekening = selectedRadio.value.no_rekening
@@ -136,7 +139,7 @@ let ongkirItems = [
 // })
 
 const changeComma = event => {
-  console.log(event)
+  //console.log(event)
 
   return event.target.value.replace(/,/g, '.')
 
@@ -158,10 +161,10 @@ const fetchUsers = async (query) => {
   try {
     const res = await $api.get(`/interior/search?keyword=${query}`);
     timeout = setTimeout(() => {
-      // console.log(res)
+      // //console.log(res)
       lists = res.item.map(interior => interior.nama);
       items.value = lists;
-      console.log(lists)
+      //console.log(lists)
     }, 1000);
   } catch (error) {
     console.error("Error fetching users:", error);

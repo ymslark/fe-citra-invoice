@@ -24,13 +24,13 @@ const fileRules = [
 //menangani file untuk diupload
 
 const handleFileChange = (event) => {
-  console.log()
+  //console.log()
 
   const selectedFile = event.target.files[0];
   if (selectedFile) {
     tempFile.value = selectedFile;
   }
-  console.log(event.target.files)
+  //console.log(event.target.files)
 };
 
 const updateFaktur = async () => {  
@@ -45,17 +45,17 @@ const updateFaktur = async () => {
       qty: item.qty,
       total: (parseInt(item.harga.replace(/\./g, '')) || 0) * item.qty
     }))
-    // console.log(finalBarangFaktur)
+    // //console.log(finalBarangFaktur)
     const formData = new FormData();
     if(file.value) {
       formData.append('gambar', file.value);
     }
     formData.append('faktur', JSON.stringify(data));
-    // console.log('Form data prepared for upload:', formData);
+    // //console.log('Form data prepared for upload:', formData);
   
-    console.log(formData.get('faktur'))
+    //console.log(formData.get('faktur'))
     let response = null
-    // console.log(formData.getAll())
+    // //console.log(formData.getAll())
     response = await $api.put(`/faktur/${id}`, formData)
      if(response){
       window.scrollTo(0, 0)
@@ -68,14 +68,14 @@ const updateFaktur = async () => {
       }, 2000)
     }
     url.value = baseUrl + '/public/images/' + response.filename
-      console.log(response, 'response');
-      console.log(url.value);
+      //console.log(response, 'response');
+      //console.log(url.value);
     // alert.showAlertObject({
     //   type: 'success',
     //   message: 'Gambar Berhasil di-upload',
     // })
   } catch (error) {
-    console.log(error)
+    //console.log(error)
     alert.showAlertObject({
       type: 'error',
       message: error.message || 'Gagal mengupload gambar',
@@ -85,14 +85,14 @@ const updateFaktur = async () => {
 watch(file, (newFile) => {
   if (newFile) {
     previewUrl.value = URL.createObjectURL(newFile)
-    console.log(URL.createObjectURL(newFile))
+    //console.log(URL.createObjectURL(newFile))
 
   }
   //  // }
 })
 const logFile = (files) => {
-  console.log('File yang dipilih:', files)
-  // console.log(file.value.files)
+  //console.log('File yang dipilih:', files)
+  // //console.log(file.value.files)
 }
 
 
@@ -138,7 +138,7 @@ if (id) {
 //     setTimeout(() => {
 //       navigateTo({ name: 'admin-faktur-detail-id', params: { id } })
 //     }, 2000)
-//     console.log(response)
+//     //console.log(response)
 //   } catch (error) {
 //     console.error("Error updating Faktur data:", error)
 //     window.scrollTo(0, 0)

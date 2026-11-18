@@ -13,13 +13,13 @@ await cii.getConfig()
 
 const showDialog = ref(false)
 const showDialogRestore = ref(false)
-console.log(id)
+//console.log(id)
 try {
   const response = await cii.getCIIById(id)
 
-  console.log(response)
+  //console.log(response)
 } catch (error) {
-  console.log(error)
+  //console.log(error)
 }
 const surat = cii.surat
 const listBarang = cii.surat.barang
@@ -127,7 +127,7 @@ const restoreCII = async () => {
 // }
 
 let interiors = hitungInvoiceInterior(surat.interior, surat.ppn)
-console.log(interiors)
+//console.log(interiors)
 </script>
 
 <template>

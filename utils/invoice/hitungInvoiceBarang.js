@@ -59,7 +59,7 @@ export function hitungInvoiceBarang(barangList = [], tarifPPN, faktur=false) {
         total_ppn,
       }
     })
-    console.log('barangs', barangs)
+    //console.log('barangs', barangs)
     return {
       barangs,
       dpp: barangs.reduce((sum, item) => sum + parseFloat(item.total_dpp), 0).toFixed(2),

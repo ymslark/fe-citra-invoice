@@ -11,18 +11,18 @@ const addedBarang = sci.addedBarang
 let alert = useAlertStore()
 
 const { $api } = useNuxtApp()
-
+sci.resetNewSurat()
 const store = async () => {
   try {
     // refForm?.value?.validate()
     const valid = await refForm?.value?.validate()
-    // // console.log(valid)
+    // // //console.log(valid)
 
     if (!valid.valid) { window.scrollTo(0, 0); return }
     if (sci.addedBarang.length == 0) throw { message: 'Barang tidak boleh kosong' }
 
     const response = await sci.storeSCI()
-    // // console.log(response)
+    // // //console.log(response)
     alert.showAlertObject({
       message: 'Berhasil Menambah Surat Sentral Citra',
       type: 'success',
@@ -35,7 +35,7 @@ const store = async () => {
 
   } catch (error) {
     window.scrollTo(0, 0)
-    // // console.log(error)
+    // // //console.log(error)
     alert.showAlertObject({
       message: error.message,
       type: 'error',
@@ -59,7 +59,7 @@ function scrollTo(id) {
 const tambahBarang = () => {
   sci.addBarang()
 
-  console.log(sci.addedBarang.length)
+  //console.log(sci.addedBarang.length)
   const idItem = `item-${sci.addedBarang.length}`
   // scrollTo(idItem)
   setTimeout(() => {
@@ -82,11 +82,11 @@ let ppnSelection = [
 
 const selectedRadio = ref()
 
-// // console.log(selectedRadio.value)
+// // //console.log(selectedRadio.value)
 
 
 const cetak = () => {
-  // // // console.log(selectedRadio.value)
+  // // // //console.log(selectedRadio.value)
   surat.atas_nama = selectedRadio.value.atas_nama
   surat.nama_bank = selectedRadio.value.nama_bank
   surat.no_rekening = selectedRadio.value.no_rekening
@@ -108,7 +108,7 @@ const checkTempo = computed(() => {
 })
 
 const changeComma = event => {
-  // // console.log(event)
+  // // //console.log(event)
 
   return event.target.value.replace(/,/g, '.')
 

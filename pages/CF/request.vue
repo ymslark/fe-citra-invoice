@@ -2,7 +2,7 @@
   <VContainer v-if="!isNotificationVisible">
     <Alert />
     <VCard class="pa-3" elevation="5">
-      <VCardTitle class="font-weight-bold text-wrap ml-n3">Request Form Citra Furniture</VCardTitle>
+      <VCardTitle class="font-weight-bold text-wrap ml-n3">Request Form Citra Furniture Indonesia</VCardTitle>
       <VForm ref="refForm" @submit.prevent>
         <VRow>
           <VCol cols="12">
@@ -57,9 +57,9 @@ const request = cf.newRequest
 const refForm = ref()
 const alert = useAlertStore()
 function scrollTo(id) {
-  console.log(id)
+  //console.log(id)
   const el = document.getElementById(id)
-  // console.log(el)
+  // //console.log(el)
   if (el){ 
     el.scrollIntoView({ behavior: 'smooth', block: 'center' })
     const input = el?.querySelector('[name="input-nama-barang"]')
@@ -72,9 +72,9 @@ function scrollTo(id) {
 const tambahBarang = () => {
   cf.addBarangRequest()
 
-  console.log(cf.newRequest.barang.length)
+  //console.log(cf.newRequest.barang.length)
   const idItem = `item-${cf.newRequest.barang.length}`
-  console.log(idItem)
+  //console.log(idItem)
   // scrollTo(idItem)
   setTimeout(() => {
     scrollTo(idItem)
@@ -88,7 +88,7 @@ const submitForm = async () => {
     if (request.barang.length == 0) throw { message: 'Barang tidak boleh kosong' }
 
     const response = await cf.storeRequestCF()
-    console.log(response)
+    //console.log(response)
     window.scrollTo(0, 0)
     alert.showAlertObject({
       message: 'Berhasil Mengajukan Request',
@@ -100,7 +100,7 @@ const submitForm = async () => {
 
   } catch (error) {
     window.scrollTo(0, 0)
-    console.log(error)
+    //console.log(error)
     
     alert.showAlertObject({
       message: error.message || 'Gagal Mengajukan Request',

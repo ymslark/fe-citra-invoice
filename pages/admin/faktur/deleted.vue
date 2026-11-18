@@ -156,7 +156,7 @@ const filterData = async (page = 1) => {
     let end = ''
     if (dateRange.value) {
       let range = dateRange.value.split(' to ')
-      //console.log(range)
+      ////console.log(range)
       if( range.length == 1) {
         start = range[0]
         end = range[0]
@@ -168,13 +168,13 @@ const filterData = async (page = 1) => {
     }
     const query = buildQueryFilterParams({ startDate: start, endDate: end,page, search: search.value, limit:50 }, false);
     const response = await $api.get('/Faktur/deleted', { ...query });
-    //console.log(response)
+    ////console.log(response)
     surats.value = response.docs
     totalPages.value = response.totalPages // backend kirim total halaman
     currentPage.value = response.page
-    //console.log(surats.value)
+    ////console.log(surats.value)
   } catch (error) {
-    //console.log(error.message)
+    ////console.log(error.message)
     alert.showAlertObject({
       type: 'error',
       message: error.message || 'Gagal mengambil data',
@@ -186,7 +186,7 @@ const filterData = async (page = 1) => {
 const fetchItems = async (page = 1) => {
   try {
     const response = await $api.get(`/Faktur?page=${page}&limit=10`)
-    //console.log(response)
+    ////console.log(response)
     surats.value = response.docs
     totalPages.value = response.totalPages // backend kirim total halaman
   } catch (error) {
@@ -199,7 +199,7 @@ watch(currentPage, (page) => {
     filterData(page)
   }
   else if (search.value.length === 0) {
-    //console.log(page)
+    ////console.log(page)
     filterData(page)
   }
 
@@ -232,7 +232,7 @@ let status = {
   }
 }
 // let surats = await cf.getFaktur()
-// //console.log(surats)
+// ////console.log(surats)
 
 function goToDetailPage(id) {
   navigateTo({ name: `admin-faktur-detail-id`, params: { id } })
@@ -248,9 +248,9 @@ const search = ref('')
 
 // watch(search, (newValue) => {
 //   if (newValue.length >= 3) {
-//     //console.log(newValue)
+//     ////console.log(newValue)
 //   } else if (newValue.length === 0) {
-//     //console.log(newValue)
+//     ////console.log(newValue)
 //   }
 // })
 
@@ -262,7 +262,7 @@ const dateRange = ref()
 //     let end = ''
 //     if (!dateRange.value) throw { message: 'Pilih rentang tanggal terlebih dahulu' }
 //     let range = dateRange.value.split(' to ')
-//     //console.log(range)
+//     ////console.log(range)
 //     if( range.length == 1) {
 //       start = range[0]
 //       end = range[0]
@@ -272,13 +272,13 @@ const dateRange = ref()
 //       end = range[1]
 //     }
 //     const response = await cf.getFakturByPeriods(start, end, page, search.value)
-//     //console.log(response)
+//     ////console.log(response)
 //     surats.value = response.docs
 //     totalPages.value = response.totalPages // backend kirim total halaman
 //     // currentPage.value = page || 1
-//     //console.log(surats.value)
+//     ////console.log(surats.value)
 //   } catch (error) {
-//     //console.log(error.message)
+//     ////console.log(error.message)
 //     alert.showAlertObject({
 //       type: 'error',
 //       message: error.message || 'Gagal mengambil data',

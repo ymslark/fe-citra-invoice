@@ -10,18 +10,18 @@ const addedInterior = cii.addedInterior
 let alert = useAlertStore()
 
 const { $api } = useNuxtApp()
-
+cii.resetNewSurat()
 const store = async () => {
   try {
     // refForm?.value?.validate()
     const valid = await refForm?.value?.validate()
-    console.log(valid)
+    //console.log(valid)
 
     if (!valid.valid) { window.scrollTo(0, 0); return }
     if (cii.addedInterior.length == 0) throw { message: 'Interior tidak boleh kosong' }
 
     const response = await cii.storeCII()
-    console.log(response)
+    //console.log(response)
     alert.showAlertObject({
       message: 'Berhasil Menambah Surat Citra Interior Indonesia',
       type: 'success',
@@ -34,7 +34,7 @@ const store = async () => {
 
   } catch (error) {
     window.scrollTo(0, 0)
-    console.log(error)
+    //console.log(error)
     alert.showAlertObject({
       message: error.message,
       type: 'error',
@@ -59,7 +59,7 @@ function scrollTo(id) {
 const tambahInterior = () => {
   cii.addInterior()
 
-  console.log(cii.addedInterior.length)
+  //console.log(cii.addedInterior.length)
   const idItem = `item-${cii.addedInterior.length}`
   // scrollTo(idItem)
   setTimeout(() => {
@@ -81,11 +81,11 @@ let ppnSelection = [
 
 const selectedRadio = ref()
 
-console.log(selectedRadio.value)
+//console.log(selectedRadio.value)
 
 
 const cetak = () => {
-  // console.log(selectedRadio.value)
+  // //console.log(selectedRadio.value)
   surat.atas_nama = selectedRadio.value.atas_nama
   surat.nama_bank = selectedRadio.value.nama_bank
   surat.no_rekening = selectedRadio.value.no_rekening
@@ -107,7 +107,7 @@ const checkTempo = computed(() => {
 })
 
 const changeComma = event => {
-  console.log(event)
+  //console.log(event)
 
   return event.target.value.replace(/,/g, '.')
 
@@ -128,11 +128,11 @@ const fetchUsers = async (query) => {
   if (query.length < 3) return []
   try {
     const res = await $api.get(`/interior/search?keyword=${query}`);
-    console.log(res)
+    //console.log(res)
     timeout = setTimeout(() => {
       lists = res.item.map(interior => interior.nama);
       items.value = lists;
-      console.log(lists)
+      //console.log(lists)
     }, 1000);
   } catch (error) {
     console.error("Error fetching users:", error);

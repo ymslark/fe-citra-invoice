@@ -101,7 +101,7 @@ let supir = {
   no_kendaraan: '',
 }
 let surats = await sci.getSCIRequest()
-// console.log(surats)
+// //console.log(surats)
 
 function goToDetailPage(id) {
   navigateTo(`SCI/detail/${id}`)
@@ -113,6 +113,6 @@ function goToDetailPage(id) {
 //   }
 // }
 onMounted(async () => {
-  // // console.log(useCookie('accessToken').value)
+  // // //console.log(useCookie('accessToken').value)
 })
 </script>

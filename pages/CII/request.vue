@@ -2,7 +2,7 @@
   <VContainer v-if="!isNotificationVisible">
     <Alert />
     <VCard class="pa-3" elevation="5">
-      <VCardTitle class="font-weight-bold text-wrap ml-n3">Request Form Citra Interior</VCardTitle>
+      <VCardTitle class="font-weight-bold text-wrap ml-n3">Request Form Citra Interior Indonesia</VCardTitle>
       <VForm ref="refForm" @submit.prevent>
         <VRow>
           <VCol cols="12">
@@ -53,7 +53,7 @@ const request = CII.newRequest
 const refForm = ref()
 const alert = useAlertStore()
 // const isMobile = computed(() => breakPoint.smAndDown)
-// console.log($vuetify)
+// //console.log($vuetify)
 // let flex = $vuetify.display.smAndDown ? 'd-flex justify-content-between p-0 flex-column' : 'd-flex justify-content-between p-0 flex-row'
 
 const isNotificationVisible = ref(false)
@@ -81,7 +81,7 @@ function scrollTo(id) {
 const tambahInterior = () => {
   CII.addInteriorRequest()
 
-  console.log(CII.newRequest.interior.length)
+  //console.log(CII.newRequest.interior.length)
   const idItem = `item-${CII.newRequest.interior.length}`
   // scrollTo(idItem)
   setTimeout(() => {
@@ -96,7 +96,7 @@ const submitForm = async () => {
     if (request.interior.length == 0) throw { message: 'Interior tidak boleh kosong' }
 
     const response = await CII.storeRequestCII()
-    console.log(response)
+    //console.log(response)
     alert.showAlertObject({
       message: 'Berhasil Mengajukan Request',
       type: 'success',
@@ -107,7 +107,7 @@ const submitForm = async () => {
 
   } catch (error) {
     window.scrollTo(0, 0)
-    console.log(error)
+    //console.log(error)
     alert.showAlertObject({
       message: error.message || 'Gagal Mengajukan Request',
       type: 'error',

@@ -102,7 +102,7 @@ import { toRaw } from 'vue'
 import { useCFStore } from '@/stores/cf'
 import {buildQueryFilterParams} from '@/utils/apiFilterQuery'
 const config = useRuntimeConfig()
-// console.log(config)
+// //console.log(config)
 const { $api } = useNuxtApp()
 const cf = useCFStore()
 const alert = useAlertStore()
@@ -128,16 +128,16 @@ const fetchIndex = async (page = 1) => {
       type: 'error',
     })
   }
-  // console.log(suratsFiltered);
+  // //console.log(suratsFiltered);
 }
 // Ambil data dari backend, backend sudah siapkan pagination
 // const fetchItems = async (page = 1) => {
 //   try {
 //     const response = await $api.get(`/CF/?page=${page}&limit=10`)
-//     // console.log(response)
+//     // //console.log(response)
 //     surats.value = response.docs
 //     totalPages.value = response.totalPages // backend kirim total halaman
-//     // console.log(surats.value)
+//     // //console.log(surats.value)
 //   } catch (error) {
 //     console.error('Gagal mengambil data:', error)
 //   }
@@ -181,7 +181,7 @@ let status = {
   }
 }
 // let surats = await cf.getCF()
-// // console.log(surats)
+// // //console.log(surats)
 
 function goToDetailPage(id) {
   navigateTo({ name: `admin-CF-detail-id`, params: { id } })
@@ -199,10 +199,10 @@ watch(search, (newValue) => {
       surat.tujuan.toLowerCase().includes(newValue.toLowerCase()) ||
       surat.no_seri.toLowerCase().includes(newValue.toLowerCase())
     )
-    // console.log(suratsFiltered)
+    // //console.log(suratsFiltered)
   } else if (newValue.length == 0) {
     suratsFiltered.value = surats.value
-    // // console.log(suratsFiltered)
+    // // //console.log(suratsFiltered)
   }
 })
 
@@ -213,7 +213,7 @@ watch(search, (newValue) => {
 //   }
 // }
 // onMounted(async () => {
-//   // // console.log(useCookie('accessToken').value)
+//   // // //console.log(useCookie('accessToken').value)
 // })
 
 </script>

@@ -32,10 +32,10 @@ let terbilang = ''
   try {
   const response = await cii.getCIIById(id)
   surat = response.doc
-  console.log(surat)
+  //console.log(surat)
   interiors = hitungInvoiceInterior(surat.interior, surat.ppn)
   terbilang = pembilang(surat.harga_akhir)
-  // console.log(surat.doc)
+  // //console.log(surat.doc)
 } catch (error) {
   alert.showAlert({
     type: 'error',
@@ -44,7 +44,7 @@ let terbilang = ''
 }
 
 onMounted(async () => {
-  // console.log(getDate())
+  // //console.log(getDate())
   if(process.client){
     document.title = surat.no_seri + ' Invoice ' + surat.tujuan + ' - Citra Interior'
     setTimeout(() => {

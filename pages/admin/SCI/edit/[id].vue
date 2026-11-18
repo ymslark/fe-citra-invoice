@@ -12,12 +12,13 @@ let alert = useAlertStore()
 
 const allowedStatus = ['WAITING', 'PROCCESS', 'DONE', 'CANCEL']
 const { $api } = useNuxtApp()
+sci.resetEditSurat()
 await sci.editSuratSCI(id)
 
 if (id) {
   try {
     const response = await sci.editSuratSCI(id)
-    // console.log(response)
+    // ////console.log(response)
     sci.editSurat = response.doc
     sci.insertTempIdEdit()
     // delete sci.editSurat._id
@@ -39,13 +40,13 @@ const store = async () => {
   try {
     // refForm?.value?.validate()
     const valid = await refForm?.value?.validate()
-    // console.log(valid)
+    // ////console.log(valid)
 
     if (!valid.valid) { window.scrollTo(0, 0); return }
     if (sci.editSurat.barang.length == 0) throw { message: 'Barang tidak boleh kosong' }
 
     const response = await sci.updateSCI(id)
-    // console.log(response)
+    // ////console.log(response)
     alert.showAlertObject({
       message: 'Berhasil Mengubah Surat Sentral Citra',
       type: 'success',
@@ -58,7 +59,7 @@ const store = async () => {
 
   } catch (error) {
     window.scrollTo(0, 0)
-    // console.log(error)
+    // ////console.log(error)
     alert.showAlertObject({
       message: error.message,
       type: 'error',
@@ -73,7 +74,7 @@ const store = async () => {
 
 function scrollTo(id) {
   const el = document.getElementById(id)
-  console.log(el)
+  ////console.log(el)
   if (el){ 
     el.scrollIntoView({ behavior: 'smooth', block: 'center' })
     const input = el?.querySelector('[name="input-nama-barang"]')
@@ -86,7 +87,7 @@ function scrollTo(id) {
 const tambahBarang = () => {
   sci.addBarangEdit()
 
-  console.log(sci.editSurat.barang.length)
+  ////console.log(sci.editSurat.barang.length)
   const idItem = `item-${sci.editSurat.barang.length}`
   // scrollTo(idItem)
   setTimeout(() => {
@@ -117,14 +118,14 @@ let rekening = {
   tagLine: 'Data Saat Ini',
 }
 rekeningList.unshift(rekening)
-// console.log(rekeningList)
+// ////console.log(rekeningList)
 const selectedRadio = ref(surat.rekening)
 
-// // console.log(selectedRadio.value)
+// // ////console.log(selectedRadio.value)
 
 
 const cetak = () => {
-  // // console.log(selectedRadio.value)
+  // // ////console.log(selectedRadio.value)
   surat.atas_nama = selectedRadio.value.atas_nama
   surat.nama_bank = selectedRadio.value.nama_bank
   surat.no_rekening = selectedRadio.value.no_rekening
@@ -146,7 +147,7 @@ let ongkirItems = [
 // })
 
 const changeComma = event => {
-  // console.log(event)
+  // ////console.log(event)
 
   return event.target.value.replace(/,/g, '.')
 

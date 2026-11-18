@@ -10,10 +10,10 @@ try {
   const response = await $api.get(`/supir/detail/${id}`)
   supir = response.supir
   memos = response.memo
-  console.log(response)
-  console.log(supir,memos)
+  //console.log(response)
+  //console.log(supir,memos)
 } catch (error) {
-  console.log(error)
+  //console.log(error)
 }
 
 let status = {
@@ -137,7 +137,7 @@ let status = {
 
     <VCard class="mt-4">
       <VCardTitle>
-        Daftar Memo Supir
+        Daftar Surat Jalan Supir
       </VCardTitle>
         <VTable fixed-header class="text-no-wrap mb-4">
           <thead>

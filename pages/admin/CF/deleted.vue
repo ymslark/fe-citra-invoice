@@ -63,13 +63,13 @@
                   <VIcon @click="goToDetailPage(surat._id)">
                     tabler-info-circle</VIcon>
                 </VBtn>
-                <!-- <VBtn size="38" class="ml-2" icon color="warning" title="Edit">
+                <VBtn size="38" class="ml-2" icon color="warning" title="Edit">
                   <VTooltip open-on-focus location="top" activator="parent">
                     Edit
                   </VTooltip>
                   <VIcon @click="navigateTo({ name: `admin-CF-edit-id`, params: { id: surat._id } })">tabler-edit
                   </VIcon>
-                </VBtn> -->
+                </VBtn>
                 <!-- <VBtn size="38" class="ml-2" icon color="error" title="Hapus">
                   <VTooltip open-on-focus location="top" activator="parent">
                     Hapus

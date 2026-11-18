@@ -125,7 +125,7 @@ import { useAlertStore } from '@/stores/alert'
 definePageMeta({
   middleware: 'auth-client',
   requiresAuth: true,
-  roles: ['superadmin', 'developer'],
+  roles: ['superadmin', 'developer', 'super_admin'],
 })
 const alertStore = useAlertStore()
 const isDialogVisible = ref(false)
@@ -147,14 +147,14 @@ const barangs = ref([])
 const getBarangs = async () => {
    try {
     const res = await $api.get('/barang/deleted', { limit: 90 })
-    console.log(res.Barangs.docs)
+    //console.log(res.Barangs.docs)
     barangs.value = res.Barangs.docs
    } catch (error) {
     alertStore.showAlertObject({
       message: error.message,
       type: 'error',
     })
-    console.log(error)
+    //console.log(error)
    }
 }
 
@@ -168,7 +168,7 @@ function cekButton(i, button) {
 const createBarang = async () => {
   try {
     const response = await $api.post('/supir', supir)
-    console.log(response)
+    //console.log(response)
     if (!response) {
       throw { message: 'Tambah Data Gagal', code: 400 }
     }
@@ -176,7 +176,7 @@ const createBarang = async () => {
     isDialogVisible.value = false
   } catch (error) {
     errorMessage.value = error.message
-    console.log(error)
+    //console.log(error)
   }
 }
 const editBarang = ref({
@@ -189,7 +189,7 @@ const editBarang = ref({
 const editDialog = async (id) => {
   try {
     const response = await $api.get(`/barang/detail/${id}`)
-    console.log(response)
+    //console.log(response)
     if (!response) throw { message: 'Data tidak ditemukan', code: 404 }
     editBarang.value.id = response.barang._id
     editBarang.value.nama = response.barang.nama
@@ -202,15 +202,15 @@ const editDialog = async (id) => {
       message: error.message,
       type: 'error',
     })
-    console.log(error)
+    //console.log(error)
   }
 }
 
 const saveEditBarang = async (id) => {
   try {
-    console.log(editBarang.value)
+    //console.log(editBarang.value)
     const response = await $api.put(`/Barang/${id}`, editBarang.value)
-    console.log(response)
+    //console.log(response)
     if (!response) {
       throw { message: 'Ubah Data Gagal', code: 400 }
     }
@@ -225,13 +225,13 @@ const saveEditBarang = async (id) => {
       message: error.message,
       type: 'error',
     })
-    console.log(error)
+    //console.log(error)
   }
 }
 const restoreBarang = async (id) => {
   try {
     const response = await $api.patch(`/Barang/restore/${id}`)
-    console.log(response)
+    //console.log(response)
     if (!response) {
       throw response
     }
@@ -246,13 +246,13 @@ const restoreBarang = async (id) => {
       message: error.message,
       type: 'error',
     })
-    console.log(error)
+    //console.log(error)
   }
 }
 onMounted(async () => {
   // useCookie('asas', { path: '/' }).value = 'jhaskjhkjashjk'
 
-  // console.log(useCookie('accessToken').value)
+  // //console.log(useCookie('accessToken').value)
   await getBarangs()
 })
 </script>

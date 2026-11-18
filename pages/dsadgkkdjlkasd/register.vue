@@ -45,7 +45,7 @@ const isPasswordVisible = ref(false)
   >
     <VCol
       md="8"
-      class="d-none d-md-flex"
+      class="d-md-flex"
     >
       <div class="position-relative bg-background w-100 me-0">
         <div
@@ -82,11 +82,11 @@ const isPasswordVisible = ref(false)
       >
         <VCardText>
           <h4 class="text-h4 mb-1">
-            Adventure starts here 🚀
+            Buat Akun <span class="text-capitalize"> {{ themeConfig.app.title }} <VIcon>tabler-user-plus</VIcon> </span>
           </h4>
-          <p class="mb-0">
+          <!-- <p class="mb-0">
             Make your app management easy and fun!
-          </p>
+          </p> -->
         </VCardText>
 
         <VCardText>
@@ -98,89 +98,82 @@ const isPasswordVisible = ref(false)
                   v-model="form.username"
                   :rules="[requiredValidator]"
                   autofocus
-                  label="Username"
-                  placeholder="Johndoe"
+                  label="Nama Lengkap"
+                  placeholder="Justin Timberlake"
                 />
               </VCol>
-
+              
               <!-- email -->
               <VCol cols="12">
                 <AppTextField
-                  v-model="form.email"
-                  :rules="[requiredValidator, emailValidator]"
-                  label="Email"
-                  type="email"
-                  placeholder="johndoe@email.com"
+                v-model="form.email"
+                :rules="[requiredValidator]"
+                label="Username"
+                placeholder="justin322"
                 />
               </VCol>
-
+              
               <!-- password -->
+              <!-- Username -->
               <VCol cols="12">
                 <AppTextField
-                  v-model="form.password"
+                  v-model="form.username"
                   :rules="[requiredValidator]"
-                  label="Password"
+                  autofocus
+                  label="Kode Register"
+                  placeholder="b!dh*37"
+                />
+              </VCol>
+              <VCol cols="12">
+                <AppTextField
+                v-model="form.password"
+                :rules="[requiredValidator]"
+                label="Password"
                   placeholder="············"
                   :type="isPasswordVisible ? 'text' : 'password'"
                   :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
                   @click:append-inner="isPasswordVisible = !isPasswordVisible"
-                />
-
-                <div class="d-flex align-center my-6">
-                  <VCheckbox
+                  />
+                  
+                  <!-- <div class="d-flex align-center my-6">
+                    <VCheckbox
                     id="privacy-policy"
                     v-model="form.privacyPolicies"
                     inline
-                  />
-                  <VLabel
+                    />
+                    <VLabel
                     for="privacy-policy"
                     style="opacity: 1;"
-                  >
+                    >
                     <span class="me-1 text-high-emphasis">I agree to</span>
                     <a
-                      href="javascript:void(0)"
-                      class="text-primary"
+                    href="javascript:void(0)"
+                    class="text-primary"
                     >privacy policy & terms</a>
                   </VLabel>
-                </div>
-
+                </div> -->
+                
                 <VBtn
-                  block
-                  type="submit"
+                block
+                type="submit"
+                 class="my-6"
                 >
-                  Sign up
-                </VBtn>
-              </VCol>
-
-              <!-- create account -->
-              <VCol
+                Buat Akun
+              </VBtn>
+            </VCol>
+            
+            <!-- create account -->
+            <VCol
                 cols="12"
                 class="text-center text-base"
               >
-                <span class="d-inline-block">Already have an account?</span>
+                <span class="d-inline-block">sudah punya akun?</span>
                 <NuxtLink
                   class="text-primary ms-1 d-inline-block"
-                  :to="{ name: 'login' }"
+                  :to="{ name: 'admin-login' }"
                 >
-                  Sign in instead
+                  Login di sini
                 </NuxtLink>
-              </VCol>
-
-              <VCol
-                cols="12"
-                class="d-flex align-center"
-              >
-                <VDivider />
-                <span class="mx-4">or</span>
-                <VDivider />
-              </VCol>
-
-              <!-- auth providers -->
-              <VCol
-                cols="12"
-                class="text-center"
-              >
-                <AuthProvider />
               </VCol>
             </VRow>
           </VForm>

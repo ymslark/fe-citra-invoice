@@ -16,7 +16,7 @@ const perusahaan = route.query.perusahaan || null
 const id = route.query.id || null
 
 if (perusahaan && id) {
-  // console.log(perusahaan, id)
+  // //console.log(perusahaan, id)
   await memo.addMemo(id, perusahaan)
   newMemo.perusahaan = perusahaan
   memo.insertTempId('new')
@@ -47,12 +47,12 @@ const jenisMemo = ['Pengambilan Barang', 'Pengiriman Barang']
 // const jenisMemoValue = ref(jenisMemo[1])
 
 const supirList = await supir.fetchSupirs()
-console.log(supirList)
+//console.log(supirList)
 // const supir = ref()
 // menampilkan data selectedOptions bila berubah
 // watch(selectedOptions, (newValue) => {
 //   if (newValue) {
-//     console.log(selectedOptions.value)
+//     //console.log(selectedOptions.value)
 //   }
 // })
 
@@ -67,7 +67,7 @@ const store = async () => {
     if (newMemo.barang.length == 0) throw { message: 'Barang tidak boleh kosong' }
 
     const response = await memo.storeMemo()
-    console.log(response)
+    //console.log(response)
     alert.showAlertObject({
       message: 'Berhasil Menambah Surat Jalan',
       type: 'success',
@@ -80,7 +80,7 @@ const store = async () => {
 
   } catch (error) {
     window.scrollTo(0, 0)
-    console.log(error)
+    //console.log(error)
     alert.showAlertObject({
       message: error.message,
       type: 'error',

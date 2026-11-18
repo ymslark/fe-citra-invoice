@@ -2,7 +2,7 @@
 definePageMeta({
   middleware: 'auth-client',
   requiresAuth: true,
-  roles: ['superadmin', 'developer'],
+  roles: ['superadmin', 'developer', 'super_admin'],
 })
 import { useAlertStore } from '@/stores/alert';
 import { useBarangStore } from '@/stores/barang';
@@ -25,7 +25,7 @@ const handleFileChange = (event) => {
   selectedFile.value = event.target.files[0]
 }
 // const handleUpload = async () => {
-//   // console.log('File upload triggered', selectedFile.value)
+//   // //console.log('File upload triggered', selectedFile.value)
 //   isLoading.value = true
 //   const file = selectedFile.value
 //   if (!selectedFile.value) return
@@ -40,7 +40,7 @@ const handleFileChange = (event) => {
     
 //     // Simpan ke Pinia
 //     barang.setBarangFromExcel(jsonData)
-//     // console.log('Data masuk ke state:', barang.addedBarang)
+//     // //console.log('Data masuk ke state:', barang.addedBarang)
 //   }
   
 //   reader.readAsArrayBuffer(file)
@@ -88,21 +88,21 @@ const saveBarang = async () => {
   try {
     const valid = await refForm?.value?.validate()
     if (!valid.valid) { window.scrollTo(0, 0); return }
-    console.log(valid)
+    //console.log(valid)
     const response = await barang.storeBarang()
-    console.log(response)
+    //console.log(response)
     barang.resetAddedBarang()
 
-    // console.log(response)
+    // //console.log(response)
     alert.showAlert('success', 'Data berhasil disimpan')
   } catch (error) {
-    console.log(error)
+    //console.log(error)
     let message = error.message
     if (error.message === 'KODE_BARANG_ALREADY_EXIST') {
       barang.existingKode = error.existingKode
       message = `${t(error.message)}, (${error.existingKode})`
       // const valid = await refForm?.value?.validate()
-      // console.log(valid)
+      // //console.log(valid)
       // if (!valid.valid) { window.scrollTo(0, 0); return }
       //       // Set error langsung ke form
       // refForm?.value?.setErrors([{
@@ -112,7 +112,7 @@ const saveBarang = async () => {
       
       // refForm?.value?.validate()
     }
-    console.log('Existing Kode:', barang.existingKode)
+    //console.log('Existing Kode:', barang.existingKode)
     alert.showAlert('error', t(message))
   }
   const fileRules = [

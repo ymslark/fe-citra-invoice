@@ -19,8 +19,8 @@ if (id) {
     const response = await $api.get(`/Faktur/detail/${id}`)
     document = response.faktur
     barang = hitungInvoiceBarang(document.barang, document.ppn, true)
-    // console.log(document)
-    // console.log(barang)
+    // //console.log(document)
+    // //console.log(barang)
   } catch (error) {
     console.error("Error fetching Faktur data:", error)
     // Handle error, e.g., show an alert or redirect
@@ -32,7 +32,7 @@ const documentLetterDateMode = config.public.documentLetterDateMode || 'current'
 
 const { $api } = useNuxtApp()
 let totalHarga = 0
-console.log(barang.total)
+//console.log(barang.total)
 let htmlContent = `
             <body style="font-family: 'Times New Roman', serif; background: #fff; padding: 20px; color: #000; margin:auto; ">
             <div id="letter" style="width: 655pt; margin: 0 auto; padding: 15px 20px; border: 1px solid #333; font-size: 12pt; line-height: 1.3; box-sizing: border-box;">
@@ -62,7 +62,7 @@ let htmlContent = `
                 </thead>
                 <tbody>`
 
-console.log(barang)                    
+//console.log(barang)                    
 // document.barang.forEach((item, index) => {
 //     htmlContent += `
 //         <tr>

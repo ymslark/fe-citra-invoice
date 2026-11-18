@@ -7,7 +7,7 @@
  */
 export function formatToIndonesianCurrency(value) {
   // Remove any non-digit, non-comma, and non-dot characters
-  console.log(value)
+  //console.log(value)
 
   const cleanedValue = value.replace(/[^\d,.]/g, '')
 
@@ -67,7 +67,7 @@ export function parseCurrencyToNumber(formattedValue) {
 
 export function formatTanggalIndonesia(tanggalString, opsi = null) {
   //hari
-  // console.log(tanggalString)
+  // //console.log(tanggalString)
   let hari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']
   const tanggal = new Date(tanggalString)
   // Format tanggal ke string dengan hari

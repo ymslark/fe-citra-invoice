@@ -17,7 +17,7 @@ const id = route.query.id || null
 const alert = useAlertStore()
 let surat = {}
 surat['tanggal'] = getDate()
-console.log(surat)
+//console.log(surat)
 let barang = null
 // const pembilang = pembilang
 let terbilang = '' 
@@ -33,7 +33,7 @@ if (!id) {
 try {
   const response = await cf.getCFById(id)
   surat = response.doc
-  console.log(surat)
+  //console.log(surat)
   barang = hitungInvoiceBarang(surat.barang, surat.ppn)
   terbilang = pembilang(surat.harga_akhir)
 } catch (error) {
@@ -43,7 +43,7 @@ try {
   })
 }
 // terbilang = pembilang(surat.harga_akhir)
-// console.log(terbilang)
+// //console.log(terbilang)
 
 
 
@@ -71,7 +71,7 @@ onMounted(async () => {
 //       })
 //   }
 // })
-// console.log(barang)
+// //console.log(barang)
 </script>
 
 <template>

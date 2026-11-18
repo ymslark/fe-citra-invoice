@@ -22,7 +22,7 @@ if (!id) {
 }
 try {
   const response = await memo.getMemoById(id)
-  console.log(response)
+  //console.log(response)
   memo.editMemo = response.doc
   delete memo.editMemo._id
   delete memo.editMemo.__v
@@ -39,11 +39,11 @@ try {
 
 const editMemo = memo.editMemo
 // if (id) {
-//   // console.log(perusahaan, id)
+//   // //console.log(perusahaan, id)
 //   await memo.addMemo(id, perusahaan)
 //   editMemo.perusahaan = perusahaan
 //   // const supirs = await supir.fetchSupirs()
-//   // console.log(supirs)
+//   // //console.log(supirs)
 //   if (!listPerusahaan.includes(perusahaan)) {
 //     //redirect to admin.memo
 //     navigateTo({ name: 'admin-memo' })
@@ -80,7 +80,7 @@ const update = async () => {
     if (editMemo.barang.length == 0) throw { message: 'Barang tidak boleh kosong' }
 
     const response = await memo.updateMemo(id)
-    console.log(response)
+    //console.log(response)
     alert.showAlertObject({
       message: 'Berhasil Mengubah Surat Jalan',
       type: 'success',
@@ -93,7 +93,7 @@ const update = async () => {
 
   } catch (error) {
     window.scrollTo(0, 0)
-    console.log(error)
+    //console.log(error)
     alert.showAlertObject({
       message: error.message,
       type: 'error',

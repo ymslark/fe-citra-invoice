@@ -32,8 +32,8 @@ if(!response || !response.config) {
 const config = ref(JSON.parse(JSON.stringify(response.config)))
 const editConfig = ref(JSON.parse(JSON.stringify(response.config)))
 
-// console.log(config)
-// console.log(editConfig)
+// //console.log(config)
+// //console.log(editConfig)
 watch(edit, (val) => {
   if(val == true){
     editConfig.value = JSON.parse(JSON.stringify(response.config))
@@ -42,9 +42,9 @@ watch(edit, (val) => {
 const refForm = ref()
 const updateConfig = async () => {
   try {
-    // console.log(editConfig)
+    // //console.log(editConfig)
     const update = await $api.put('/Config', editConfig.value )
-    // console.log(update)
+    // //console.log(update)
     if (update.status) {
       window.scrollTo(0,0)
       alert.showAlertObject({

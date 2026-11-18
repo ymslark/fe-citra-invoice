@@ -6,8 +6,8 @@ export default [
     children: [
       // { title: 'Dashboard', to: 'apps-cii-dashboard' },
       { title: 'Daftar Surat', to: 'admin-CII' },
-      { title: 'Tambah Surat', to: 'admin-CII-add' },
       { title: 'Arsip Surat', to: 'admin-CII-lists' },
+      { title: 'Tambah Surat', to: 'admin-CII-add' },
       { title: 'Request', to: 'admin-CII-request' },
       { title: 'Surat Terhapus', to: 'admin-CII-deleted' },
     ],

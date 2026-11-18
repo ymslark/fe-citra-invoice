@@ -188,13 +188,13 @@ const supirs = ref([])
 const getSupirDeleted = async () => {
   try {
     const response = await $api.get('/supir/deleted')
-    console.log(response)
+    //console.log(response)
     supirs.value = response.supir
-    console.log(supirs.value)
+    //console.log(supirs.value)
 
   } catch (error) {
 
-    console.log(error)
+    //console.log(error)
   }
 }
 
@@ -219,7 +219,7 @@ const createSupir = async () => {
       vehicle_number: vehicle_number.value,
     }
     const response = await $api.post('/supir', supir)
-    console.log(response)
+    //console.log(response)
     alertStore.showAlertObject({
       message: 'Data Supir berhasil ditambah!',
       type: 'success',
@@ -233,7 +233,7 @@ const createSupir = async () => {
       type: 'error',
     })
     // errorMessage.value = error.message
-    console.log(error)
+    //console.log(error)
   }
 }
 let dataEditSUpir = {
@@ -248,13 +248,13 @@ const editSupir = ref(dataEditSUpir)
 const editDialog = async (id) => {
   try {
     const response = await $api.get(`/supir/detail/${id}`)
-    // console.log(response)
+    // //console.log(response)
     // if (!response) throw { message: 'Data tidak ditemukan', code: 404 }
     editSupir.value.id = response.supir._id
     editSupir.value.driver_name = response.supir.nama_supir
     editSupir.value.driver_phone = response.supir.no_hp
     editSupir.value.vehicle_number = response.supir.no_kendaraan
-    console.log(editSupir.value)
+    //console.log(editSupir.value)
     
     isEditDialogVisible.value = true
   } catch (error) {
@@ -262,15 +262,15 @@ const editDialog = async (id) => {
       message: error.message,
       type: 'error',
     })
-    console.log(error)
+    //console.log(error)
   }
 }
 
 const saveEditSupir = async () => {
   try {
-    console.log(editSupir.value.id)
+    //console.log(editSupir.value.id)
     const response = await $api.put(`/supir/${editSupir.value.id}`, editSupir.value)
-    console.log(response)
+    //console.log(response)
     if (!response) {
       throw { message: 'Ubah Data Gagal', code: 400 }
     }
@@ -282,7 +282,7 @@ const saveEditSupir = async () => {
     getSupirDeleted()
   } catch (error) {
     errorMessage.value = error.message
-    console.log(error)
+    //console.log(error)
     alertStore.showAlertObject({
       message: 'Data Supir gagal diubah!',
       type: 'error',
@@ -293,23 +293,23 @@ const saveEditSupir = async () => {
 const deleteSupirDialog = async (id) => {
   try {
     deleteSupirId.value = id
-    console.log(deleteSupirId.value)
+    //console.log(deleteSupirId.value)
     isDeleteDialogVisible.value = true
   } catch (error) {
     alertStore.showAlert({
       message: error.message,
       type: 'error',
     })
-    console.log(error)
+    //console.log(error)
   }
 }
 
 const deleteSupir = async () => {
   try {
-    console.log(deleteSupirId.value)
+    //console.log(deleteSupirId.value)
     isDeleteDialogVisible.value = true
     const response = await $api.put(`/supir/restore/${deleteSupirId.value}`)
-    console.log(response)
+    //console.log(response)
     if (!response) {
       throw { message: 'Ubah Data Gagal', code: 400 }
     }
@@ -321,7 +321,7 @@ const deleteSupir = async () => {
     getSupirDeleted()  
   } catch (error) {
     errorMessage.value = error.message
-    console.log(error)
+    //console.log(error)
     alertStore.showAlertObject({
       message: error.message,
       type: 'error',
@@ -332,6 +332,6 @@ const deleteSupir = async () => {
 onMounted(() => {
   useCookie('asas', { path: '/' }).value = 'jhaskjhkjashjk'
 
-  // console.log(useCookie('accessToken').value)
+  // //console.log(useCookie('accessToken').value)
 })
 </script>

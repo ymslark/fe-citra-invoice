@@ -10,7 +10,7 @@ export const useConfigStore = defineStore('config', {
     async getConfig() {
       const { $api } = useNuxtApp()
       const response = await $api.get('/config')
-      console.log(response)
+      //console.log(response)
     },
     
     

@@ -6,14 +6,14 @@
 // export default defineNuxtPlugin(nuxtApp => {
 //   const BASE_URL =  process.env.API_BASE_URL // Ganti dengan API base URL-mu
 //   const authStore = useAuthStore()
-//   // console.log(authStore.isLoggedIn, authStore.accessToken)
+//   // //console.log(authStore.isLoggedIn, authStore.accessToken)
 //   // Fungsi dasar untuk meng-handle request
 //   let request = null
 //   request = async (method, url, data = {}, customOptions = {}) => {
 //     const headers = customOptions.headers || {}
 //     // if(!authStore.isLoggedIn && authStore.accessToken == null && authStore.accessToken == undefined ) {
 //       // window.location.replace('/admin/login')
-//     //   console.log((!authStore.isLoggedIn) )
+//     //   //console.log((!authStore.isLoggedIn) )
 //     // }
 //     if (authStore.accessToken) {
 //     headers.Authorization = `Bearer ${authStore.accessToken}`
@@ -36,23 +36,23 @@
 //     }
 
 //     try {
-//       console.log(await $fetch(BASE_URL + url, options))
+//       //console.log(await $fetch(BASE_URL + url, options))
 //       // return await $fetch(BASE_URL + url, options)
 
 //     } catch (error) {
-//       // console.log(error.response._data)
-//       // console.log(error.response)
+//       // //console.log(error.response._data)
+//       // //console.log(error.response)
 //       error.response._data['code'] = error.response?.status
-//       // console.log(authStore.refreshToken)
+//       // //console.log(authStore.refreshToken)
 //       if (error.response?.status === 401 && authStore.refreshToken) {
 //         try {
-//           console.log('Refreshing access token...')
+//           //console.log('Refreshing access token...')
 //           await authStore.refreshAccessToken()
 //           headers.Authorization = `Bearer ${authStore.accessToken}`
           
 //           return await $fetch(BASE_URL + url, options)
 //         } catch (refreshError) {
-//           console.log('Refresh token failed:', refreshError)
+//           //console.log('Refresh token failed:', refreshError)
 //           authStore.logout()
 //           navigateTo('admin-login')
 //           throw refreshError
@@ -87,7 +87,7 @@ export default defineNuxtPlugin(nuxtApp => {
   const alert= useAlertStore()
   const config = useRuntimeConfig() // pakai runtimeConfig, bukan process.env
   // env = dotenv.config()
-  // console.log('Runtime Config:', config)
+  // //console.log('Runtime Config:', config)
 
   // const BASE_URL = config.BASE_URL_API || config.public.apiUrl // Ganti dengan API base URL-mu
   const BASE_URL = config.public.apiUrl // Ganti dengan API base URL-mu
@@ -115,14 +115,14 @@ export default defineNuxtPlugin(nuxtApp => {
     }
 
     try {
-      console.log('Request URL:', BASE_URL + url)
+      //console.log('Request URL:', BASE_URL + url)
       const res = await $fetch(BASE_URL + url, options)
-      console.log('Response:', res)
+      //console.log('Response:', res)
       return res
     } catch (error) {
-      console.log(error)
+      //console.log(error)
       if (!error.response) {
-        // console.log('Network or unexpected error:', error)
+        // //console.log('Network or unexpected error:', error)
         // alert.showAlertObject({ type: 'error', message: 'ERROR_OCCURRED' })
         throw { code: 500, message: 'SERVER_ERROR' }
 
@@ -130,18 +130,18 @@ export default defineNuxtPlugin(nuxtApp => {
       error.response._data['code'] = error.response?.status
       if (error.response?.status === 401 && authStore.refreshToken) {
         try {
-          console.log('Refreshing access token...')
+          //console.log('Refreshing access token...')
           await authStore.refreshAccessToken()
           headers.Authorization = `Bearer ${authStore.accessToken}`
           return await $fetch(BASE_URL + url, options)
         } catch (refreshError) {
-          console.log('Refresh token failed:', refreshError)
+          //console.log('Refresh token failed:', refreshError)
           authStore.logout()
           navigateTo('admin-login')
           throw refreshError
         }
       }
-      console.log('Request error:', error)
+      //console.log('Request error:', error)
       throw error.response?._data || error
     }
   }

@@ -94,7 +94,7 @@ export const useCiStore = defineStore('ciis', {
         const response = await $api.get('/CII', query)
 
         this.daftarSurat = response.docs
-        console.log(this.daftarSurat)
+        //console.log(this.daftarSurat)
         
         return response
       } catch (error) {
@@ -110,7 +110,7 @@ export const useCiStore = defineStore('ciis', {
         const response = await $api.get('/CII/last30Days', query)
 
         this.daftarSurat = response.docs
-        console.log(this.daftarSurat)
+        //console.log(this.daftarSurat)
         
         return response
       } catch (error) {
@@ -145,7 +145,7 @@ export const useCiStore = defineStore('ciis', {
         const response = await $api.get('/CII/deleted', query)
 
         this.daftarSurat = response.docs
-        console.log(this.daftarSurat)
+        //console.log(this.daftarSurat)
         
         return response
       } catch (error) {
@@ -163,17 +163,25 @@ export const useCiStore = defineStore('ciis', {
 
     async storeCII() {
       const { $api, $parseRupiah } = useNuxtApp()
-      this.newSurat['interior'] = this.addedInterior.map(item => {
+       this.newSurat['interior'] = this.editSurat.interior.map((item)=> {
+        let v1,v2
+        //console.log(typeof(item.v1))
+        if(typeof(item.v1) == 'string') {
+          v1 = parseFloat(item.v1.replace(',', '.'))
+        }else v1 = item.v1
+        if(typeof(item.v2) == 'string') {
+          v2 = parseFloat(item.v2.replace(',', '.'))
+        }else v2 = item.v2
         return {
           "nama_interior": item.nama_interior,
-          "v1": parseIndoFloat(item.v1),
-          "v2": parseIndoFloat(item.v2),
+          "v1": v1,
+          "v2": v2,
           "diskon_persen": item.diskon_persen,
           "diskon_nominal": $parseRupiah(item.diskon_nominal),
           "harga": $parseRupiah(item.harga),
         }
       })
-      console.log(this.newSurat['interior'])
+      //console.log(this.newSurat['interior'])
 
       const response = await $api.post('/CII', this.newSurat)
       return response
@@ -182,7 +190,7 @@ export const useCiStore = defineStore('ciis', {
     async deleteCII(id) {
       const { $api } = useNuxtApp()
       const response = await $api.delete(`/cii/${id}`)     
-      console.log(response)  
+      //console.log(response)  
       return response
     },
 
@@ -208,7 +216,7 @@ export const useCiStore = defineStore('ciis', {
         let diskon  = 0
         let total = 0
         this.surat = response.doc
-        console.log(response)
+        //console.log(response)
         response.doc.interior.forEach(item => {
           diskon += parseInt(item.total_diskon)
           total  += parseInt(item.total_harga_awal)
@@ -221,7 +229,7 @@ export const useCiStore = defineStore('ciis', {
         return response
         
       } catch (error) {
-        console.log('Fetch cii failed:', error)
+        //console.log('Fetch cii failed:', error)
         this.setError(error.message)
         
         return error 
@@ -233,8 +241,8 @@ export const useCiStore = defineStore('ciis', {
       const { $api } = useNuxtApp()
 
       const response = await $api.put(`/CII/restore/${id}`)
-      console.log(id)
-      console.log(response)
+      //console.log(id)
+      //console.log(response)
       return response
     },
     
@@ -244,7 +252,7 @@ export const useCiStore = defineStore('ciis', {
         const response = await $api.get('/Request/CII')
 
         this.daftarSurat = response.docs.docs
-        console.log(this.daftarSurat)
+        //console.log(this.daftarSurat)
         
         return response.docs
       } catch (error) {
@@ -256,7 +264,7 @@ export const useCiStore = defineStore('ciis', {
       const { $api } = useNuxtApp()
       try {
         const response = await $api.get(`/Request/detail/CII/${id}`)
-        console.log(response)
+        //console.log(response)
         this.resetNewSurat()
         this.newSurat.tujuan = response.doc.tujuan
         this.newSurat.alamat = response.doc.alamat  
@@ -274,14 +282,14 @@ export const useCiStore = defineStore('ciis', {
           })
         })
       } catch (error) {
-        console.log(error)
+        //console.log(error)
       }
     },
 
     async editSuratCII(id) {
       const { $api } = useNuxtApp()
       const response = await $api.get(`/CII/detail/${id}`)
-      console.log(response.doc)
+      //console.log(response.doc)
       return response
     },
 
@@ -290,7 +298,7 @@ export const useCiStore = defineStore('ciis', {
       const {$api, $parseRupiah} = useNuxtApp()
       this.editSurat['interior'] = this.editSurat.interior.map((item)=> {
         let v1,v2
-        console.log(typeof(item.v1))
+        //console.log(typeof(item.v1))
         if(typeof(item.v1) == 'string') {
           v1 = parseFloat(item.v1.replace(',', '.'))
         }else v1 = item.v1
@@ -308,7 +316,7 @@ export const useCiStore = defineStore('ciis', {
       })
       const response = await $api.put(`/CII/update/${id}`, this.editSurat)
       
-      console.log(response)
+      //console.log(response)
       return response
     },
 
@@ -336,11 +344,11 @@ export const useCiStore = defineStore('ciis', {
     //   this.newRequest.interior = interior.filter((item, index)=> index == _tempId);
     // },
     deleteInterior(i) {
-      console.log(i)
+      //console.log(i)
       this.addedInterior.splice(i, 1)
     },
     deleteInteriorEdit(i) {
-      console.log(i)
+      //console.log(i)
       this.editSurat.interior.splice(i, 1)
     },
     async searchInterior(keyword) {
@@ -356,14 +364,14 @@ export const useCiStore = defineStore('ciis', {
 
         const response = await $api.get('/interior/search', { keyword })
         const items = response.item.map(item => item.nama)
-        console.log(items)
+        //console.log(items)
         // Simpan hasil pencarian ke cached
         
         this.searchCache = { ...this.searchCache, [keyword]: items }
 
         return items
       } catch (error) {
-        console.log('Search error:', error)
+        //console.log('Search error:', error)
         return []
       }
     },
@@ -372,7 +380,7 @@ export const useCiStore = defineStore('ciis', {
       try {
         const response = await $api.get('/getConfig')
 
-        console.log(response)
+        //console.log(response)
         this.config = response.config
         let rekeningList = response.config.rekening.cii
         this.config.rekening = rekeningList.map(item => {
@@ -431,6 +439,27 @@ export const useCiStore = defineStore('ciis', {
     this.addedInterior = []
   },
 
+    resetEditSurat(){
+      this.newSurat = {
+        tanggal: "",
+        hal: "Surat Penawaran Interior",
+        tujuan: "",
+        alamat: "",
+        tempo: true,
+        tanggal_tempo: "",
+        catatan_tempo: "",
+        status: "",
+        atas_nama: "",
+        no_rekening: "",
+        nama_bank: "",
+        catatan: "",
+        ongkos_kirim: false,
+        instalasi: true,
+        ppn:0,      
+    }
+    this.addedInterior = []
+  },
+
     resetNewRequest(){
       this.newRequest = {
         tanggal: "",
@@ -453,7 +482,7 @@ export const useCiStore = defineStore('ciis', {
   },
 
   deleteInteriorRequest(i) {
-    console.log(this.newRequest)
+    //console.log(this.newRequest)
     this.newRequest.interior.splice(i, 1)
   },
   async storeRequestCII(){
@@ -465,7 +494,7 @@ export const useCiStore = defineStore('ciis', {
         v2: parseFloat(item.v2),
       }
     })
-    console.log(this.newRequest['interior'])
+    //console.log(this.newRequest['interior'])
     const response = await $api.post('/Request/CII', this.newRequest)
     return response
   },
@@ -474,7 +503,7 @@ export const useCiStore = defineStore('ciis', {
 
     const {$api} = useNuxtApp()
     const response = await $api.patch(`/Request/status/${this.perusahaan}/${id}?status=APPROVED`)
-    console.log(response)
+    //console.log(response)
   }
 
 },
@@ -483,7 +512,7 @@ export const useCiStore = defineStore('ciis', {
     // getRekeningRadio: state => {
     //   let rekeningList = []
 
-    //   console.log(this.config.rekening)
+    //   //console.log(this.config.rekening)
     //   state.rekening.forEach((rekening, i) => {
     //     rekeningList.push({
     //       title: rekening.atas_nama + ' ( ' + rekening.nama_bank + ' )',
@@ -493,7 +522,7 @@ export const useCiStore = defineStore('ciis', {
     //   })
       
     //   return state.config
-    //   console.log(rekeningList)
+    //   //console.log(rekeningList)
       
     //   return rekeningList
     // },

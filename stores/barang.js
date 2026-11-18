@@ -82,7 +82,7 @@ export const useBarangStore = defineStore('barang', {
 
         return items
       } catch (error) {
-        console.log('Search error:', error)
+        //console.log('Search error:', error)
         return []
       }
     },
@@ -93,7 +93,7 @@ export const useBarangStore = defineStore('barang', {
         const response = await $api.get('/barang')
 
         this.barang = response.docs
-        console.log(this.barang)
+        //console.log(this.barang)
         
         return response
       } catch (error) {
@@ -105,10 +105,10 @@ export const useBarangStore = defineStore('barang', {
       try {
         const response = await $api.get('/barang/getAllBarang')
         
-        console.log(response)
+        //console.log(response)
         this.existingKode = response.Barangs.map(barang => barang.kode)
         this.existingNama = response.Barangs.map(barang => barang.nama)
-        // console.log(this.barang)
+        // //console.log(this.barang)
         
         // return response
       } catch (error) {

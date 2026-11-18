@@ -1,9 +1,9 @@
 <template>
   <div>
-    <Alert />
+    <!-- <Alert /> -->
     <VCard v-if="isNotificationVisible === false">
       <VForm ref="refForm" @submit.prevent>
-        <VCardTitle class="text-h5">Request Faktur Pajak</VCardTitle>
+        <VCardTitle class="text-h5">Request Faktur Pajak Citra</VCardTitle>
         <div>
           <VCardItem>
               <VRow>
@@ -72,6 +72,9 @@
 import {useFakturStore} from '@/stores/faktur.js'
 import { useAuthStore } from '@/@core/stores/auth'
 import { VForm } from 'vuetify/components/VForm'
+const props = defineProps({
+  isAdmin: { type: String, default: "tidak" },
+})
 const auth = useAuthStore()
 const faktur = useFakturStore()
 const seri = ref('')
@@ -98,25 +101,25 @@ const showNotification = () => {
   }, 5000);
 }
 const handleFileChange = (event) => {
-  console.log(event.target.files)
+  //console.log(event.target.files)
   const selectedFile = event.target.files[0];
   if (selectedFile) {
     tempFile.value = selectedFile;
   }else{
     tempFile.value = null;
   }
-  console.log(event.target.files)
+  //console.log(event.target.files)
 };
 
 const uploadImage = async () => {  
   try {
     const { $api } = useNuxtApp()
     const valid = await refForm?.value?.validate()
-    console.log(file.value)
+    //console.log(file.value)
     if (!file.value) throw { message: 'File gambar wajib diisi' }
     
     if (!valid.valid) { window.scrollTo(0, 0); return }
-    console.log(form.barang)
+    //console.log(form.barang)
     if (form.barang.length == 0) throw { message: 'Barang tidak boleh kosong' }
     let data = JSON.parse(JSON.stringify(faktur.newFaktur))
     data['barang'] = faktur.newFaktur.barang.map(item => ({
@@ -125,43 +128,46 @@ const uploadImage = async () => {
       qty: item.qty,
       total: (parseInt(item.harga.replace(/\./g, '')) || 0) * item.qty
     }))
-    // console.log(finalBarangFaktur)
+    // //console.log(finalBarangFaktur)
     const formData = new FormData();
     formData.append('gambar', file.value);
     formData.append('faktur', JSON.stringify(data));
-    // console.log('Form data prepared for upload:', formData);
+    // //console.log('Form data prepared for upload:', formData);
    
-    console.log(formData.get('faktur'))
+    //console.log(formData.get('faktur'))
     let response = null
     response = await $api.post('/faktur', formData)
-    console.log(response)
+    //console.log(response)
     // url.value = baseUrl + '/public/images/' + response.filename
-    // console.log(response, 'response');
-    // console.log(url.value);
+    // //console.log(response, 'response');
+    // //console.log(url.value);
     // await faktur.setStatusRequest
     faktur.resetNewFaktur()
     seri.value = ''
     tempFile.value = null
-    showNotification()
-    // alert.showAlertObject({
-    //   type: 'success',
-    //   message: 'Berhasil mengirim request faktur pajak',
-    // })
-  } catch (error) {
-    console.log(error)
-    alert.showAlertObject({
-      type: 'error',
-      message: error.message || 'Gagal mengupload gambar',
-    })
-  }
+    if(props.isAdmin == "ya"){
+      alert.showAlertObject({
+        type: 'success',
+        message: 'Berhasil mengirim request faktur pajak',
+      })
+      }else{
+        showNotification()
+      }
+    } catch (error) {
+      //console.log(error)
+      alert.showAlertObject({
+        type: 'error',
+        message: error.message || 'Gagal mengupload gambar',
+      })
+    }
 };
 watch(file, (newFile) => {
-  console.log(tempFile.value)
-  console.log(previewUrl.value)
+  //console.log(tempFile.value)
+  //console.log(previewUrl.value)
   if (newFile) {
     previewUrl.value = URL.createObjectURL(newFile)
     isVisiblePreviewImage.value = true
-    console.log(URL.createObjectURL(newFile))
+    //console.log(URL.createObjectURL(newFile))
   }
   if (!file.value) {
     isVisiblePreviewImage.value = false
@@ -170,8 +176,8 @@ watch(file, (newFile) => {
   //  // }
 })
 const logFile = (files) => {
-  console.log('File yang dipilih:', files)
-  // console.log(file.value.files)
+  //console.log('File yang dipilih:', files)
+  // //console.log(file.value.files)
 }
 
 const surat = ref(null)
@@ -184,7 +190,7 @@ const getSurat = async () => {
     const { $api } = useNuxtApp()
     const response = await $api.get('/faktur/getSurat/', {no_seri:seri.value})
     surat.value = response.surat
-    console.log(surat)
+    //console.log(surat)
     form.pembeli.nama_pembeli= surat.value.tujuan
     form.pembeli.alamat = surat.value.alamat ||  'Alamat.....'
     form.pembeli.no_hp = surat.value.no_hp ||  'No Hp.....'

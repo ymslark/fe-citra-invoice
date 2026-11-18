@@ -22,7 +22,7 @@ let detailMemo = null
 if (id) {
   try {
     const response = await memo.getMemoById(id)
-    console.log(response)
+    //console.log(response)
     detailMemo = response.doc
 
   } catch (error) {
@@ -54,12 +54,12 @@ const jenisMemo = ['Pengambilan Barang', 'Pengiriman Barang']
 const jenisMemoValue = ref(jenisMemo[1])
 
 const supirList = await supir.fetchSupirs()
-console.log(supirList)
+//console.log(supirList)
 // const supir = ref()
 // menampilkan data selectedOptions bila berubah
 // watch(selectedOptions, (newValue) => {
 //   if (newValue) {
-//     console.log(selectedOptions.value)
+//     //console.log(selectedOptions.value)
 //   }
 // })
 

@@ -97,7 +97,7 @@ export const useMemoStore = defineStore('memo', {
 
     async getAllMemo(){
       const response = await $api.get('/Memo')
-      console.log(response)
+      //console.log(response)
       return response
     },
 
@@ -105,7 +105,7 @@ export const useMemoStore = defineStore('memo', {
     async getDataSurat(id, perusahaan){
       const {$api} = useNuxtApp()
       const response = await $api.get(`/${perusahaan}/detail/${id}`)
-      console.log(response)
+      //console.log(response)
       return response
     },
 
@@ -115,7 +115,7 @@ export const useMemoStore = defineStore('memo', {
                  CII: 'PT. Citra Interior Indonesia',
                  SCI: 'PT. Sentral Citra Indonesia',
       }
-      console.log(data)
+      //console.log(data)
       this.newMemo.tujuan = data.doc.tujuan
       this.newMemo.alamat = data.doc.alamat
       this.newMemo.jenis_memo = data.doc.jenis_memo
@@ -142,14 +142,14 @@ export const useMemoStore = defineStore('memo', {
 
       }
 
-      console.log(this.newMemo)
+      //console.log(this.newMemo)
       return data
     },
 
     async getMemoById(id){
       const { $api } = useNuxtApp()
       const response = await $api.get(`/Memo/detail/${id}`)
-      console.log(response)
+      //console.log(response)
       return response
     }
 
@@ -157,27 +157,27 @@ export const useMemoStore = defineStore('memo', {
     async storeMemo(){
       const { $api } = useNuxtApp()
       const response = await $api.post('/Memo', this.newMemo)
-      console.log(response)
+      //console.log(response)
       return response
     },
 
     async updateMemo(id){
       const { $api } = useNuxtApp()
       const response = await $api.put(`/Memo/update/${id}`, this.editMemo)
-      console.log(response)
+      //console.log(response)
       return response
     },
 
     async deleteMemo(id){
       const { $api } = useNuxtApp()
       const response = await $api.delete(`/Memo/${id}`)
-      console.log(response)
+      //console.log(response)
       return response
     },
     async restoreMemo(id){
       const { $api } = useNuxtApp()
       const response = await $api.patch(`/Memo/restore/${id}`)
-      console.log(response)
+      //console.log(response)
       return response
     },
 

@@ -32,10 +32,10 @@ let status = {
 }
 // const alert = useAlertStore()
 // watch(isDialogConfirmVisible, (newVal) => {
-//   console.log('Dialog visibility changed:', newVal);
+//   //console.log('Dialog visibility changed:', newVal);
 // });
 // watch(isActive, (newVal) => {
-//   console.log('Document Aktif', newVal);
+//   //console.log('Document Aktif', newVal);
 // });
 
 if (id) {
@@ -44,7 +44,7 @@ if (id) {
     const response = await $api.get(`/Faktur/detail/${id}`)
     document = response.faktur
     isActive.value = document.isActive
-    console.log(document)
+    //console.log(document)
   } catch (error) {
     console.error("Error fetching Faktur data:", error)
     // Handle error, e.g., show an alert or redirect
@@ -56,7 +56,7 @@ async function deleteFaktur(){
     isDialogConfirmVisible.value = false
     if(!id) throw { message: 'Masukkan id faktur!!!' }
     const response = await faktur.hapusFaktur(id)
-    console.log(response)
+    //console.log(response)
     alert.showAlertObject({
       type: 'success',
       message: 'Faktur berhasil dihapus',
@@ -79,12 +79,12 @@ async function restoreFaktur(){
     isRestoreDialogConfirmVisible.value = false
     if(!id) throw { message: 'Masukkan id faktur!!!' }
     const response = await faktur.restoreFaktur(id)
-    console.log(response)
+    //console.log(response)
     alert.showAlertObject({
       type: 'success',
       message: 'Faktur berhasil direstore',
     })
-    console.log(document)
+    //console.log(document)
     isActive.value = true
     setTimeout(() => {
       navigateTo({ name: 'admin-faktur-detail-id', params: { id: id } })

@@ -19,10 +19,10 @@ export const useSupirStore = defineStore('supir', {
         if(!response){
           throw { code: 500, message: 'Gagal Mengambil data supir' };
         }
-        console.log(response.supir);
+        //console.log(response.supir);
         return response.supir
       } catch (error) {
-        console.log(error);
+        //console.log(error);
         return null
       }
     },

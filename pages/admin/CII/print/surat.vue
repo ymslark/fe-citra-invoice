@@ -32,9 +32,9 @@ let interior = null
 try {
   await cf.getCIIById(id)
   surat = cf.surat
-  // // console.log(surat.doc)
+  // // //console.log(surat.doc)
   interior = hitungInvoiceInterior(surat.interior, surat.ppn) 
-  // console.log(barang)
+  // //console.log(barang)
 } catch (error) {
   alert.showAlert({
     type: 'error',

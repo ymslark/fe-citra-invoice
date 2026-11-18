@@ -101,7 +101,7 @@ let supir = {
   no_kendaraan: '',
 }
 let surats = await cii.getCIIRequest()
-console.log(surats)
+//console.log(surats)
 
 function goToDetailPage(id) {
   navigateTo(`CII/detail/${id}`)
@@ -113,6 +113,6 @@ function goToDetailPage(id) {
 //   }
 // }
 onMounted(async () => {
-  // console.log(useCookie('accessToken').value)
+  // //console.log(useCookie('accessToken').value)
 })
 </script>

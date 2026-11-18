@@ -103,7 +103,7 @@ export const useCFStore = defineStore('cf', {
         const response = await $api.get('/CF', query)
 
         this.daftarSurat = response.docs
-        console.log(this.daftarSurat)
+        ////console.log(this.daftarSurat)
         
         return response
       } catch (error) {
@@ -119,7 +119,7 @@ export const useCFStore = defineStore('cf', {
         const response = await $api.get('/CF/last30Days', query)
 
         this.daftarSurat = response.docs
-        console.log(this.daftarSurat)
+        ////console.log(this.daftarSurat)
         
         return response
       } catch (error) {
@@ -154,7 +154,7 @@ export const useCFStore = defineStore('cf', {
         const response = await $api.get('/CF/deleted', query)
 
         this.daftarSurat = response.docs
-        console.log(this.daftarSurat)
+        ////console.log(this.daftarSurat)
         
         return response
       } catch (error) {
@@ -188,7 +188,7 @@ export const useCFStore = defineStore('cf', {
     async deleteCF(id) {
       const { $api } = useNuxtApp()
       const response = await $api.delete(`/cf/${id}`)     
-      console.log(response)  
+      ////console.log(response)  
       return response
     },
 
@@ -214,7 +214,7 @@ export const useCFStore = defineStore('cf', {
         let diskon  = 0
         let total = 0
         this.surat = response.doc
-        console.log(response)
+        ////console.log(response)
         response.doc.barang.forEach(item => {
           diskon += parseInt(item.total_diskon)
           total  += parseInt(item.total_harga_awal)
@@ -227,7 +227,7 @@ export const useCFStore = defineStore('cf', {
         return response
         
       } catch (error) {
-        console.log('Fetch cf failed:', error)
+        ////console.log('Fetch cf failed:', error)
         this.setError(error.message)
         
         return error 
@@ -238,7 +238,7 @@ export const useCFStore = defineStore('cf', {
       //TANPA TRY CATCH
       const { $api } = useNuxtApp()
       const response = await $api.patch(`/CF/restore/${id}`)
-      console.log(response)
+      ////console.log(response)
       return response
     },
     
@@ -248,7 +248,7 @@ export const useCFStore = defineStore('cf', {
         const response = await $api.get('/Request/CF')
 
         this.daftarSurat = response.docs.docs
-        console.log(this.daftarSurat)
+        ////console.log(this.daftarSurat)
         
         return response.docs
       } catch (error) {
@@ -260,7 +260,7 @@ export const useCFStore = defineStore('cf', {
       const { $api } = useNuxtApp()
       try {
         const response = await $api.get(`/Request/detail/CF/${id}`)
-        console.log(response)
+        ////console.log(response)
         this.resetNewSurat()
         this.newSurat.tujuan = response.doc.tujuan
         this.newSurat.no_hp = response.doc.no_hp
@@ -277,14 +277,14 @@ export const useCFStore = defineStore('cf', {
           })
         })
       } catch (error) {
-        console.log(error)
+        ////console.log(error)
       }
     },
 
     async editSuratCF(id) {
       const { $api } = useNuxtApp()
       const response = await $api.get(`/CF/detail/${id}`)
-      console.log(response.doc)
+      ////console.log(response.doc)
       return response
     },
 
@@ -302,7 +302,7 @@ export const useCFStore = defineStore('cf', {
       })
 
       const response = await $api.put(`/CF/update/${id}`, this.editSurat)
-      console.log(response)
+      ////console.log(response)
       return response
     },
 
@@ -328,11 +328,11 @@ export const useCFStore = defineStore('cf', {
       })
     },
     deleteBarang(i) {
-      console.log(i)
+      ////console.log(i)
       this.addedBarang.splice(i, 1)
     },
     deleteBarangEdit(i) {
-      console.log(i)
+      ////console.log(i)
       this.editSurat.barang.splice(i, 1)
     },
     deleteBarangByTempId(_tempId) {
@@ -366,14 +366,14 @@ export const useCFStore = defineStore('cf', {
 
         const response = await $api.get('/barang/search', { keyword })
         const items = response.item.map(item => item.nama)
-        console.log(items)
+        ////console.log(items)
         // Simpan hasil pencarian ke cached
         
         this.searchCache = { ...this.searchCache, [keyword]: items }
 
         return items
       } catch (error) {
-        console.log('Search error:', error)
+        ////console.log('Search error:', error)
         return []
       }
     },
@@ -382,7 +382,7 @@ export const useCFStore = defineStore('cf', {
       try {
         const response = await $api.get('/Config')
 
-        console.log(response)
+        ////console.log(response)
         this.config = response.config
         let rekeningList = response.config.rekening.cf
         this.config.rekening = rekeningList.map(item => {
@@ -439,6 +439,26 @@ export const useCFStore = defineStore('cf', {
     }
     this.addedBarang = []
   },
+    resetEditSurat(){
+      this.newSurat = {
+        tanggal: "",
+        hal: "Surat Penawaran Barang",
+        tujuan: "",
+        alamat: "",
+        tempo: true,
+        tanggal_tempo: "-",
+        catatan_tempo: "-",
+        status: "",
+        atas_nama: "",
+        no_rekening: "",
+        nama_bank: "",
+        catatan: "",
+        ongkos_kirim: false,
+        instalasi: true,
+        ppn:0,      
+    }
+    this.addedBarang = []
+  },
 
     resetNewRequest(){
       this.newRequest = {
@@ -460,7 +480,7 @@ export const useCFStore = defineStore('cf', {
   },
 
   deleteBarangRequest(i) {
-    console.log(this.newRequest)
+    ////console.log(this.newRequest)
     this.newRequest.barang.splice(i, 1)
   },
   async storeRequestCF(){
@@ -472,7 +492,7 @@ export const useCFStore = defineStore('cf', {
   async getCFRequestById(id){
     const { $api } = useNuxtApp()
     const response = await $api.get(`/Request/detail/CF/${id}`)
-    console.log(response)
+    ////console.log(response)
     this.newSurat.tujuan = response.doc.tujuan
     this.newSurat.no_hp = response.doc.no_hp
     this.newSurat.alamat = response.doc.alamat
@@ -496,7 +516,7 @@ export const useCFStore = defineStore('cf', {
 
     const {$api} = useNuxtApp()
     const response = await $api.patch(`/Request/status/${this.perusahaan}/${id}?status=APPROVED`)
-    console.log(response)
+    ////console.log(response)
   }
 
   },

@@ -48,15 +48,15 @@ const isLoggedIn = computed(() => authStore.isLoggedIn)
 
 const login = async () => {
   try {
-    // console.log(username, password)
+    // //console.log(username, password)
 
     const response = await authStore.login({ username: username.value, password: password.value })
     if (!isLoggedIn) throw response
     // throw { message: 'Login Gagal! periksa username dan password anda' }
-    // console.log(isLoggedIn)
+    // //console.log(isLoggedIn)
     if (isLoggedIn) navigateTo({ name: 'admin-CF' })
   } catch (error) {
-    console.log(error)
+    //console.log(error)
     if(error.code >= 399 && error.code <= 499) {
       errorMessage.value = "Login Gagal! Username atau Password Salah!"
     } else {

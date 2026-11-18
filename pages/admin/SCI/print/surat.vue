@@ -32,9 +32,9 @@ let barang = null
 try {
   await sci.getSCIById(id)
   surat = sci.surat
-  // // console.log(surat.doc)
+  // // //console.log(surat.doc)
   barang = hitungInvoiceBarang(surat.barang, surat.ppn) 
-  // console.log(barang)
+  // //console.log(barang)
 } catch (error) {
   alert.showAlert({
     type: 'error',

@@ -32,17 +32,19 @@ const props = defineProps({
 })
 
 const auth = useAuthStore()
-let role = auth.user ? auth.user.role : 'guest'
+
+// Reaktif terhadap perubahan auth.user
+const role = computed(() => auth.user?.role ?? 'guest')
 
 const navItems = computed(() => {
-  // Filter nav items based on user roles
   return props.navItems.filter(item => {
-    if (item.roles && Array.isArray(item.roles)) {
-      return item.roles.some(i => i.includes(role))
-    }
-    return true // If no roles specified, show to all
+    // Item tanpa roles → tampil untuk semua
+    if (!item.roles || !Array.isArray(item.roles)) return true
+    // Cek apakah role user ada di daftar roles item
+    return item.roles.includes(role.value)
   })
 })
+
 const refNav = ref()
 const isHovered = useElementHover(refNav)
 

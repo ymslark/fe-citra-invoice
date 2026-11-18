@@ -19,8 +19,8 @@ if (id) {
     const response = await $api.get(`/Faktur/detail/${id}`)
     document = response.faktur
     barang = hitungInvoiceBarang(document.barang, document.ppn, true)
-    console.log(document)
-    console.log(barang)
+    //console.log(document)
+    //console.log(barang)
   } catch (error) {
     console.error("Error fetching Faktur data:", error)
     // Handle error, e.g., show an alert or redirect
@@ -61,7 +61,7 @@ let htmlContent = `
                 </thead>
                 <tbody>`
 
-console.log(document)                    
+//console.log(document)                    
 barang.barangs.forEach((item, index) => {
     htmlContent += `
         <tr>
