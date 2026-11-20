@@ -2,7 +2,7 @@
   <VContainer v-if="!isNotificationVisible">
     <Alert />
     <VCard class="pa-3" elevation="5">
-      <VCardTitle class="font-weight-bold text-wrap ml-n3">Request Form Citra Furniture Indonesia</VCardTitle>
+      <VCardTitle class="font-weight-bold text-wrap ml-n3">Request Form Citra Furniture</VCardTitle>
       <VForm ref="refForm" @submit.prevent>
         <VRow>
           <VCol cols="12">

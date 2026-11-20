@@ -146,7 +146,7 @@
 definePageMeta({
   middleware: 'auth-client',
   requiresAuth: true,
-  roles: ['super_admin', 'developer', 'superadmin'],
+  roles: ['super_admin', 'developer', 'superadmin', 'admin'],
 })
 import {useAlertStore} from '@/stores/alert'
 import { buildQueryFilterParams } from '@/utils/apiFilterQuery'

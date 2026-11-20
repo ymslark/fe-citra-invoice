@@ -68,7 +68,7 @@ export default [
       { title: 'Tambah Barang', to: 'admin-barang-add' },
       { title: 'Barang Terhapus', to: 'admin-barang-deleted' },
     ],
-    roles: ['developer', 'superadmin', 'super_admin'], //add super_admin role based on backend role list
+    // roles: ['developer', 'superadmin', 'super_admin'], //add super_admin role based on backend role list
   },
   {
     title: 'Permintaan Faktur',
@@ -89,7 +89,7 @@ export default [
       { title: 'Daftar Supir', to: 'admin-supir' },
       { title: 'Supir Terhapus', to: 'admin-supir-deleted' },
     ],
-    roles: ['developer', 'superadmin', 'super_admin'], //add super_admin role based on backend role list
+    // roles: ['developer', 'superadmin', 'super_admin'], //add super_admin role based on backend role list
   },
 
 ]

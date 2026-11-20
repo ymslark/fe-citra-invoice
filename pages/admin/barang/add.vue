@@ -2,7 +2,7 @@
 definePageMeta({
   middleware: 'auth-client',
   requiresAuth: true,
-  roles: ['superadmin', 'developer', 'super_admin'],
+  roles: ['superadmin', 'developer', 'super_admin', 'admin'],
 })
 import { useAlertStore } from '@/stores/alert';
 import { useBarangStore } from '@/stores/barang';

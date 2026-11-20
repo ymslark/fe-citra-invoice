@@ -125,7 +125,7 @@ import { useAlertStore } from '@/stores/alert'
 definePageMeta({
   middleware: 'auth-client',
   requiresAuth: true,
-  roles: ['superadmin', 'developer', 'super_admin'],
+  roles: ['superadmin', 'developer', 'super_admin', 'admin'],
 })
 const alertStore = useAlertStore()
 const isDialogVisible = ref(false)
